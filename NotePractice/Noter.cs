@@ -12,52 +12,55 @@ namespace NotePractice
 {
     public class Noter
     {
-        public static Bitmap NoteImage(Note note, Clef clef)
+        public static Bitmap NoteImage(List<Note> notes, Clef clef)
         {
             Bitmap trebleC = Resources.treble_clef;
             Bitmap BassC = Resources.bass_clef;
             using Bitmap noteBitmap = new Bitmap(trebleC.Width, trebleC.Height * 3);
             using Graphics g = Graphics.FromImage(noteBitmap);
             g.Clear(Color.White);
-            int height = trebleC.Height;
             int offset = 64 + trebleC.Height;
             int spacing = 30;
-            int noteShift = spacing / 2;
-
-            int noteInt = (int)note.NoteLetter;
-            int octave = note.Octave;
-
             int topLinePosition = offset;
             int bottomLinePosition = offset + spacing * 4;
 
-            int xNp = noteBitmap.Width / 2;
-            int yNp;
-            if(clef == Clef.Treble)
-            {
-                 yNp = (int)(offset + spacing * 5 - noteInt * noteShift + 28 * noteShift - octave * 7 * noteShift);
-            } else
-            {
-                yNp = (int)(offset - spacing - noteInt * noteShift + 28 * noteShift - octave * 7 * noteShift);
-            }
- 
-            OVector notePosition = new OVector(xNp, yNp);
+            int noteShift = spacing / 2;
             using Pen p = new Pen(Brushes.Black, 3);
+            foreach (Note note in notes)
+            {
+                int noteInt = (int)note.NoteLetter;
+                int octave = note.Octave;
 
-            DrawNote(g, notePosition, noteBitmap.Width / 5);
-            if (yNp < topLinePosition)
-            {
-                for (int i = topLinePosition; i >= yNp; i -= spacing)
+                int xNp = noteBitmap.Width / 2;
+                int yNp;
+                if (clef == Clef.Treble)
                 {
-                    g.DrawLine(p, new Point(xNp - 50, i), new Point(xNp + 50, i));
+                    yNp = (int)(offset + spacing * 5 - noteInt * noteShift + 28 * noteShift - octave * 7 * noteShift);
+                }
+                else
+                {
+                    yNp = (int)(offset - spacing - noteInt * noteShift + 28 * noteShift - octave * 7 * noteShift);
+                }
+
+                OVector notePosition = new OVector(xNp, yNp);
+
+                DrawNote(g, notePosition, noteBitmap.Width / 5);
+                if (yNp < topLinePosition)
+                {
+                    for (int i = topLinePosition; i >= yNp; i -= spacing)
+                    {
+                        g.DrawLine(p, new Point(xNp - 50, i), new Point(xNp + 50, i));
+                    }
+                }
+                if (yNp > bottomLinePosition)
+                {
+                    for (int i = bottomLinePosition; i <= yNp; i += spacing)
+                    {
+                        g.DrawLine(p, new Point(xNp - 50, i), new Point(xNp + 50, i));
+                    }
                 }
             }
-            if (yNp > bottomLinePosition)
-            {
-                for (int i = bottomLinePosition; i <= yNp; i += spacing)
-                {
-                    g.DrawLine(p, new Point(xNp - 50, i), new Point(xNp + 50, i));
-                }
-            }
+
 
             Bitmap result = new Bitmap(noteBitmap.Width + trebleC.Width, noteBitmap.Height);
             using Graphics rg = Graphics.FromImage(result);
@@ -84,7 +87,7 @@ namespace NotePractice
         {
             Keys[] noteKeys = { Keys.C, Keys.D, Keys.E, Keys.F, Keys.G, Keys.A, Keys.B };
             NoteLetter pressedNL = (NoteLetter)Array.IndexOf(noteKeys, key);
-            Bitmap result = NoteImage(note, clef);
+            Bitmap result = NoteImage([note], clef);
             using Graphics g = Graphics.FromImage(result);
 
             using Font font = new Font("Arial", 100);

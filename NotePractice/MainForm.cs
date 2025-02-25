@@ -9,9 +9,9 @@ namespace NotePractice
         {
             InitializeComponent();
 
-            Note = Noter.RandomNote(4,4);
+            Note = new Note(NoteLetter.C, 4);
 
-            mainPictureBox.Image = Noter.NoteImage(Note, Clef.Treble);
+            mainPictureBox.Image = Noter.NoteImage([Note, new Note(NoteLetter.C, 5)], Clef.Treble);
             mainPictureBox.Click += (sender, args) => mainPictureBox.Focus();
         }
 
@@ -32,7 +32,7 @@ namespace NotePractice
                 extraPictureBox.Image = Noter.NoteImageWithLetter(Note, Cco.PreviousClef, keyData);
                 mainPictureBox.Image?.Dispose();
                 Note = Noter.RandomNote(minOctave, maxOctave);
-                mainPictureBox.Image = Noter.NoteImage(Note, nextClef);
+                mainPictureBox.Image = Noter.NoteImage([Note], nextClef);
                 Cco.PreviousClef = nextClef;
                 return true;
             }

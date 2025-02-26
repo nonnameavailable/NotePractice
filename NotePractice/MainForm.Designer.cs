@@ -29,9 +29,10 @@
         private void InitializeComponent()
         {
             tableLayoutPanel1 = new TableLayoutPanel();
-            controlClefOctave = new ControlClefOctave();
             extraPictureBox = new PictureBox();
+            controlClefOctave = new ControlClefOctave();
             mainPictureBox = new PictureBox();
+            showPianoBTN = new Button();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)extraPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)mainPictureBox).BeginInit();
@@ -46,6 +47,7 @@
             tableLayoutPanel1.Controls.Add(extraPictureBox, 2, 1);
             tableLayoutPanel1.Controls.Add(controlClefOctave, 1, 0);
             tableLayoutPanel1.Controls.Add(mainPictureBox, 1, 1);
+            tableLayoutPanel1.Controls.Add(showPianoBTN, 0, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -54,16 +56,6 @@
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.Size = new Size(669, 428);
             tableLayoutPanel1.TabIndex = 0;
-            // 
-            // controlClefOctave
-            // 
-            tableLayoutPanel1.SetColumnSpan(controlClefOctave, 2);
-            controlClefOctave.Dock = DockStyle.Fill;
-            controlClefOctave.Location = new Point(103, 3);
-            controlClefOctave.Name = "controlClefOctave";
-            controlClefOctave.PreviousClef = Clef.Treble;
-            controlClefOctave.Size = new Size(563, 114);
-            controlClefOctave.TabIndex = 0;
             // 
             // extraPictureBox
             // 
@@ -75,6 +67,16 @@
             extraPictureBox.TabIndex = 1;
             extraPictureBox.TabStop = false;
             // 
+            // controlClefOctave
+            // 
+            tableLayoutPanel1.SetColumnSpan(controlClefOctave, 2);
+            controlClefOctave.Dock = DockStyle.Fill;
+            controlClefOctave.Location = new Point(103, 3);
+            controlClefOctave.Name = "controlClefOctave";
+            controlClefOctave.PreviousClef = Clef.Treble;
+            controlClefOctave.Size = new Size(563, 114);
+            controlClefOctave.TabIndex = 0;
+            // 
             // mainPictureBox
             // 
             mainPictureBox.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
@@ -84,6 +86,16 @@
             mainPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
             mainPictureBox.TabIndex = 0;
             mainPictureBox.TabStop = false;
+            // 
+            // showPianoBTN
+            // 
+            showPianoBTN.Dock = DockStyle.Fill;
+            showPianoBTN.Location = new Point(3, 3);
+            showPianoBTN.Name = "showPianoBTN";
+            showPianoBTN.Size = new Size(94, 114);
+            showPianoBTN.TabIndex = 2;
+            showPianoBTN.Text = "Show piano";
+            showPianoBTN.UseVisualStyleBackColor = true;
             // 
             // MainForm
             // 
@@ -106,5 +118,6 @@
         private PictureBox extraPictureBox;
         private NumericUpDown numericUpDown2;
         private ControlClefOctave controlClefOctave;
+        private Button showPianoBTN;
     }
 }

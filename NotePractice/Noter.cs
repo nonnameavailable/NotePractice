@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -101,6 +102,23 @@ namespace NotePractice
             }
             return result;
         }
+        public static Bitmap NoteImageWithLetter(Note correctNote, Clef clef, Note inputNote)
+        {
+            Bitmap result = NoteImage([correctNote], clef);
+            using Graphics g = Graphics.FromImage(result);
+
+            using Font font = new Font("Arial", 100);
+            if (correctNote.Equals(inputNote))
+            {
+                g.DrawString(correctNote.ToString(), font, Brushes.Green, 20, 0);
+            }
+            else
+            {
+                g.DrawString(inputNote.ToString(), font, Brushes.Red, 20, 0);
+                g.DrawString(correctNote.ToString(), font, Brushes.Green, 20, 120);
+            }
+            return result;
+        }
         private static void DrawNote(Graphics g, OVector position, int size)
         {
             OVector start = new OVector(position.X - size / 2d, position.Y);
@@ -145,32 +163,8 @@ namespace NotePractice
             if (octave == 0) minNl = 5;
             if (octave == 8) maxNl = 1;
             NoteLetter nl = (NoteLetter)r.Next(minNl, maxNl);
-            return new Note(nl, octave);
+            Note result = new Note(nl, octave);
+            return result;
         }
-    }
-    public enum NoteLetter
-    {
-        C,
-        D,
-        E,
-        F,
-        G,
-        A,
-        B
-    }
-    public enum Clef
-    {
-        Treble,
-        Bass
-    }
-    public struct Note
-    {
-        public Note(NoteLetter noteLetter, int octave)
-        {
-            NoteLetter = noteLetter;
-            Octave = octave;
-        }
-        public NoteLetter NoteLetter { get; }
-        public int Octave { get; }
     }
 }

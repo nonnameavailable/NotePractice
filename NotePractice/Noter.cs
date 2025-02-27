@@ -20,13 +20,13 @@ namespace NotePractice
             using Bitmap noteBitmap = new Bitmap(trebleC.Width, trebleC.Height * 3);
             using Graphics g = Graphics.FromImage(noteBitmap);
             g.Clear(Color.White);
-            int offset = 64 + trebleC.Height;
-            int spacing = 30;
+            int offset = 79 + trebleC.Height;
+            int spacing = 38;
             int topLinePosition = offset;
             int bottomLinePosition = offset + spacing * 4;
 
             int noteShift = spacing / 2;
-            using Pen p = new Pen(Brushes.Black, 3);
+            using Pen p = new Pen(Brushes.Black, 4);
             foreach (Note note in notes)
             {
                 int noteInt = (int)note.NoteLetter;
@@ -44,8 +44,23 @@ namespace NotePractice
                 }
 
                 OVector notePosition = new OVector(xNp, yNp);
-
-                DrawNote(g, notePosition, noteBitmap.Width / 5);
+                int noteSize = noteBitmap.Width / 5;
+                DrawNote(g, notePosition, noteSize);
+                if(note.Sharp || note.Flat)
+                {
+                    string symbol = note.Sharp ? "#" : "b";
+                    float fontSize = note.Sharp ? noteSize * 0.7f : noteSize * 0.5f;
+                    using Font f = new Font("Arial", fontSize);
+                    Point pos;
+                    if (note.Sharp)
+                    {
+                        pos = new Point(notePosition.Xint - 80, notePosition.Yint - 37);
+                    } else
+                    {
+                        pos = new Point(notePosition.Xint - 65, notePosition.Yint - 32);
+                    }
+                    g.DrawString(symbol, f, Brushes.Black, pos);
+                }
                 if (yNp < topLinePosition)
                 {
                     for (int i = topLinePosition; i >= yNp; i -= spacing)
@@ -153,7 +168,7 @@ namespace NotePractice
             }
             return path;
         }
-        public static Note RandomNote(int minOctave, int maxOctave)
+        public static Note RandomNote(int minOctave, int maxOctave, bool includeSharpFlat)
         {
             Random r = new Random();            
             int octave = r.Next(minOctave, maxOctave + 1);
@@ -164,6 +179,26 @@ namespace NotePractice
             if (octave == 8) maxNl = 1;
             NoteLetter nl = (NoteLetter)r.Next(minNl, maxNl);
             Note result = new Note(nl, octave);
+            if (includeSharpFlat)
+            {
+                int rnd = r.Next(0, 10);
+                if(rnd < 3)
+                {
+                    result.Sharp = true;
+                    if(nl == NoteLetter.E || nl == NoteLetter.B)
+                    {
+                        result.NoteLetter = (NoteLetter)((int)nl - 1);
+                    }
+                }
+                else if(rnd < 6)
+                {
+                    result.Flat = true;
+                    if (nl == NoteLetter.F || nl == NoteLetter.C)
+                    {
+                        result.NoteLetter = (NoteLetter)((int)nl + 1);
+                    }
+                }
+            }
             return result;
         }
     }

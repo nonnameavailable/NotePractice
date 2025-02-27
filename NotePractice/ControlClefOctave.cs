@@ -16,6 +16,7 @@ namespace NotePractice
         public int TrebleMax { get => (int)trebleMaxNUD.Value; }
         public int BassMin { get => (int)bassMinNUD.Value; }
         public int BassMax { get => (int)bassMaxNUD.Value; }
+        public bool IncludeSharpFlat { get => includeSharpFlatCB.Checked; }
         public Clef NextClef
         {
             get
@@ -54,7 +55,7 @@ namespace NotePractice
 
         private void BassMaxNUD_ValueChanged(object? sender, EventArgs e)
         {
-            if(BassMax < BassMin) bassMaxNUD.Value =  BassMin;
+            if (BassMax < BassMin) bassMaxNUD.Value = BassMin;
         }
 
         private void BassMinNUD_ValueChanged(object? sender, EventArgs e)
@@ -70,6 +71,11 @@ namespace NotePractice
         private void TrebleMinNUD_ValueChanged(object? sender, EventArgs e)
         {
             if (TrebleMin > TrebleMax) trebleMinNUD.Value = TrebleMax;
+        }
+
+        private void clefCBB_SelectedIndexChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }

@@ -15,10 +15,10 @@ namespace NotePractice
             Sharp = sharp;
             Flat = flat;
         }
-        public NoteLetter NoteLetter { get; }
-        public int Octave { get; }
-        public bool Flat { get; }
-        public bool Sharp { get; }
+        public NoteLetter NoteLetter { get; set; }
+        public int Octave { get; set; }
+        public bool Flat { get; set; }
+        public bool Sharp { get; set; }
         public override string ToString()
         {
             string sharpFlat = "";

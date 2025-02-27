@@ -21,9 +21,9 @@ namespace NotePractice
         {
             InitializeComponent();
 
-            Note = new Note(NoteLetter.C, 4);
+            Note = new Note(NoteLetter.C, 4, sharp:true);
 
-            mainPictureBox.Image = Noter.NoteImage([Note, new Note(NoteLetter.C, 5)], Clef.Treble);
+            mainPictureBox.Image = Noter.NoteImage([Note], Clef.Treble);
             mainPictureBox.Click += (sender, args) => mainPictureBox.Focus();
             ShowPianoBTN_Click(null, EventArgs.Empty);
             showPianoBTN.Click += ShowPianoBTN_Click;
@@ -67,7 +67,7 @@ namespace NotePractice
             extraPictureBox.Image?.Dispose();
             extraPictureBox.Image = Noter.NoteImageWithLetter(Note, Cco.PreviousClef, note);
             mainPictureBox.Image?.Dispose();
-            Note = Noter.RandomNote(minOctave, maxOctave);
+            Note = Noter.RandomNote(minOctave, maxOctave, controlClefOctave.IncludeSharpFlat);
             mainPictureBox.Image = Noter.NoteImage([Note], nextClef);
             Cco.PreviousClef = nextClef;
         }
@@ -81,7 +81,7 @@ namespace NotePractice
             extraPictureBox.Image?.Dispose();
             extraPictureBox.Image = Noter.NoteImageWithLetter(Note, Cco.PreviousClef, keyData);
             mainPictureBox.Image?.Dispose();
-            Note = Noter.RandomNote(minOctave, maxOctave);
+            Note = Noter.RandomNote(minOctave, maxOctave, controlClefOctave.IncludeSharpFlat);
             mainPictureBox.Image = Noter.NoteImage([Note], nextClef);
             Cco.PreviousClef = nextClef;
         }

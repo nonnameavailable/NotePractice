@@ -22,6 +22,7 @@ namespace NotePractice
             InitializeComponent();
 
             Note = new Note(NoteLetter.C, 4, sharp:true);
+            Debug.Print(Note.Equals(new Note(NoteLetter.C, 4)).ToString());
 
             mainPictureBox.Image = Noter.NoteImage([Note], Clef.Treble);
             mainPictureBox.Click += (sender, args) => mainPictureBox.Focus();

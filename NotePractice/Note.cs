@@ -38,6 +38,8 @@ namespace NotePractice
             {
                 letterCond = (NoteLetter)((int)NoteLetter + 1) == n.NoteLetter;
             }
+            if ((n.Flat || n.Sharp) && !Flat && !Sharp) letterCond = false;
+            if ((Flat || Sharp) && !n.Flat && !n.Sharp) letterCond = false;
             return letterCond && n.Octave == Octave;
         }
     }

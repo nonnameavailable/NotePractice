@@ -15,13 +15,12 @@ namespace NotePractice
     {
         public static Bitmap NoteImage(List<Note> notes, Clef clef)
         {
-            Bitmap trebleC = Resources.treble_clef;
-            Bitmap BassC = Resources.bass_clef;
-            using Bitmap noteBitmap = new Bitmap(trebleC.Width, trebleC.Height * 3);
+            Bitmap clefC = clef == Clef.Treble ? Resources.treble_clef : Resources.bass_clef;
+            using Bitmap noteBitmap = new Bitmap(clefC.Width, clefC.Height * 3);
             using Graphics g = Graphics.FromImage(noteBitmap);
             g.Clear(Color.White);
-            int offset = 79 + trebleC.Height;
-            int spacing = 38;
+            int offset = 65 + clefC.Height;
+            int spacing = 30;
             int topLinePosition = offset;
             int bottomLinePosition = offset + spacing * 4;
 
@@ -76,25 +75,15 @@ namespace NotePractice
                     }
                 }
             }
-
-
-            Bitmap result = new Bitmap(noteBitmap.Width + trebleC.Width, noteBitmap.Height);
+            Bitmap result = new Bitmap(noteBitmap.Width + clefC.Width, noteBitmap.Height);
             using Graphics rg = Graphics.FromImage(result);
             rg.Clear(Color.White);
-
-            if (clef == Clef.Treble)
-            {
-                rg.DrawImage(trebleC, 0, trebleC.Height);
-            } else
-            {
-                rg.DrawImage(BassC, 0, trebleC.Height);
-            }
-            rg.DrawImage(noteBitmap, trebleC.Width, 0);
+            rg.DrawImage(clefC, 0, clefC.Height);
+            rg.DrawImage(noteBitmap, clefC.Width, 0);
             for (int i = 0; i < 5; i++)
             {
                 Point startPoint = new Point(40, offset + i * spacing);
                 Point endPoint = new Point(result.Width, offset + i * spacing);
-
                 rg.DrawLine(p, startPoint, endPoint);
             }
             return result;
@@ -136,16 +125,18 @@ namespace NotePractice
         }
         private static void DrawNote(Graphics g, OVector position, int size)
         {
-            OVector start = new OVector(position.X - size / 2d, position.Y);
-            OVector end = new OVector(position.X + size / 2d, position.Y);
-            GraphicsPath upperPath = ArcPath(start, end, size * 0.65, 10);
-            GraphicsPath lowerPath = ArcPath(end, start, size * 0.65, 10);
-            float noteThickness = size / 8;
-            using Pen pen = new Pen(Brushes.Black, noteThickness);
-            pen.StartCap = LineCap.Round;
-            pen.EndCap = LineCap.Round;
-            g.DrawPath(pen, upperPath);
-            g.DrawPath(pen, lowerPath);
+            using Pen p = new Pen(Brushes.Black, size / 8f);
+            g.DrawEllipse(p, (float)(position.X - size / 2), (float)(position.Y - size / 4), size, size / 2);
+        //    OVector start = new OVector(position.X - size / 2d, position.Y);
+        //    OVector end = new OVector(position.X + size / 2d, position.Y);
+        //    GraphicsPath upperPath = ArcPath(start, end, size * 0.65, 10);
+        //    GraphicsPath lowerPath = ArcPath(end, start, size * 0.65, 10);
+        //    float noteThickness = size / 8;
+        //    using Pen pen = new Pen(Brushes.Black, noteThickness);
+        //    pen.StartCap = LineCap.Round;
+        //    pen.EndCap = LineCap.Round;
+        //    g.DrawPath(pen, upperPath);
+        //    g.DrawPath(pen, lowerPath);
         }
 
         public static GraphicsPath ArcPath(OVector start, OVector end, double radius, int steps)

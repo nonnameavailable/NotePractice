@@ -76,6 +76,7 @@ namespace NotePractice.Piano
         public Note NoteUnderCursor(Point mousePoint)
         {
             int i = (int)(mousePoint.X / (WhiteKeyWidth * 52d) * 52);
+            if (i > 51) return null;
             Rectangle whiteKey = new Rectangle(i * WhiteKeyWidth, WhiteKeyHeight, WhiteKeyWidth, WhiteKeyHeight);
             Rectangle blackKey = new Rectangle((int)(i * WhiteKeyWidth - BlackKeyWidth * 0.5), WhiteKeyHeight, BlackKeyWidth, BlackKeyHeight);
             Rectangle nextBlackKey = new Rectangle((int)((i + 1) * WhiteKeyWidth - BlackKeyWidth * 0.5), WhiteKeyHeight, BlackKeyWidth, BlackKeyHeight);

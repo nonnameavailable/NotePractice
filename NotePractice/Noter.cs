@@ -13,18 +13,19 @@ namespace NotePractice
 {
     public class Noter
     {
+        public const int ClefWidth = 293;
+        public const int ClefHeight = 242;
+        public const int Offset = 65 + ClefHeight;
+        public const int Spacing = 30;
+        public const int TopLinePosition = Offset;
+        public const int BottomLinePosition = Offset + Spacing;
+        public const int NoteShift = Spacing / 2;
         public static Bitmap NoteImage(List<Note> notes, Clef clef)
         {
             Bitmap clefC = clef == Clef.Treble ? Resources.treble_clef : Resources.bass_clef;
             using Bitmap noteBitmap = new Bitmap(clefC.Width, clefC.Height * 3);
             using Graphics g = Graphics.FromImage(noteBitmap);
             g.Clear(Color.White);
-            int offset = 65 + clefC.Height;
-            int spacing = 30;
-            int topLinePosition = offset;
-            int bottomLinePosition = offset + spacing * 4;
-
-            int noteShift = spacing / 2;
             using Pen p = new Pen(Brushes.Black, 4);
             foreach (Note note in notes)
             {
@@ -35,11 +36,11 @@ namespace NotePractice
                 int yNp;
                 if (clef == Clef.Treble)
                 {
-                    yNp = (int)(offset + spacing * 5 - noteInt * noteShift + 28 * noteShift - octave * 7 * noteShift);
+                    yNp = (int)(Offset + Spacing * 5 - noteInt * NoteShift + 28 * NoteShift - octave * 7 * NoteShift);
                 }
                 else
                 {
-                    yNp = (int)(offset - spacing - noteInt * noteShift + 28 * noteShift - octave * 7 * noteShift);
+                    yNp = (int)(Offset - Spacing - noteInt * NoteShift + 28 * NoteShift - octave * 7 * NoteShift);
                 }
 
                 OVector notePosition = new OVector(xNp, yNp);
@@ -60,16 +61,16 @@ namespace NotePractice
                     }
                     g.DrawString(symbol, f, Brushes.Black, pos);
                 }
-                if (yNp < topLinePosition)
+                if (yNp < TopLinePosition)
                 {
-                    for (int i = topLinePosition; i >= yNp; i -= spacing)
+                    for (int i = TopLinePosition; i >= yNp; i -= Spacing)
                     {
                         g.DrawLine(p, new Point(xNp - 50, i), new Point(xNp + 50, i));
                     }
                 }
-                if (yNp > bottomLinePosition)
+                if (yNp > BottomLinePosition)
                 {
-                    for (int i = bottomLinePosition; i <= yNp; i += spacing)
+                    for (int i = BottomLinePosition; i <= yNp; i += Spacing)
                     {
                         g.DrawLine(p, new Point(xNp - 50, i), new Point(xNp + 50, i));
                     }
@@ -82,8 +83,8 @@ namespace NotePractice
             rg.DrawImage(noteBitmap, clefC.Width, 0);
             for (int i = 0; i < 5; i++)
             {
-                Point startPoint = new Point(40, offset + i * spacing);
-                Point endPoint = new Point(result.Width, offset + i * spacing);
+                Point startPoint = new Point(40, Offset + i * Spacing);
+                Point endPoint = new Point(result.Width, Offset + i * Spacing);
                 rg.DrawLine(p, startPoint, endPoint);
             }
             return result;

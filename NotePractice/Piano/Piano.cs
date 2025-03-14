@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NotePractice.Properties;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -13,11 +14,22 @@ namespace NotePractice.Piano
         private const int BlackKeyWidth = 12;
         private const int WhiteKeyHeight = 100;
         private const int BlackKeyHeight = 65;
-
+        private bool _helpMode;
+        public bool HelpMode {
+            get
+            {
+                return _helpMode;
+            }
+            set
+            {
+                _helpMode = value;
+            }
+        }
         public Piano()
         {
+            HelpMode = true;
         }
-        public Bitmap PianoBitmap(Point mousePoint, out Note playedNote)
+        public Bitmap PianoBitmap(Point mousePoint, out Note? playedNote)
         {
             Bitmap helpBitmap = HelpBitmap();
             Bitmap result = new Bitmap(WhiteKeyWidth * 52, WhiteKeyHeight + helpBitmap.Height);
@@ -61,6 +73,10 @@ namespace NotePractice.Piano
         }
         private Bitmap HelpBitmap()
         {
+            if (!HelpMode)
+            {
+                return new Bitmap(Resources.treble_clef.Width * 2, 1);
+            }
             Bitmap result = new Bitmap(WhiteKeyWidth * 52, WhiteKeyHeight);
             Graphics g = Graphics.FromImage(result);
             for(int i = 0; i < 52; i++)

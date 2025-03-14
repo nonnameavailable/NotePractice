@@ -44,8 +44,28 @@ namespace NotePractice.Piano
         private void UpdateHelpPictureBox()
         {
             Bitmap newHelpImage = Noter.NoteImageWithLetter(_noteUnderCursor, _helpClef, _noteUnderCursor);
+            using Graphics g = Graphics.FromImage(newHelpImage);
+            HelpBitmapColorOverlay(g);
             helpPictureBox.Image?.Dispose();
             helpPictureBox.Image = newHelpImage;
+        }
+        private void HelpBitmapColorOverlay(Graphics g)
+        {
+            int width = Noter.ClefWidth * 2;
+            int octaveHeight = Noter.NoteShift * 7;
+            for(int i = 0; i < 8; i++)
+            {
+                Color c = ColorConvertor.HSBtoRGB(i / 8f, 1, 1);
+                Color ca = Color.FromArgb(120, c.R, c.G, c.B);
+                int y = Noter.ClefHeight * 3 + Noter.NoteShift * 3 - Noter.NoteShift * 7 * i;
+                if(_helpClef == Clef.Bass)
+                {
+                    y -= Noter.Spacing * 6;
+                }
+                Rectangle colorRectangle = new Rectangle(0, y, width, octaveHeight);
+                using Brush brush = new SolidBrush(ca);
+                g.FillRectangle(brush, colorRectangle);
+            }
         }
         private void MainPictureBox_Click(object? sender, EventArgs e)
         {
@@ -74,6 +94,21 @@ namespace NotePractice.Piano
                     _helpClef = Clef.Bass;
                     UpdateHelpPictureBox();
                     return true;
+                }
+                else if(keyData == Keys.H)
+                {
+                    _piano.HelpMode = !_piano.HelpMode;
+                    if (_piano.HelpMode)
+                    {
+                        helpPictureBox.Visible = true;
+                    } else
+                    {
+                        helpPictureBox.Visible = false;
+                    }
+                    UpdateHelpPictureBox();
+                    Image newImage = _piano.PianoBitmap(mainPictureBox.MousePositionOnImage, out Note playedNote);
+                    mainPictureBox.Image?.Dispose();
+                    mainPictureBox.Image = newImage;
                 }
             }
             return base.ProcessKeyPreview(ref m);

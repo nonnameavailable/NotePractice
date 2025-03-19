@@ -19,6 +19,7 @@ namespace NotePractice
         public int Octave { get; set; }
         public bool Flat { get; set; }
         public bool Sharp { get; set; }
+        public int NumVal { get => Octave * 7 + (int)NoteLetter; }
         public override string ToString()
         {
             string sharpFlat = "";
@@ -41,6 +42,26 @@ namespace NotePractice
             if ((n.Flat || n.Sharp) && !Flat && !Sharp) letterCond = false;
             if ((Flat || Sharp) && !n.Flat && !n.Sharp) letterCond = false;
             return letterCond && n.Octave == Octave;
+        }
+        public int Distance(Note note)
+        {
+            return Math.Abs(note.NumVal - NumVal) + 1;
+        }
+        public Note ShiftedNote(int shiftValue)
+        {
+            int newNlVal = (int)NoteLetter + shiftValue;
+            int newOctave = Octave;
+            if(newNlVal > 6)
+            {
+                newNlVal -= 7;
+                newOctave++;
+            }
+            if(newNlVal < 0)
+            {
+                newNlVal += 7;
+                newOctave--;
+            }
+            return new Note((NoteLetter)newNlVal, newOctave);
         }
     }
     public enum NoteLetter

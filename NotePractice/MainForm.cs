@@ -15,6 +15,7 @@ namespace NotePractice
     public partial class MainForm : Form
     {
         public Note Note { get; set; }
+        public List<Note> Notes { get; set; }
         public ControlClefOctave Cco { get => controlClefOctave; }
         private PianoForm _pianoForm;
         public MainForm()
@@ -28,6 +29,8 @@ namespace NotePractice
             mainPictureBox.Click += (sender, args) => mainPictureBox.Focus();
             ShowPianoBTN_Click(null, EventArgs.Empty);
             showPianoBTN.Click += ShowPianoBTN_Click;
+            Notes = [new Note(NoteLetter.C, 4), new Note(NoteLetter.D, 4)];
+            practiceModeCBB.SelectedIndex = 0;
         }
 
         private void ShowPianoBTN_Click(object? sender, EventArgs e)
@@ -53,7 +56,13 @@ namespace NotePractice
             Keys keyData = (Keys)m.WParam.ToInt32();
             if (m.Msg == WM_KEYDOWN)
             {
-                EvaluateNoteFromKey(keyData);
+                if(practiceModeCBB.Text == "Notes")
+                {
+                    EvaluateNoteFromKey(keyData);
+                } else
+                {
+                    EvaluateIntervalFromKey(keyData);
+                }
                 return true;
             }
             return base.ProcessKeyPreview(ref m);
@@ -84,6 +93,21 @@ namespace NotePractice
             mainPictureBox.Image?.Dispose();
             Note = Noter.RandomNote(minOctave, maxOctave, controlClefOctave.IncludeSharpFlat);
             mainPictureBox.Image = Noter.NoteImage([Note], nextClef);
+            Cco.PreviousClef = nextClef;
+        }
+        private void EvaluateIntervalFromKey(Keys keyData)
+        {
+            Clef nextClef = Cco.NextClef;
+            extraPictureBox.Image?.Dispose();
+            extraPictureBox.Image = Noter.IntervalImageWithNumber(Notes, Cco.PreviousClef, keyData);
+            mainPictureBox.Image?.Dispose();
+            int minOctave = nextClef == Clef.Treble ? Cco.TrebleMin : Cco.BassMin;
+            int maxOctave = nextClef == Clef.Treble ? Cco.TrebleMax : Cco.BassMax;
+            Note = Noter.RandomNote(minOctave, maxOctave, false);
+            int shift = new Random().Next(-7, 8);
+            Notes = [Note, Note.ShiftedNote(shift)];
+            mainPictureBox.Image?.Dispose();
+            mainPictureBox.Image = Noter.NoteImage(Notes, nextClef);
             Cco.PreviousClef = nextClef;
         }
     }

@@ -33,6 +33,7 @@
             controlClefOctave = new ControlClefOctave();
             mainPictureBox = new PictureBox();
             showPianoBTN = new Button();
+            practiceModeCBB = new ComboBox();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)extraPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)mainPictureBox).BeginInit();
@@ -48,6 +49,7 @@
             tableLayoutPanel1.Controls.Add(controlClefOctave, 1, 0);
             tableLayoutPanel1.Controls.Add(mainPictureBox, 1, 1);
             tableLayoutPanel1.Controls.Add(showPianoBTN, 0, 0);
+            tableLayoutPanel1.Controls.Add(practiceModeCBB, 2, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -69,12 +71,11 @@
             // 
             // controlClefOctave
             // 
-            tableLayoutPanel1.SetColumnSpan(controlClefOctave, 2);
             controlClefOctave.Dock = DockStyle.Fill;
             controlClefOctave.Location = new Point(103, 3);
             controlClefOctave.Name = "controlClefOctave";
             controlClefOctave.PreviousClef = Clef.Treble;
-            controlClefOctave.Size = new Size(563, 114);
+            controlClefOctave.Size = new Size(363, 114);
             controlClefOctave.TabIndex = 0;
             // 
             // mainPictureBox
@@ -96,6 +97,16 @@
             showPianoBTN.TabIndex = 2;
             showPianoBTN.Text = "Show piano";
             showPianoBTN.UseVisualStyleBackColor = true;
+            // 
+            // practiceModeCBB
+            // 
+            practiceModeCBB.DropDownStyle = ComboBoxStyle.DropDownList;
+            practiceModeCBB.FormattingEnabled = true;
+            practiceModeCBB.Items.AddRange(new object[] { "Notes", "Intervals" });
+            practiceModeCBB.Location = new Point(472, 3);
+            practiceModeCBB.Name = "practiceModeCBB";
+            practiceModeCBB.Size = new Size(121, 23);
+            practiceModeCBB.TabIndex = 3;
             // 
             // MainForm
             // 
@@ -119,5 +130,6 @@
         private NumericUpDown numericUpDown2;
         private ControlClefOctave controlClefOctave;
         private Button showPianoBTN;
+        private ComboBox practiceModeCBB;
     }
 }

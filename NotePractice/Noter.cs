@@ -124,6 +124,26 @@ namespace NotePractice
             }
             return result;
         }
+        public static Bitmap IntervalImageWithNumber(List<Note> notes, Clef clef, Keys inputKey)
+        {
+            notes = notes.OrderBy(n => n.NumVal).ToList();
+            Bitmap result = NoteImage(notes, clef);
+            using Graphics g = Graphics.FromImage(result);
+            using Font font = new Font("Arial", 80);
+            Keys[] numkeys = [Keys.NumPad2, Keys.NumPad3, Keys.NumPad4, Keys.NumPad5, Keys.NumPad6, Keys.NumPad7, Keys.NumPad8];
+            int pressedNo = Array.IndexOf(numkeys, inputKey) + 2;
+            int distance = notes[0].Distance(notes[1]);
+            if(pressedNo == distance)
+            {
+                g.DrawString(distance.ToString() + $"({notes[0].ToString()} - {notes[1].ToString()})", font, Brushes.Green, 20, 0);
+            }
+            else
+            {
+                g.DrawString(pressedNo.ToString(), font, Brushes.Red, 20, 0);
+                g.DrawString(distance.ToString() + $"({notes[0].ToString()} - {notes[1].ToString()})", font, Brushes.Green, 20, 120);
+            }
+            return result;
+        }
         private static void DrawNote(Graphics g, OVector position, int size)
         {
             using Pen p = new Pen(Brushes.Black, size / 8f);

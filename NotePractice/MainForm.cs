@@ -21,7 +21,7 @@ namespace NotePractice
         public MainForm()
         {
             InitializeComponent();
-
+            AutoScaleMode = AutoScaleMode.None;
             Note = new Note(NoteLetter.C, 4, sharp:true);
             Debug.Print(Note.Equals(new Note(NoteLetter.C, 4)).ToString());
 

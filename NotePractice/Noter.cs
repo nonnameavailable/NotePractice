@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -27,12 +28,17 @@ namespace NotePractice
             using Graphics g = Graphics.FromImage(noteBitmap);
             g.Clear(Color.White);
             using Pen p = new Pen(Brushes.Black, 4);
+            int counter = 0;
+            Random rand = new Random();
             foreach (Note note in notes)
             {
                 int noteInt = (int)note.NoteLetter;
                 int octave = note.Octave;
-
                 int xNp = noteBitmap.Width / 2;
+                if(rand.Next(11) > 4 && counter > 0)
+                {
+                    xNp = (int)(noteBitmap.Width * 0.8);
+                }
                 int yNp;
                 if (clef == Clef.Treble)
                 {
@@ -75,11 +81,12 @@ namespace NotePractice
                         g.DrawLine(p, new Point(xNp - 50, i), new Point(xNp + 50, i));
                     }
                 }
+                counter++;
             }
             Bitmap result = new Bitmap(noteBitmap.Width + clefC.Width, noteBitmap.Height);
             using Graphics rg = Graphics.FromImage(result);
             rg.Clear(Color.White);
-            rg.DrawImage(clefC, 0, clefC.Height);
+            rg.DrawImage(clefC, 0, clefC.Height, clefC.Width, clefC.Height);
             rg.DrawImage(noteBitmap, clefC.Width, 0);
             for (int i = 0; i < 5; i++)
             {
@@ -96,7 +103,7 @@ namespace NotePractice
             Bitmap result = NoteImage([note], clef);
             using Graphics g = Graphics.FromImage(result);
 
-            using Font font = new Font("Arial", 100);
+            using Font font = ScaledLetterFont(100); 
             if(pressedNL == note.NoteLetter)
             {
                 g.DrawString(key.ToString() + note.Octave.ToString(), font, Brushes.Green, 20, 0);
@@ -112,7 +119,7 @@ namespace NotePractice
             Bitmap result = NoteImage([correctNote], clef);
             using Graphics g = Graphics.FromImage(result);
 
-            using Font font = new Font("Arial", 100);
+            using Font font = ScaledLetterFont(100); 
             if (correctNote.Equals(inputNote))
             {
                 g.DrawString(correctNote.ToString(), font, Brushes.Green, 20, 0);
@@ -129,7 +136,7 @@ namespace NotePractice
             notes = notes.OrderBy(n => n.NumVal).ToList();
             Bitmap result = NoteImage(notes, clef);
             using Graphics g = Graphics.FromImage(result);
-            using Font font = new Font("Arial", 80);
+            using Font font = ScaledLetterFont(80); 
             Keys[] numkeys = [Keys.NumPad2, Keys.NumPad3, Keys.NumPad4, Keys.NumPad5, Keys.NumPad6, Keys.NumPad7, Keys.NumPad8];
             int pressedNo = Array.IndexOf(numkeys, inputKey) + 2;
             int distance = notes[0].Distance(notes[1]);
@@ -212,6 +219,18 @@ namespace NotePractice
                 }
             }
             return result;
+        }
+        private static float DpiMult()
+        {
+            using (Graphics graphics = Graphics.FromHwnd(IntPtr.Zero))
+            {
+                float dpiX = graphics.DpiX; // Horizontal DPI
+                return 96 / dpiX;
+            }
+        }
+        private static Font ScaledLetterFont(float baseSize)
+        {
+            return new Font("Arial", baseSize * DpiMult());
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using NotePractice.Properties;
+﻿using NotePractice.Music.Symbols;
+using NotePractice.Properties;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;

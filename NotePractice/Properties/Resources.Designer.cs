@@ -73,6 +73,16 @@ namespace NotePractice.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap squiggle {
+            get {
+                object obj = ResourceManager.GetObject("squiggle", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap treble_clef {
             get {
                 object obj = ResourceManager.GetObject("treble_clef", resourceCulture);

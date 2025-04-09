@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NotePractice.Music.Symbols;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -17,6 +18,8 @@ namespace NotePractice
         public int BassMin { get => (int)bassMinNUD.Value; }
         public int BassMax { get => (int)bassMaxNUD.Value; }
         public bool IncludeSharpFlat { get => includeSharpFlatCB.Checked; }
+        public int WritingOctave { get => (int)(writingOctaveNUD.Value); set => writingOctaveNUD.Value = Math.Clamp(value, 0, 8); }
+        public int WritingDuration { get => (int)durationNUD.Value; set => durationNUD.Value = Math.Clamp(value, 1, 64); }
         public Clef NextClef
         {
             get

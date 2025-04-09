@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using NotePractice.Music.Symbols;
 using NotePractice.Properties;
 
 namespace NotePractice

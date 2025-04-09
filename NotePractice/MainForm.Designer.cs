@@ -1,4 +1,6 @@
-﻿namespace NotePractice
+﻿using NotePractice.Music.Symbols;
+
+namespace NotePractice
 {
     partial class MainForm
     {
@@ -34,9 +36,17 @@
             mainPictureBox = new PictureBox();
             showPianoBTN = new Button();
             practiceModeCBB = new ComboBox();
+            panel1 = new Panel();
+            modeGroupBox = new GroupBox();
+            practiceRB = new RadioButton();
+            writingRB = new RadioButton();
+            modeControlPanel = new Panel();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)extraPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)mainPictureBox).BeginInit();
+            panel1.SuspendLayout();
+            modeGroupBox.SuspendLayout();
+            modeControlPanel.SuspendLayout();
             SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -46,10 +56,11 @@
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
             tableLayoutPanel1.Controls.Add(extraPictureBox, 2, 1);
-            tableLayoutPanel1.Controls.Add(controlClefOctave, 1, 0);
             tableLayoutPanel1.Controls.Add(mainPictureBox, 1, 1);
             tableLayoutPanel1.Controls.Add(showPianoBTN, 0, 0);
             tableLayoutPanel1.Controls.Add(practiceModeCBB, 2, 0);
+            tableLayoutPanel1.Controls.Add(panel1, 0, 1);
+            tableLayoutPanel1.Controls.Add(modeControlPanel, 1, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -72,7 +83,7 @@
             // controlClefOctave
             // 
             controlClefOctave.Dock = DockStyle.Fill;
-            controlClefOctave.Location = new Point(103, 3);
+            controlClefOctave.Location = new Point(0, 0);
             controlClefOctave.Name = "controlClefOctave";
             controlClefOctave.PreviousClef = Clef.Treble;
             controlClefOctave.Size = new Size(363, 114);
@@ -108,6 +119,57 @@
             practiceModeCBB.Size = new Size(121, 23);
             practiceModeCBB.TabIndex = 3;
             // 
+            // panel1
+            // 
+            panel1.Controls.Add(modeGroupBox);
+            panel1.Dock = DockStyle.Fill;
+            panel1.Location = new Point(3, 123);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(94, 302);
+            panel1.TabIndex = 4;
+            // 
+            // modeGroupBox
+            // 
+            modeGroupBox.Controls.Add(writingRB);
+            modeGroupBox.Controls.Add(practiceRB);
+            modeGroupBox.Location = new Point(3, 3);
+            modeGroupBox.Name = "modeGroupBox";
+            modeGroupBox.Size = new Size(88, 82);
+            modeGroupBox.TabIndex = 0;
+            modeGroupBox.TabStop = false;
+            modeGroupBox.Text = "Mode";
+            // 
+            // practiceRB
+            // 
+            practiceRB.AutoSize = true;
+            practiceRB.Location = new Point(6, 22);
+            practiceRB.Name = "practiceRB";
+            practiceRB.Size = new Size(67, 19);
+            practiceRB.TabIndex = 0;
+            practiceRB.TabStop = true;
+            practiceRB.Text = "Practice";
+            practiceRB.UseVisualStyleBackColor = true;
+            // 
+            // writingRB
+            // 
+            writingRB.AutoSize = true;
+            writingRB.Location = new Point(6, 47);
+            writingRB.Name = "writingRB";
+            writingRB.Size = new Size(64, 19);
+            writingRB.TabIndex = 1;
+            writingRB.TabStop = true;
+            writingRB.Text = "Writing";
+            writingRB.UseVisualStyleBackColor = true;
+            // 
+            // modeControlPanel
+            // 
+            modeControlPanel.Controls.Add(controlClefOctave);
+            modeControlPanel.Dock = DockStyle.Fill;
+            modeControlPanel.Location = new Point(103, 3);
+            modeControlPanel.Name = "modeControlPanel";
+            modeControlPanel.Size = new Size(363, 114);
+            modeControlPanel.TabIndex = 5;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -119,6 +181,10 @@
             tableLayoutPanel1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)extraPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)mainPictureBox).EndInit();
+            panel1.ResumeLayout(false);
+            modeGroupBox.ResumeLayout(false);
+            modeGroupBox.PerformLayout();
+            modeControlPanel.ResumeLayout(false);
             ResumeLayout(false);
         }
 
@@ -131,5 +197,10 @@
         private ControlClefOctave controlClefOctave;
         private Button showPianoBTN;
         private ComboBox practiceModeCBB;
+        private Panel panel1;
+        private GroupBox modeGroupBox;
+        private RadioButton writingRB;
+        private RadioButton practiceRB;
+        private Panel modeControlPanel;
     }
 }

@@ -1,25 +1,31 @@
-﻿using System;
+﻿using NotePractice.Music;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NotePractice
+namespace NotePractice.Music.Symbols
 {
-    public class Note
+    public class Note : Symbol
     {
-        public Note(NoteLetter noteLetter, int octave, bool sharp = false, bool flat = false)
+        public Note(NoteLetter noteLetter, int octave, bool sharp = false, bool flat = false, int duration = 1)
         {
             NoteLetter = noteLetter;
             Octave = octave;
             Sharp = sharp;
             Flat = flat;
+            Duration = duration;
         }
         public NoteLetter NoteLetter { get; set; }
         public int Octave { get; set; }
         public bool Flat { get; set; }
         public bool Sharp { get; set; }
         public int NumVal { get => Octave * 7 + (int)NoteLetter; }
+        public int Duration { get; set; }
+
+        public SymbolType Type { get => SymbolType.Note; }
+
         public override string ToString()
         {
             string sharpFlat = "";

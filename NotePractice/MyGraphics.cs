@@ -37,6 +37,11 @@ namespace NotePractice
                 double distance = i / (double)points.Length;
                 float width = Lerp(startWidth, endWidth, distance);
                 using Pen pen = new Pen(Color.Black, width);
+                if (i > 0)
+                {
+                    pen.StartCap = LineCap.Round;
+                    pen.EndCap = LineCap.Round;
+                }
                 g.DrawLine(pen, points[i], points[i + 1]);
             }
         }

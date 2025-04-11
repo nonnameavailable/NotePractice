@@ -136,34 +136,44 @@ namespace NotePractice.Music.Symbols
                 g.Restore(savedG);
                 // Draw stem
                 int stemXPos = (int)(xPos + noteWidth / 2 * 1.2);
-                int stemLength = MusicDrawer.LineSpacing * 3;
-                if (yPos <= MusicDrawer.TopLinePosition + MusicDrawer.LineSpacing * 2)
+                int stemLength = (int)(MusicDrawer.LineSpacing * 3.5);
+                bool stemDown = yPos <= MusicDrawer.TopLinePosition + MusicDrawer.LineSpacing * 2;
+                if (stemDown)
                 {
-                    stemXPos = (int)(xPos - noteWidth / 2 * 1.15);
-                    stemLength *= -1;
+                    stemXPos = (int)(xPos - noteWidth / 2 * 1.13);
                 }
                 if (DrawStem)
                 {
-                    g.DrawLine(MusicDrawer.LinePen, stemXPos, yPos, stemXPos, yPos - stemLength);
+                    if (stemDown)
+                    {
+                        g.DrawLine(MusicDrawer.LinePen, stemXPos, yPos, stemXPos, yPos + stemLength);
+                    } else
+                    {
+                        g.DrawLine(MusicDrawer.LinePen, stemXPos, yPos, stemXPos, yPos - stemLength);
+                    }
                 }
                 // Draw flag
                 if (DrawFlag && Duration > 4)
                 {
-                    int flagCount = (int)(Math.Log2(Duration));
+                    int flagCount = (int)(Math.Log2(Duration)) - 2;
                     int flagWidth = MusicDrawer.LineSpacing;
-                    int flagHeight = stemLength / 2;
-                    for(int i = 0; i < flagCount; i++)
+                    int flagHeight = Math.Abs(stemLength) / 2;
+                    for (int i = 0; i < flagCount; i++)
                     {
+                        int iShift = (int)(i * stemLength * 0.15);
                         int x1 = stemXPos;
-                        int y1 = yPos - stemLength;
+                        int y1 = yPos - stemLength + iShift;
                         int x2 = stemXPos + flagWidth;
-                        int y2 = yPos - stemLength + flagHeight;
-                        if (yPos <= MusicDrawer.TopLinePosition + MusicDrawer.LineSpacing * 2)
+                        int y2 = yPos - stemLength + flagHeight + iShift;
+                        if (stemDown)
                         {
-                            flagHeight *= -1;
+                            y1 = yPos + stemLength - iShift;
+                            x2 = stemXPos - flagWidth;
+                            y2 = yPos + stemLength - flagHeight - iShift;
                         }
-                        GraphicsPath flagPath = MyGraphics.ArcPath(new OVector(x1, y1), new OVector(x2, y2), stemLength, 20);
-                        //g.DrawPath(MusicDrawer.LinePen, flagPath);
+                        OVector v1 = new OVector(x1, y1);
+                        OVector v2 = new OVector(x2, y2);
+                        using GraphicsPath flagPath = MyGraphics.ArcPath(v1, v2, stemLength, 20);
                         MyGraphics.DrawPathInterpolatedWidths(g, flagPath, MusicDrawer.Unit * 0.2f, MusicDrawer.Unit * 0.05f);
 
                     }

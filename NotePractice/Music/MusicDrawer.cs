@@ -20,7 +20,7 @@ namespace NotePractice.Music
         public const int NoteShift = LineSpacing / 2;
         public const int TopLinePosition = LineSpacing * 4;
         public const int BottomLinePosition = LineSpacing * 8;
-        public static Pen LinePen = new Pen(Brushes.Black, 4);
+        public static Pen LinePen = new Pen(Brushes.Black, Unit * 0.1f);
         public static Pen NotePen = new Pen(Brushes.Black, Unit * 0.2f);
         public static Bitmap MusicBitmap(List<Symbol> symbols, bool drawCursor = true)
         {

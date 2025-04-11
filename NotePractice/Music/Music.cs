@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NotePractice.Music.Symbols;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -20,10 +21,11 @@ namespace NotePractice.Music
         Note,
         Rest,
         BarLine,
-        Shift
+        Shift,
+        Clef
     }
     public interface Symbol
     {
-        SymbolType Type { get; }
+        void Draw(Graphics g, int xPos, Clef clef = Clef.Treble);
     }
 }

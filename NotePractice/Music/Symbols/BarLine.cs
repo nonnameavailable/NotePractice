@@ -9,5 +9,9 @@ namespace NotePractice.Music.Symbols
     public class BarLine : Symbol
     {
         public SymbolType Type { get => SymbolType.BarLine; }
+        public void Draw(Graphics g, int xPos, Clef clef)
+        {
+            g.DrawLine(MusicDrawer.LinePen, xPos, MusicDrawer.TopLinePosition, xPos, MusicDrawer.BottomLinePosition);
+        }
     }
 }

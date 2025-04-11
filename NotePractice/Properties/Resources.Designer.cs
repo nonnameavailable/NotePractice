@@ -73,6 +73,16 @@ namespace NotePractice.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap bass_clef_nolines {
+            get {
+                object obj = ResourceManager.GetObject("bass_clef_nolines", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap squiggle {
             get {
                 object obj = ResourceManager.GetObject("squiggle", resourceCulture);
@@ -86,6 +96,16 @@ namespace NotePractice.Properties {
         internal static System.Drawing.Bitmap treble_clef {
             get {
                 object obj = ResourceManager.GetObject("treble_clef", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap treble_clef_nolines {
+            get {
+                object obj = ResourceManager.GetObject("treble_clef_nolines", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

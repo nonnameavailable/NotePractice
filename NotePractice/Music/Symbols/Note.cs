@@ -40,6 +40,8 @@ namespace NotePractice.Music.Symbols
         public int XPosShift { get; set; }
         public bool DrawStem { get; set; }
         public bool DrawFlag { get; set; }
+        public bool StemAlwaysRight { get; set; }
+        public int StemLength { get; set; }
 
         public SymbolType Type { get => SymbolType.Note; }
         public Note(NoteLetter noteLetter, int octave, bool sharp = false, bool flat = false, int duration = 1)
@@ -50,8 +52,9 @@ namespace NotePractice.Music.Symbols
             Flat = flat;
             Duration = duration;
             DrawStem = true;
-            DrawFlag = true;
+            DrawFlag = false;
             XPosShift = 0;
+            StemLength = MusicDrawer.DefaultStemLength;
         }
 
         public override string ToString()
@@ -97,37 +100,40 @@ namespace NotePractice.Music.Symbols
             }
             return new Note((NoteLetter)newNlVal, newOctave);
         }
-        public void Draw(Graphics g, int xPos, Clef clef)
+        public bool StemShouldBeLeft(Clef clef)
+        {
+            return YPos(clef) <= MusicDrawer.TopLinePosition + MusicDrawer.LineSpacing * 2;
+        }
+        private int YPos(Clef clef)
         {
             int noteInt = (int)NoteLetter;
-            int octave = Octave;
-            int yPos;
+            int yPos = (int)(MusicDrawer.LineSpacing * 4 + MusicDrawer.LineSpacing * 5 - noteInt * MusicDrawer.NoteShift + 28 * MusicDrawer.NoteShift - Octave * 7 * MusicDrawer.NoteShift);
+            if (clef == Clef.Bass)
+            {
+                yPos = (int)(MusicDrawer.LineSpacing * 3 - noteInt * MusicDrawer.NoteShift + 28 * MusicDrawer.NoteShift - Octave * 7 * MusicDrawer.NoteShift);
+            }
+            return yPos;
+        }
+        public void Draw(Graphics g, int xPos, Clef clef)
+        {
+            int yPos = YPos(clef);
             xPos += XPosShift;
-            // Y position calculation
-            if (clef == Clef.Treble)
-            {
-                yPos = (int)(MusicDrawer.LineSpacing * 4 + MusicDrawer.LineSpacing * 5 - noteInt * MusicDrawer.NoteShift + 28 * MusicDrawer.NoteShift - octave * 7 * MusicDrawer.NoteShift);
-            }
-            else
-            {
-                yPos = (int)(MusicDrawer.LineSpacing * 3 - noteInt * MusicDrawer.NoteShift + 28 * MusicDrawer.NoteShift - octave * 7 * MusicDrawer.NoteShift);
-            }
             // Draw ellipse based on note duration
             OVector notePosition = new OVector(xPos, yPos);
-            int noteHeight = (int)(MusicDrawer.LineSpacing * 0.9);
-            int noteWidth = (int)(noteHeight * 1.7);
+            int fnw = MusicDrawer.FullNoteWidth;
+            int fnh = MusicDrawer.FullNoteHeight;
+            int snw = MusicDrawer.SmallNoteWidth;
+            int snh = MusicDrawer.SmallNoteHeight;
             if (Duration == 1)
             {
-                g.DrawEllipse(MusicDrawer.NotePen, xPos - noteWidth / 2, yPos - noteHeight / 2, noteWidth, noteHeight);
+                g.DrawEllipse(MusicDrawer.NotePen, xPos - fnw / 2, yPos - fnh / 2, fnw, fnh);
             }
             else
             {
-                noteHeight = (int)(MusicDrawer.LineSpacing * 0.7);
-                noteWidth = (int)(noteHeight * 1.6);
                 GraphicsState savedG = g.Save();
                 g.TranslateTransform(xPos, yPos);
                 g.RotateTransform(-15);
-                Rectangle noteRectangle = new Rectangle(-noteWidth / 2, -noteHeight / 2, noteWidth, noteHeight);
+                Rectangle noteRectangle = new Rectangle(-snw / 2, -snh / 2, snw, snh);
                 g.DrawEllipse(MusicDrawer.NotePen, noteRectangle);
                 if (Duration > 2)
                 {
@@ -135,21 +141,20 @@ namespace NotePractice.Music.Symbols
                 }
                 g.Restore(savedG);
                 // Draw stem
-                int stemXPos = (int)(xPos + noteWidth / 2 * 1.2);
-                int stemLength = (int)(MusicDrawer.LineSpacing * 3.5);
-                bool stemDown = yPos <= MusicDrawer.TopLinePosition + MusicDrawer.LineSpacing * 2;
-                if (stemDown)
+                int stemXPos = (int)(xPos + snw / 2 * 1.2 - MusicDrawer.LinePen.Width * 0.5);
+                bool stemDown = StemShouldBeLeft(clef);
+                if (stemDown && !StemAlwaysRight)
                 {
-                    stemXPos = (int)(xPos - noteWidth / 2 * 1.13);
+                    stemXPos = (int)(xPos - snw / 2 * 1.13 + MusicDrawer.LinePen.Width * 0.5);
                 }
                 if (DrawStem)
                 {
-                    if (stemDown)
+                    if (stemDown && !StemAlwaysRight)
                     {
-                        g.DrawLine(MusicDrawer.LinePen, stemXPos, yPos, stemXPos, yPos + stemLength);
+                        g.DrawLine(MusicDrawer.LinePen, stemXPos, yPos, stemXPos, yPos + StemLength);
                     } else
                     {
-                        g.DrawLine(MusicDrawer.LinePen, stemXPos, yPos, stemXPos, yPos - stemLength);
+                        g.DrawLine(MusicDrawer.LinePen, stemXPos, yPos, stemXPos, yPos - StemLength);
                     }
                 }
                 // Draw flag
@@ -157,23 +162,23 @@ namespace NotePractice.Music.Symbols
                 {
                     int flagCount = (int)(Math.Log2(Duration)) - 2;
                     int flagWidth = MusicDrawer.LineSpacing;
-                    int flagHeight = Math.Abs(stemLength) / 2;
+                    int flagHeight = MusicDrawer.DefaultStemLength / 2;
                     for (int i = 0; i < flagCount; i++)
                     {
-                        int iShift = (int)(i * stemLength * 0.15);
+                        int iShift = (int)(i * MusicDrawer.DefaultStemLength * 0.15);
                         int x1 = stemXPos;
-                        int y1 = yPos - stemLength + iShift;
+                        int y1 = yPos - StemLength + iShift;
                         int x2 = stemXPos + flagWidth;
-                        int y2 = yPos - stemLength + flagHeight + iShift;
-                        if (stemDown)
+                        int y2 = yPos - StemLength + flagHeight + iShift;
+                        if (stemDown && !StemAlwaysRight)
                         {
-                            y1 = yPos + stemLength - iShift;
+                            y1 = yPos + StemLength - iShift;
                             x2 = stemXPos - flagWidth;
-                            y2 = yPos + stemLength - flagHeight - iShift;
+                            y2 = yPos + StemLength - flagHeight - iShift;
                         }
                         OVector v1 = new OVector(x1, y1);
                         OVector v2 = new OVector(x2, y2);
-                        using GraphicsPath flagPath = MyGraphics.ArcPath(v1, v2, stemLength, 20);
+                        using GraphicsPath flagPath = MyGraphics.ArcPath(v1, v2, MusicDrawer.DefaultStemLength, 20);
                         MyGraphics.DrawPathInterpolatedWidths(g, flagPath, MusicDrawer.Unit * 0.2f, MusicDrawer.Unit * 0.05f);
 
                     }
@@ -183,16 +188,16 @@ namespace NotePractice.Music.Symbols
             if (Sharp || Flat)
             {
                 string sharpFlat = Sharp ? "#" : "b";
-                float fontSize = Sharp ? noteHeight * 1.3f : noteHeight;
+                float fontSize = Sharp ? fnh * 1.3f : fnh;
                 using Font f = new Font("Arial", fontSize, FontStyle.Bold);
                 Point pos;
                 if (Sharp)
                 {
-                    pos = new Point(notePosition.Xint - (int)(noteWidth * 1.4), notePosition.Yint - (int)(noteHeight * 0.95));
+                    pos = new Point(notePosition.Xint - (int)(fnw * 1.4), notePosition.Yint - (int)(fnh * 0.95));
                 }
                 else
                 {
-                    pos = new Point(notePosition.Xint - (int)(noteWidth * 1.3), notePosition.Yint - (int)(noteHeight * 0.8));
+                    pos = new Point(notePosition.Xint - (int)(fnw * 1.3), notePosition.Yint - (int)(fnh * 0.8));
                 }
                 g.DrawString(sharpFlat, f, Brushes.Black, pos);
             }

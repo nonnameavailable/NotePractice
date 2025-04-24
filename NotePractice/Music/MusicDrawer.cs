@@ -94,44 +94,6 @@ namespace NotePractice.Music
                     notes.Clear();
                 }
             }
-            //Note? firstNote = null;
-            //for (int i = 0; i < symbols.Count; i++)
-            //{
-            //    Note? note = symbols[i] as Note;
-            //    Note? prevNote = null, nextNote = null;
-            //    if (i > 0) prevNote = symbols[i - 1] as Note;
-            //    if (i < symbols.Count - 1) nextNote = symbols[i + 1] as Note;
-            //    bool isNote = note != null;
-            //    bool prevIsNote = prevNote != null;
-            //    bool nextIsNote = nextNote != null;
-            //    bool isFirstNote = !prevIsNote;
-            //    bool isLastNote = !nextIsNote;
-            //    if (isFirstNote) firstNote = note;
-            //    if (isNote)
-            //    {
-            //        if (prevIsNote)
-            //        {
-            //            int dist = note.Distance(prevNote);
-            //            if (dist == 2)
-            //            {
-            //                note.XPosShift = (int)(Unit * 1.3);
-            //                note.DrawStem = false;
-            //                note.DrawFlag = false;
-            //                prevNote.DrawFlag = true;
-            //            }
-            //        }
-            //        if (isLastNote && !firstNote.StemShouldBeLeft(clef))
-            //        {
-            //            note.DrawFlag = true;
-            //            if (prevIsNote && prevNote.DrawFlag) note.DrawFlag = false;
-            //        }
-            //        else if (isLastNote && firstNote.StemShouldBeLeft(clef))
-            //        {
-            //            firstNote.DrawFlag = true;
-            //        }
-            //        note.StemAlwaysRight = !firstNote.StemShouldBeLeft(clef);
-            //    }
-        //}
         }
         public static void AdjustNoteList(List<Note> notes, Clef clef)
         {
@@ -177,11 +139,12 @@ namespace NotePractice.Music
                         if(stemIsRight)firstInSequence.StemLength += LineSpacing / 2;
                         shiftCounter++;
                         note.XPosShift = xShiftValue * ((shiftCounter) % 2);
-                        if (firstNote.StemShouldBeLeft(clef))
+                        if (!stemIsRight)
                         {
                             note.XPosShift *= -1;
                         }
-                        note.DrawStem = false;
+                        //note.DrawStem = false;
+                        note.DrawStem = !stemIsRight && shiftCounter % 2 == 0;
                         prevDist = dist;
                         continue;
                     }
@@ -199,6 +162,10 @@ namespace NotePractice.Music
                     }
                 }
             }
+        }
+        public static List<Symbol> StartSymbols(Clef clef, List<Note> notes)
+        {
+            return new List<Symbol>() { new ClefSymbol(clef), new Shift(), new Shift() }.Concat(notes).ToList();
         }
     }
 }

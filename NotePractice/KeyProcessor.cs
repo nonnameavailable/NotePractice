@@ -118,7 +118,7 @@ namespace NotePractice
             mf.ExtraPictureBox.Image = Noter.NoteImageWithLetter(mf.Note, mf.Cco.PreviousClef, keyData);
             mf.MainPictureBox.Image?.Dispose();
             mf.Note = Noter.RandomNote(minOctave, maxOctave, mf.Cco.IncludeSharpFlat);
-            mf.MainPictureBox.Image = Noter.NoteImage([mf.Note], nextClef);
+            mf.MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, [mf.Note]), false);
             mf.Cco.PreviousClef = nextClef;
         }
         private static void EvaluateIntervalFromKey(Keys keyData, MainForm mf)
@@ -131,9 +131,8 @@ namespace NotePractice
             int maxOctave = nextClef == Clef.Treble ? mf.Cco.TrebleMax : mf.Cco.BassMax;
             mf.Note = Noter.RandomNote(minOctave, maxOctave, false);
             int shift = new Random().Next(-7, 8);
-            mf.Notes = [mf.Note, mf.Note.ShiftedNote(shift)];
             mf.MainPictureBox.Image?.Dispose();
-            mf.MainPictureBox.Image = Noter.NoteImage(mf.Notes, nextClef);
+            mf.MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, [mf.Note, mf.Note.ShiftedNote(shift)]), false);
             mf.Cco.PreviousClef = nextClef;
         }
     }

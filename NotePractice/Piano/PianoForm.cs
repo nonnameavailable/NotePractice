@@ -1,4 +1,5 @@
-﻿using NotePractice.Music.Symbols;
+﻿using NotePractice.Music;
+using NotePractice.Music.Symbols;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -23,11 +24,13 @@ namespace NotePractice.Piano
         {
             InitializeComponent();
             _helpClef = Clef.Treble;
-            _noteUnderCursor = null;
+            _noteUnderCursor = new Note(NoteLetter.C, 4);
             _piano = new Piano();
             mainPictureBox.Image = _piano.PianoBitmap(new Point(-1, -1), out Note playedNote);
-            mainPictureBox.Click += MainPictureBox_Click;
+            helpPictureBox.Image = Noter.NoteImageWithLetter(_noteUnderCursor, _helpClef, _noteUnderCursor);
+            UpdateHelpPictureBox();
             mainPictureBox.MouseMove += MainPictureBox_MouseMove;
+            mainPictureBox.Click += MainPictureBox_Click;
         }
 
         private void MainPictureBox_MouseMove(object? sender, MouseEventArgs e)
@@ -52,16 +55,16 @@ namespace NotePractice.Piano
         }
         private void HelpBitmapColorOverlay(Graphics g)
         {
-            int width = Noter.ClefWidth * 2;
-            int octaveHeight = Noter.NoteShift * 7;
+            int width = helpPictureBox.Image.Width;
+            int octaveHeight = MusicDrawer.NoteShift * 7;
             for(int i = 0; i < 8; i++)
             {
                 Color c = ColorConvertor.HSBtoRGB(i / 8f, 1, 1);
                 Color ca = Color.FromArgb(120, c.R, c.G, c.B);
-                int y = Noter.ClefHeight * 3 + Noter.NoteShift * 3 - Noter.NoteShift * 7 * i;
+                int y = MusicDrawer.BottomLinePosition + MusicDrawer.NoteShift * 2 + octaveHeight * 3 - i * octaveHeight;
                 if(_helpClef == Clef.Bass)
                 {
-                    y -= Noter.Spacing * 6;
+                    y -= MusicDrawer.LineSpacing * 6;
                 }
                 Rectangle colorRectangle = new Rectangle(0, y, width, octaveHeight);
                 using Brush brush = new SolidBrush(ca);
@@ -76,33 +79,34 @@ namespace NotePractice.Piano
             if(playedNote != null) NotePlayed?.Invoke(this, new NoteEventArgs(playedNote));
             mainPictureBox.Image = newImage;
         }
-        protected override bool ProcessKeyPreview(ref Message m)
+        protected override bool ProcessCmdKey(ref Message m, Keys keyData)
         {
             if (!mainPictureBox.Focused) return false;
             const int WM_KEYDOWN = 0x100;
             const int WM_KEYUP = 0x101;
-            Keys keyData = (Keys)m.WParam.ToInt32();
+            //Keys keyData = (Keys)m.WParam.ToInt32();
             if (m.Msg == WM_KEYDOWN)
             {
-                if(keyData == Keys.T)
+                if (keyData == Keys.T)
                 {
                     _helpClef = Clef.Treble;
                     UpdateHelpPictureBox();
                     return true;
                 }
-                else if(keyData == Keys.B)
+                else if (keyData == Keys.B)
                 {
                     _helpClef = Clef.Bass;
                     UpdateHelpPictureBox();
                     return true;
                 }
-                else if(keyData == Keys.H)
+                else if (keyData == Keys.H)
                 {
                     _piano.HelpMode = !_piano.HelpMode;
                     if (_piano.HelpMode)
                     {
                         helpPictureBox.Visible = true;
-                    } else
+                    }
+                    else
                     {
                         helpPictureBox.Visible = false;
                     }

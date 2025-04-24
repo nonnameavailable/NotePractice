@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using NotePractice.Music;
 using NotePractice.Music.Symbols;
 using NotePractice.Properties;
 
@@ -15,93 +16,11 @@ namespace NotePractice
 {
     public class Noter
     {
-        public const int ClefWidth = 293;
-        public const int ClefHeight = 242;
-        public const int Offset = 65 + ClefHeight;
-        public const int Spacing = 30;
-        public const int TopLinePosition = Offset;
-        public const int BottomLinePosition = Offset + Spacing;
-        public const int NoteShift = Spacing / 2;
-        public static Bitmap NoteImage(List<Note> notes, Clef clef)
-        {
-            Bitmap clefC = clef == Clef.Treble ? Resources.treble_clef : Resources.bass_clef;
-            using Bitmap noteBitmap = new Bitmap(clefC.Width, clefC.Height * 3);
-            using Graphics g = Graphics.FromImage(noteBitmap);
-            g.Clear(Color.White);
-            using Pen p = new Pen(Brushes.Black, 4);
-            int counter = 0;
-            Random rand = new Random();
-            foreach (Note note in notes)
-            {
-                int noteInt = (int)note.NoteLetter;
-                int octave = note.Octave;
-                int xNp = noteBitmap.Width / 2;
-                if(rand.Next(11) > 4 && counter > 0)
-                {
-                    xNp = (int)(noteBitmap.Width * 0.8);
-                }
-                int yNp;
-                if (clef == Clef.Treble)
-                {
-                    yNp = (int)(Offset + Spacing * 5 - noteInt * NoteShift + 28 * NoteShift - octave * 7 * NoteShift);
-                }
-                else
-                {
-                    yNp = (int)(Offset - Spacing - noteInt * NoteShift + 28 * NoteShift - octave * 7 * NoteShift);
-                }
-
-                OVector notePosition = new OVector(xNp, yNp);
-                int noteSize = noteBitmap.Width / 5;
-                DrawNote(g, notePosition, noteSize);
-                if(note.Sharp || note.Flat)
-                {
-                    string symbol = note.Sharp ? "#" : "b";
-                    float fontSize = note.Sharp ? noteSize * 0.7f : noteSize * 0.5f;
-                    using Font f = new Font("Arial", fontSize);
-                    Point pos;
-                    if (note.Sharp)
-                    {
-                        pos = new Point(notePosition.Xint - 80, notePosition.Yint - 37);
-                    } else
-                    {
-                        pos = new Point(notePosition.Xint - 65, notePosition.Yint - 32);
-                    }
-                    g.DrawString(symbol, f, Brushes.Black, pos);
-                }
-                if (yNp < TopLinePosition)
-                {
-                    for (int i = TopLinePosition; i >= yNp; i -= Spacing)
-                    {
-                        g.DrawLine(p, new Point(xNp - 50, i), new Point(xNp + 50, i));
-                    }
-                }
-                if (yNp > BottomLinePosition)
-                {
-                    for (int i = BottomLinePosition; i <= yNp; i += Spacing)
-                    {
-                        g.DrawLine(p, new Point(xNp - 50, i), new Point(xNp + 50, i));
-                    }
-                }
-                counter++;
-            }
-            Bitmap result = new Bitmap(noteBitmap.Width + clefC.Width, noteBitmap.Height);
-            using Graphics rg = Graphics.FromImage(result);
-            rg.Clear(Color.White);
-            rg.DrawImage(clefC, 0, clefC.Height, clefC.Width, clefC.Height);
-            rg.DrawImage(noteBitmap, clefC.Width, 0);
-            for (int i = 0; i < 5; i++)
-            {
-                Point startPoint = new Point(40, Offset + i * Spacing);
-                Point endPoint = new Point(result.Width, Offset + i * Spacing);
-                rg.DrawLine(p, startPoint, endPoint);
-            }
-            return result;
-        }
         public static Bitmap NoteImageWithLetter(Note note, Clef clef, Keys key)
         {
             Keys[] noteKeys = { Keys.C, Keys.D, Keys.E, Keys.F, Keys.G, Keys.A, Keys.B };
             NoteLetter pressedNL = (NoteLetter)Array.IndexOf(noteKeys, key);
-            Bitmap result = NoteImage([note], clef);
+            Bitmap result = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(clef, [note]), false);
             using Graphics g = Graphics.FromImage(result);
 
             using Font font = ScaledLetterFont(100); 
@@ -117,7 +36,7 @@ namespace NotePractice
         }
         public static Bitmap NoteImageWithLetter(Note correctNote, Clef clef, Note inputNote)
         {
-            Bitmap result = NoteImage([correctNote], clef);
+            Bitmap result = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(clef, [correctNote]), false);
             using Graphics g = Graphics.FromImage(result);
 
             using Font font = ScaledLetterFont(100); 
@@ -135,7 +54,9 @@ namespace NotePractice
         public static Bitmap IntervalImageWithNumber(List<Note> notes, Clef clef, Keys inputKey)
         {
             notes = notes.OrderBy(n => n.NumVal).ToList();
-            Bitmap result = NoteImage(notes, clef);
+            List<Symbol> symbols = [new ClefSymbol(clef), new Shift(), new Shift()];
+            symbols.Concat(notes);
+            Bitmap result = MusicDrawer.MusicBitmap(notes.Cast<Symbol>().ToList(), false);
             using Graphics g = Graphics.FromImage(result);
             using Font font = ScaledLetterFont(80); 
             Keys[] numkeys = [Keys.NumPad2, Keys.NumPad3, Keys.NumPad4, Keys.NumPad5, Keys.NumPad6, Keys.NumPad7, Keys.NumPad8];
@@ -151,21 +72,6 @@ namespace NotePractice
                 g.DrawString(distance.ToString() + $"({notes[0].ToString()} - {notes[1].ToString()})", font, Brushes.Green, 20, 120);
             }
             return result;
-        }
-        private static void DrawNote(Graphics g, OVector position, int size)
-        {
-            using Pen p = new Pen(Brushes.Black, size / 8f);
-            g.DrawEllipse(p, (float)(position.X - size / 2), (float)(position.Y - size / 4), size, size / 2);
-        //    OVector start = new OVector(position.X - size / 2d, position.Y);
-        //    OVector end = new OVector(position.X + size / 2d, position.Y);
-        //    GraphicsPath upperPath = ArcPath(start, end, size * 0.65, 10);
-        //    GraphicsPath lowerPath = ArcPath(end, start, size * 0.65, 10);
-        //    float noteThickness = size / 8;
-        //    using Pen pen = new Pen(Brushes.Black, noteThickness);
-        //    pen.StartCap = LineCap.Round;
-        //    pen.EndCap = LineCap.Round;
-        //    g.DrawPath(pen, upperPath);
-        //    g.DrawPath(pen, lowerPath);
         }
 
         public static GraphicsPath ArcPath(OVector start, OVector end, double radius, int steps)

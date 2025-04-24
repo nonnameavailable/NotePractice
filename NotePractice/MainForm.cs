@@ -33,7 +33,7 @@ namespace NotePractice
             AutoScaleMode = AutoScaleMode.None;
             Note = new Note(NoteLetter.C, 4, sharp:true);
 
-            mainPictureBox.Image = Noter.NoteImage([Note], Clef.Treble);
+            mainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(Clef.Treble, [Note]), false);
             mainPictureBox.Click += (sender, args) => mainPictureBox.Focus();
             ShowPianoBTN_Click(null, EventArgs.Empty);
             showPianoBTN.Click += ShowPianoBTN_Click;
@@ -62,39 +62,6 @@ namespace NotePractice
             return KeyProcessor.ProcessKey(msg, keyData, this);
             //return base.ProcessCmdKey(ref msg, keyData);
         }
-        //protected override bool ProcessKeyPreview(ref Message m)
-        //{
-        //    const int WM_KEYDOWN = 0x100;
-        //    const int WM_KEYUP = 0x101;
-        //    Keys keyData = (Keys)m.WParam.ToInt32();
-        //    if (m.Msg == WM_KEYDOWN)
-        //    {
-        //        if (keyData == Keys.ShiftKey)
-        //        {
-        //            IsShiftDown = true;
-        //            return true;
-        //        }
-        //        else if (keyData == Keys.ControlKey)
-        //        {
-        //            IsCtrlDown = true;
-        //            return true;
-        //        }
-        //    }
-        //    else if (m.Msg == WM_KEYUP)
-        //    {
-        //        if (keyData == Keys.ControlKey)
-        //        {
-        //            IsCtrlDown = false;
-        //            return true;
-        //        }
-        //        else if (keyData == Keys.ShiftKey)
-        //        {
-        //            IsShiftDown = false;
-        //            return true;
-        //        }
-        //    }
-        //    return base.ProcessKeyPreview(ref m);
-        //}
         private void EvaluateNoteFromPiano(Note note)
         {
             Clef nextClef = Cco.NextClef;
@@ -106,7 +73,7 @@ namespace NotePractice
             ExtraPictureBox.Image = Noter.NoteImageWithLetter(Note, Cco.PreviousClef, note);
             MainPictureBox.Image?.Dispose();
             Note = Noter.RandomNote(minOctave, maxOctave, Cco.IncludeSharpFlat);
-            MainPictureBox.Image = Noter.NoteImage([Note], nextClef);
+            MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, [Note]), false);
             Cco.PreviousClef = nextClef;
         }
     }

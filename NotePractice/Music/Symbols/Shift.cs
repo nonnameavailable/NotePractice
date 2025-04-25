@@ -12,7 +12,9 @@ namespace NotePractice.Music.Symbols
 
         public void Draw(Graphics g, int xPos, Clef clef = Clef.Treble)
         {
-            //nothing for now
+            Color cursorColor = Color.FromArgb(120, 0, 255, 0);
+            using Pen p = new Pen(cursorColor, MusicDrawer.Unit / 10);
+            g.DrawLine(p, xPos, MusicDrawer.TopLinePosition, xPos, MusicDrawer.BottomLinePosition);
         }
     }
 }

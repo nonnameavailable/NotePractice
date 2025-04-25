@@ -56,12 +56,11 @@ namespace NotePractice.Music
             for(int i = 0; i < symbols.Count; i++)
             {
                 Symbol s = symbols[i];
+                s.Draw(g, xPos, clef);
                 if (s is Shift)
                 {
                     xPos += XSymbolShift;
-                    continue;
                 }
-                else s.Draw(g, xPos, clef);
             }
             if (drawCursor)
             {

@@ -64,6 +64,8 @@ namespace NotePractice
             _musicHolder.AddNewGrandStaff();
 
             _musicHolder.ClefButtonPressed += _musicHolder_ClefButtonPressed;
+            _musicHolder.GrandStaffAdded += (sender, args) => Song.AddGrandStaff();
+            _musicHolder.GrandStaffRemoved += (sender, args) => Song.RemoveGrandStaff();
 
             SelectedStaffClef = Clef.Treble;
             SelectedStaffIndex = 0;

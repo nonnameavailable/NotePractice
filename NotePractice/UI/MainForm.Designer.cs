@@ -31,18 +31,17 @@ namespace NotePractice
         private void InitializeComponent()
         {
             tableLayoutPanel1 = new TableLayoutPanel();
-            extraPictureBox = new PictureBox();
-            controlClefOctave = new ControlClefOctave();
             mainPictureBox = new PictureBox();
             showPianoBTN = new Button();
             practiceModeCBB = new ComboBox();
             panel1 = new Panel();
             modeGroupBox = new GroupBox();
-            practiceRB = new RadioButton();
             writingRB = new RadioButton();
+            practiceRB = new RadioButton();
             modeControlPanel = new Panel();
+            controlClefOctave = new ControlClefOctave();
+            extraPanel = new Panel();
             tableLayoutPanel1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)extraPictureBox).BeginInit();
             ((System.ComponentModel.ISupportInitialize)mainPictureBox).BeginInit();
             panel1.SuspendLayout();
             modeGroupBox.SuspendLayout();
@@ -55,12 +54,12 @@ namespace NotePractice
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Absolute, 100F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 65F));
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
-            tableLayoutPanel1.Controls.Add(extraPictureBox, 2, 1);
             tableLayoutPanel1.Controls.Add(mainPictureBox, 1, 1);
             tableLayoutPanel1.Controls.Add(showPianoBTN, 0, 0);
             tableLayoutPanel1.Controls.Add(practiceModeCBB, 2, 0);
             tableLayoutPanel1.Controls.Add(panel1, 0, 1);
             tableLayoutPanel1.Controls.Add(modeControlPanel, 1, 0);
+            tableLayoutPanel1.Controls.Add(extraPanel, 2, 1);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
@@ -69,25 +68,6 @@ namespace NotePractice
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.Size = new Size(669, 428);
             tableLayoutPanel1.TabIndex = 0;
-            // 
-            // extraPictureBox
-            // 
-            extraPictureBox.Dock = DockStyle.Fill;
-            extraPictureBox.Location = new Point(472, 123);
-            extraPictureBox.Name = "extraPictureBox";
-            extraPictureBox.Size = new Size(194, 302);
-            extraPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
-            extraPictureBox.TabIndex = 1;
-            extraPictureBox.TabStop = false;
-            // 
-            // controlClefOctave
-            // 
-            controlClefOctave.Dock = DockStyle.Fill;
-            controlClefOctave.Location = new Point(0, 0);
-            controlClefOctave.Name = "controlClefOctave";
-            controlClefOctave.PreviousClef = Clef.Treble;
-            controlClefOctave.Size = new Size(363, 114);
-            controlClefOctave.TabIndex = 0;
             // 
             // mainPictureBox
             // 
@@ -139,17 +119,6 @@ namespace NotePractice
             modeGroupBox.TabStop = false;
             modeGroupBox.Text = "Mode";
             // 
-            // practiceRB
-            // 
-            practiceRB.AutoSize = true;
-            practiceRB.Location = new Point(6, 22);
-            practiceRB.Name = "practiceRB";
-            practiceRB.Size = new Size(67, 19);
-            practiceRB.TabIndex = 0;
-            practiceRB.TabStop = true;
-            practiceRB.Text = "Practice";
-            practiceRB.UseVisualStyleBackColor = true;
-            // 
             // writingRB
             // 
             writingRB.AutoSize = true;
@@ -161,6 +130,18 @@ namespace NotePractice
             writingRB.Text = "Writing";
             writingRB.UseVisualStyleBackColor = true;
             // 
+            // practiceRB
+            // 
+            practiceRB.AutoSize = true;
+            practiceRB.Checked = true;
+            practiceRB.Location = new Point(6, 22);
+            practiceRB.Name = "practiceRB";
+            practiceRB.Size = new Size(67, 19);
+            practiceRB.TabIndex = 0;
+            practiceRB.TabStop = true;
+            practiceRB.Text = "Practice";
+            practiceRB.UseVisualStyleBackColor = true;
+            // 
             // modeControlPanel
             // 
             modeControlPanel.Controls.Add(controlClefOctave);
@@ -169,6 +150,25 @@ namespace NotePractice
             modeControlPanel.Name = "modeControlPanel";
             modeControlPanel.Size = new Size(363, 114);
             modeControlPanel.TabIndex = 5;
+            // 
+            // controlClefOctave
+            // 
+            controlClefOctave.Dock = DockStyle.Fill;
+            controlClefOctave.Location = new Point(0, 0);
+            controlClefOctave.Name = "controlClefOctave";
+            controlClefOctave.PreviousClef = Clef.Treble;
+            controlClefOctave.Size = new Size(363, 114);
+            controlClefOctave.TabIndex = 0;
+            controlClefOctave.WritingDuration = 1;
+            controlClefOctave.WritingOctave = 4;
+            // 
+            // extraPanel
+            // 
+            extraPanel.Dock = DockStyle.Fill;
+            extraPanel.Location = new Point(472, 123);
+            extraPanel.Name = "extraPanel";
+            extraPanel.Size = new Size(194, 302);
+            extraPanel.TabIndex = 6;
             // 
             // MainForm
             // 
@@ -179,7 +179,6 @@ namespace NotePractice
             Name = "MainForm";
             Text = "Form1";
             tableLayoutPanel1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)extraPictureBox).EndInit();
             ((System.ComponentModel.ISupportInitialize)mainPictureBox).EndInit();
             panel1.ResumeLayout(false);
             modeGroupBox.ResumeLayout(false);
@@ -192,7 +191,6 @@ namespace NotePractice
 
         private TableLayoutPanel tableLayoutPanel1;
         private PictureBox mainPictureBox;
-        private PictureBox extraPictureBox;
         private NumericUpDown numericUpDown2;
         private ControlClefOctave controlClefOctave;
         private Button showPianoBTN;
@@ -202,5 +200,6 @@ namespace NotePractice
         private RadioButton writingRB;
         private RadioButton practiceRB;
         private Panel modeControlPanel;
+        private Panel extraPanel;
     }
 }

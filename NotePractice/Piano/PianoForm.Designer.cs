@@ -1,4 +1,6 @@
-﻿namespace NotePractice.Piano
+﻿using NotePractice.UI;
+
+namespace NotePractice.Piano
 {
     partial class PianoForm
     {

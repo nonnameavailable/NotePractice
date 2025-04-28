@@ -56,14 +56,20 @@ namespace NotePractice
                     //WRITING
                     if (keyData == Keys.Back)
                     {
-                        if (mf.WrittenSymbols.Count > 0) mf.WrittenSymbols.RemoveAt(mf.WrittenSymbols.Count - 1);
+                        //if (mf.WrittenSymbols.Count > 0) mf.WrittenSymbols.RemoveAt(mf.WrittenSymbols.Count - 1);
+                        mf.Song.RemoveSymbol(mf.SelectedStaffIndex, mf.SelectedStaffClef);
                     }
                     else
                     {
                         Symbol s = WrittenSymbol(keyData, mf);
-                        if (s != null) mf.WrittenSymbols.Add(s);
+                        //if (s != null) mf.WrittenSymbols.Add(s);
+                        if(s != null)
+                        {
+                            mf.Song.AddSymbol(s, mf.SelectedStaffIndex, mf.SelectedStaffClef);
+                        }
                     }
-                    mf.MainPictureBox.Image = MusicDrawer.MusicBitmap(mf.WrittenSymbols);
+                    mf.UpdatePictureBoxAfterWrite();
+                    //mf.MainPictureBox.Image = MusicDrawer.MusicBitmap(mf.WrittenSymbols);
                     return true;
                 }
             }

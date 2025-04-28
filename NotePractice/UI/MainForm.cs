@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using NotePractice.Music;
 using NotePractice.Music.Symbols;
 using NotePractice.Piano;
+using NotePractice.UI;
 
 namespace NotePractice
 {
@@ -26,7 +27,13 @@ namespace NotePractice
         public bool IsInPracticeMode { get => practiceRB.Checked; }
         public string PracticeMode { get => practiceModeCBB.Text; }
         public PictureBox MainPictureBox { get => mainPictureBox; }
-        public PictureBox ExtraPictureBox { get => extraPictureBox; }
+        private PictureBox _extraPictureBox;
+        private MusicHolder _musicHolder;
+        public PictureBox ExtraPictureBox { get => _extraPictureBox; }
+        private Song _song;
+        public Song Song { get => _song; set => _song = value; }
+        public int SelectedStaffIndex { get; set; }
+        public Clef SelectedStaffClef { get; set; }
         public MainForm()
         {
             InitializeComponent();
@@ -40,6 +47,45 @@ namespace NotePractice
             Notes = [new Note(NoteLetter.C, 4), new Note(NoteLetter.D, 4)];
             practiceModeCBB.SelectedIndex = 0;
             WrittenSymbols = new();
+
+            _extraPictureBox = new PictureBox();
+            _extraPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
+            _extraPictureBox.Dock = DockStyle.Fill;
+
+            _musicHolder = new MusicHolder();
+            _musicHolder.Dock = DockStyle.Fill;
+
+            practiceRB.Click += PracticeRB_Click;
+            writingRB.Click += WritingRB_Click;
+            extraPanel.Controls.Add(_extraPictureBox);
+
+            _song = new Song();
+            _song.AddGrandStaff();
+            _musicHolder.AddNewGrandStaff();
+
+            _musicHolder.ClefButtonPressed += _musicHolder_ClefButtonPressed;
+
+            SelectedStaffClef = Clef.Treble;
+            SelectedStaffIndex = 0;
+        }
+
+        private void _musicHolder_ClefButtonPressed(object? sender, ClefEventArgs e)
+        {
+            SelectedStaffClef = e.Clef;
+            SelectedStaffIndex = e.Index;
+            UpdatePictureBoxAfterWrite();
+        }
+
+        private void WritingRB_Click(object? sender, EventArgs e)
+        {
+            extraPanel.Controls.Clear();
+            extraPanel.Controls.Add(_musicHolder);
+        }
+
+        private void PracticeRB_Click(object? sender, EventArgs e)
+        {
+            extraPanel.Controls.Clear();
+            extraPanel.Controls.Add(_extraPictureBox);
         }
 
         private void ShowPianoBTN_Click(object? sender, EventArgs e)
@@ -75,6 +121,16 @@ namespace NotePractice
             Note = Noter.RandomNote(minOctave, maxOctave, Cco.IncludeSharpFlat);
             MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, [Note]), false);
             Cco.PreviousClef = nextClef;
+        }
+        public void SetNewMainBitmap(Bitmap bitmap)
+        {
+            MainPictureBox.Image?.Dispose();
+            MainPictureBox.Image = bitmap;
+        }
+        public void UpdatePictureBoxAfterWrite()
+        {
+            mainPictureBox.Image?.Dispose();
+            MainPictureBox.Image = Song.GrandStaffBitmap(SelectedStaffIndex);
         }
     }
 }

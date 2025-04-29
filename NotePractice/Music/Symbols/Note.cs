@@ -161,25 +161,27 @@ namespace NotePractice.Music.Symbols
                 if (DrawFlag && Duration > 4)
                 {
                     int flagCount = (int)(Math.Log2(Duration)) - 2;
-                    int flagWidth = MusicDrawer.LineSpacing;
-                    int flagHeight = MusicDrawer.DefaultStemLength / 2;
+                    int flagWidth = (int)(MusicDrawer.LineSpacing * 0.8);
+                    int flagHeight = (int)(MusicDrawer.DefaultStemLength * 0.6);
                     for (int i = 0; i < flagCount; i++)
                     {
                         int iShift = (int)(i * MusicDrawer.DefaultStemLength * 0.15);
-                        int x1 = stemXPos;
+                        int x1 = (int)(stemXPos + MusicDrawer.Unit * 0.06);
                         int y1 = yPos - StemLength + iShift;
                         int x2 = stemXPos + flagWidth;
                         int y2 = yPos - StemLength + flagHeight + iShift;
                         if (stemDown && !StemAlwaysRight)
                         {
+                            x1 = (int)(stemXPos - MusicDrawer.Unit * 0.06);
                             y1 = yPos + StemLength - iShift;
                             x2 = stemXPos - flagWidth;
                             y2 = yPos + StemLength - flagHeight - iShift;
                         }
                         OVector v1 = new OVector(x1, y1);
                         OVector v2 = new OVector(x2, y2);
-                        using GraphicsPath flagPath = MyGraphics.ArcPath(v1, v2, MusicDrawer.DefaultStemLength, 20);
-                        MyGraphics.DrawPathInterpolatedWidths(g, flagPath, MusicDrawer.Unit * 0.2f, MusicDrawer.Unit * 0.05f);
+                        //using GraphicsPath flagPath = MyGraphics.ArcPath(v1, v2, MusicDrawer.DefaultStemLength, 20);
+                        using GraphicsPath flagPath = MyGraphics.FlagPath(v1, v2);
+                        MyGraphics.DrawPathInterpolatedWidths(g, flagPath, MusicDrawer.Unit * 0.2f, MusicDrawer.Unit * 0.02f);
 
                     }
                 }

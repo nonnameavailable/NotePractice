@@ -54,10 +54,11 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            BorderStyle = BorderStyle.FixedSingle;
             Controls.Add(bassBTN);
             Controls.Add(trebleBTN);
             Name = "GrandStaffHolder";
-            Size = new Size(139, 30);
+            Size = new Size(137, 30);
             ResumeLayout(false);
         }
 

@@ -11,21 +11,28 @@ namespace NotePractice.Music
     public class Song
     {
         public List<GrandStaff> GrandStaves { get; set; }
+        private static Color StaffHighlightColor = Color.FromArgb(100, 50, 0, 255);
         public Song() 
         { 
             GrandStaves = new List<GrandStaff>();
         }
-        public Bitmap Bitmap(bool drawCursor)
+        public Bitmap Bitmap(bool drawCursor, int highlightedStaffIndex = -1, Clef? highlightedClef = null)
         {
             List<Bitmap> staffBitmaps = GrandStaves.Select(staff => staff.Bitmap(drawCursor)).ToList();
             int width = staffBitmaps.Max(x => x.Width);
-            int height = staffBitmaps.Max(x => x.Height);
+            int height = staffBitmaps.Sum(x => x.Height);
             Bitmap result = new Bitmap(width, height);
             using Graphics g = Graphics.FromImage(result);
             int yPos = 0;
-            foreach(Bitmap bitmap in staffBitmaps)
+            for(int i = 0; i < staffBitmaps.Count; i++)
             {
+                Bitmap bitmap = staffBitmaps[i];
                 g.DrawImage(bitmap, 0, yPos);
+                if (i == highlightedStaffIndex)
+                {
+                    using Brush brush = new SolidBrush(StaffHighlightColor);
+                    g.FillRectangle(brush, 0, yPos, bitmap.Width, bitmap.Height);
+                }
                 yPos += bitmap.Height;
                 bitmap.Dispose();
             }

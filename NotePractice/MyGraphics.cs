@@ -29,6 +29,19 @@ namespace NotePractice
             }
             return path;
         }
+        public static GraphicsPath FlagPath(OVector start, OVector end)
+        {
+            OVector direction = end.Copy().Subtract(start);
+            double startPortion = 0.45;
+            OVector midPoint = start.Copy().Add(direction.Copy().Multiply(startPortion));
+            using GraphicsPath startArc = ArcPath(midPoint, start, direction.Magnitude * 0.6, 10);
+            using GraphicsPath endArc = ArcPath(midPoint, end, direction.Magnitude * 0.6, 10);
+            startArc.Reverse();
+            GraphicsPath path = new GraphicsPath();
+            path.AddPath(startArc, true);
+            path.AddPath(endArc, true);
+            return path;
+        }
         public static void DrawPathInterpolatedWidths(Graphics g, GraphicsPath path, float startWidth, float endWidth)
         {
             PointF[] points = path.PathPoints;
@@ -37,11 +50,8 @@ namespace NotePractice
                 double distance = i / (double)points.Length;
                 float width = Lerp(startWidth, endWidth, distance);
                 using Pen pen = new Pen(Color.Black, width);
-                if (i > 0)
-                {
-                    pen.StartCap = LineCap.Round;
-                    pen.EndCap = LineCap.Round;
-                }
+                pen.StartCap = LineCap.Round;
+                pen.EndCap = LineCap.Round;
                 g.DrawLine(pen, points[i], points[i + 1]);
             }
         }

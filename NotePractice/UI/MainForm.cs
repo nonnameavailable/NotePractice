@@ -38,7 +38,7 @@ namespace NotePractice
         {
             InitializeComponent();
             AutoScaleMode = AutoScaleMode.None;
-            Note = new Note(NoteLetter.C, 4, sharp:true);
+            Note = new Note(NoteLetter.C, 4, duration: 64);
 
             mainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(Clef.Treble, [Note]), false);
             mainPictureBox.Click += (sender, args) => mainPictureBox.Focus();
@@ -66,9 +66,16 @@ namespace NotePractice
             _musicHolder.ClefButtonPressed += _musicHolder_ClefButtonPressed;
             _musicHolder.GrandStaffAdded += (sender, args) => Song.AddGrandStaff();
             _musicHolder.GrandStaffRemoved += (sender, args) => Song.RemoveGrandStaff();
+            _musicHolder.StaffUnderCursorChanged += _musicHolder_StaffUnderCursorChanged;
 
             SelectedStaffClef = Clef.Treble;
             SelectedStaffIndex = 0;
+        }
+
+        private void _musicHolder_StaffUnderCursorChanged(object? sender, ClefEventArgs e)
+        {
+            SetNewMainBitmap(Song.Bitmap(false, e.Index, e.Clef));
+            Debug.Print("staffchanged");
         }
 
         private void _musicHolder_ClefButtonPressed(object? sender, ClefEventArgs e)

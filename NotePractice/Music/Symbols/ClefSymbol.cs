@@ -34,5 +34,10 @@ namespace NotePractice.Music.Symbols
                 g.DrawImage(bass, xPos, y, width, height);
             }
         }
+
+        string Symbol.StringForFileExport()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

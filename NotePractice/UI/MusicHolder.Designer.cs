@@ -31,8 +31,9 @@
             mainFLP = new FlowLayoutPanel();
             tableLayoutPanel1 = new TableLayoutPanel();
             panel1 = new Panel();
-            addBTN = new Button();
             removeBTN = new Button();
+            addBTN = new Button();
+            showSongBTN = new Button();
             tableLayoutPanel1.SuspendLayout();
             panel1.SuspendLayout();
             SuspendLayout();
@@ -41,9 +42,9 @@
             // 
             mainFLP.AutoScroll = true;
             mainFLP.Dock = DockStyle.Fill;
-            mainFLP.Location = new Point(3, 43);
+            mainFLP.Location = new Point(3, 83);
             mainFLP.Name = "mainFLP";
-            mainFLP.Size = new Size(144, 104);
+            mainFLP.Size = new Size(144, 64);
             mainFLP.TabIndex = 0;
             // 
             // tableLayoutPanel1
@@ -56,20 +57,30 @@
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 2;
-            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 40F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 80F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
             tableLayoutPanel1.Size = new Size(150, 150);
             tableLayoutPanel1.TabIndex = 1;
             // 
             // panel1
             // 
+            panel1.Controls.Add(showSongBTN);
             panel1.Controls.Add(removeBTN);
             panel1.Controls.Add(addBTN);
             panel1.Dock = DockStyle.Fill;
             panel1.Location = new Point(3, 3);
             panel1.Name = "panel1";
-            panel1.Size = new Size(144, 34);
+            panel1.Size = new Size(144, 74);
             panel1.TabIndex = 1;
+            // 
+            // removeBTN
+            // 
+            removeBTN.Location = new Point(74, 3);
+            removeBTN.Name = "removeBTN";
+            removeBTN.Size = new Size(67, 28);
+            removeBTN.TabIndex = 1;
+            removeBTN.Text = "Remove";
+            removeBTN.UseVisualStyleBackColor = true;
             // 
             // addBTN
             // 
@@ -80,14 +91,14 @@
             addBTN.Text = "Add";
             addBTN.UseVisualStyleBackColor = true;
             // 
-            // removeBTN
+            // showSongBTN
             // 
-            removeBTN.Location = new Point(74, 3);
-            removeBTN.Name = "removeBTN";
-            removeBTN.Size = new Size(67, 28);
-            removeBTN.TabIndex = 1;
-            removeBTN.Text = "Remove";
-            removeBTN.UseVisualStyleBackColor = true;
+            showSongBTN.Location = new Point(3, 37);
+            showSongBTN.Name = "showSongBTN";
+            showSongBTN.Size = new Size(138, 28);
+            showSongBTN.TabIndex = 2;
+            showSongBTN.Text = "Show whole song";
+            showSongBTN.UseVisualStyleBackColor = true;
             // 
             // MusicHolder
             // 
@@ -107,5 +118,6 @@
         private Panel panel1;
         private Button removeBTN;
         private Button addBTN;
+        private Button showSongBTN;
     }
 }

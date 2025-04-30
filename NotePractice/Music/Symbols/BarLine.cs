@@ -13,5 +13,10 @@ namespace NotePractice.Music.Symbols
         {
             g.DrawLine(MusicDrawer.LinePen, xPos, MusicDrawer.TopLinePosition, xPos, MusicDrawer.BottomLinePosition);
         }
+
+        string Symbol.StringForFileExport()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

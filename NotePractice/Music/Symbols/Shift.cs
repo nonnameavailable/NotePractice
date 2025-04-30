@@ -16,5 +16,10 @@ namespace NotePractice.Music.Symbols
             using Pen p = new Pen(cursorColor, MusicDrawer.Unit / 10);
             g.DrawLine(p, xPos, MusicDrawer.TopLinePosition, xPos, MusicDrawer.BottomLinePosition);
         }
+
+        string Symbol.StringForFileExport()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

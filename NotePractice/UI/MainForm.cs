@@ -34,6 +34,7 @@ namespace NotePractice
         public Song Song { get => _song; set => _song = value; }
         public int SelectedStaffIndex { get; set; }
         public Clef SelectedStaffClef { get; set; }
+        private bool _showingWholeSong;
         public MainForm()
         {
             InitializeComponent();
@@ -47,6 +48,7 @@ namespace NotePractice
             Notes = [new Note(NoteLetter.C, 4), new Note(NoteLetter.D, 4)];
             practiceModeCBB.SelectedIndex = 0;
             WrittenSymbols = new();
+            _showingWholeSong = false;
 
             _extraPictureBox = new PictureBox();
             _extraPictureBox.SizeMode = PictureBoxSizeMode.Zoom;
@@ -64,22 +66,42 @@ namespace NotePractice
             _musicHolder.AddNewGrandStaff();
 
             _musicHolder.ClefButtonPressed += _musicHolder_ClefButtonPressed;
-            _musicHolder.GrandStaffAdded += (sender, args) => Song.AddGrandStaff();
-            _musicHolder.GrandStaffRemoved += (sender, args) => Song.RemoveGrandStaff();
+            _musicHolder.GrandStaffAdded += _musicHolder_GrandStaffAdded;
+            _musicHolder.GrandStaffRemoved += _musicHolder_GrandStaffRemoved;
             _musicHolder.StaffUnderCursorChanged += _musicHolder_StaffUnderCursorChanged;
+            _musicHolder.ShowSongClicked += _musicHolder_ShowSongClicked;
 
             SelectedStaffClef = Clef.Treble;
             SelectedStaffIndex = 0;
         }
 
+        private void _musicHolder_GrandStaffRemoved(object? sender, EventArgs e)
+        {
+            Song.RemoveGrandStaff();
+            ShowDefaultSongBitmap();
+        }
+
+        private void _musicHolder_GrandStaffAdded(object? sender, EventArgs e)
+        {
+            Song.AddGrandStaff();
+            ShowDefaultSongBitmap();
+
+        }
+
+        private void _musicHolder_ShowSongClicked(object? sender, EventArgs e)
+        {
+            _showingWholeSong = true;
+            ShowDefaultSongBitmap();
+        }
+
         private void _musicHolder_StaffUnderCursorChanged(object? sender, ClefEventArgs e)
         {
-            SetNewMainBitmap(Song.Bitmap(false, e.Index, e.Clef));
-            Debug.Print("staffchanged");
+            if (_showingWholeSong) SetNewMainBitmap(Song.Bitmap(false, e.Index, e.Clef));
         }
 
         private void _musicHolder_ClefButtonPressed(object? sender, ClefEventArgs e)
         {
+            _showingWholeSong = false;
             SelectedStaffClef = e.Clef;
             SelectedStaffIndex = e.Index;
             UpdatePictureBoxAfterWrite();
@@ -140,6 +162,10 @@ namespace NotePractice
         {
             mainPictureBox.Image?.Dispose();
             MainPictureBox.Image = Song.GrandStaffBitmap(SelectedStaffIndex);
+        }
+        public void ShowDefaultSongBitmap()
+        {
+            SetNewMainBitmap(Song.Bitmap(false, -1, null));
         }
     }
 }

@@ -62,7 +62,7 @@ namespace NotePractice.Piano
                 if (blackContains)
                 {
                     g.FillRectangle(Brushes.Purple, blackKey);
-                    playedNote = new Note((NoteLetter)((i + 4) % 7), (i + 5) / 7, sharp: true);
+                    playedNote = new Note((NoteLetter)((i + 4) % 7), (i + 5) / 7, accidental: Accidental.Sharp);
                 }
                 else
                 {
@@ -110,11 +110,11 @@ namespace NotePractice.Piano
             if (skipBlack && skipNextBlack) return result;
             if (blackContains && !skipBlack) 
             {
-                result = new Note((NoteLetter)((i + 4) % 7), (i + 5) / 7, sharp: true);
+                result = new Note((NoteLetter)((i + 4) % 7), (i + 5) / 7, accidental:Accidental.Sharp);
             }
             if (nextBlackContains && !skipNextBlack)
             {
-                result =  new Note((NoteLetter)((i + 5) % 7), (i + 5) / 7, sharp: true);
+                result =  new Note((NoteLetter)((i + 5) % 7), (i + 5) / 7, accidental: Accidental.Sharp);
             }
             return result;
         }

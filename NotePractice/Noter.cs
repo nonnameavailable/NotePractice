@@ -110,7 +110,7 @@ namespace NotePractice
                 int rnd = r.Next(0, 10);
                 if(rnd < 3)
                 {
-                    result.Sharp = true;
+                    result.Accidental = Accidental.Sharp;
                     if(nl == NoteLetter.E || nl == NoteLetter.B)
                     {
                         result.NoteLetter = (NoteLetter)((int)nl - 1);
@@ -118,7 +118,7 @@ namespace NotePractice
                 }
                 else if(rnd < 6)
                 {
-                    result.Flat = true;
+                    result.Accidental = Accidental.Flat;
                     if (nl == NoteLetter.F || nl == NoteLetter.C)
                     {
                         result.NoteLetter = (NoteLetter)((int)nl + 1);

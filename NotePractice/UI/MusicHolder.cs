@@ -16,6 +16,7 @@ namespace NotePractice.UI
         public event EventHandler GrandStaffAdded;
         public event EventHandler GrandStaffRemoved;
         public event EventHandler<ClefEventArgs> StaffUnderCursorChanged;
+        public event EventHandler ShowSongClicked;
         public int CurrentStaffUnderCursor { get; set; }
         public MusicHolder()
         {
@@ -23,6 +24,7 @@ namespace NotePractice.UI
             addBTN.Click += (sender, args) => AddNewGrandStaff();
             removeBTN.Click += RemoveBTN_Click;
             CurrentStaffUnderCursor = -1;
+            showSongBTN.Click += (sender, args) => ShowSongClicked?.Invoke(this, EventArgs.Empty);
         }
 
         private void RemoveBTN_Click(object? sender, EventArgs e)

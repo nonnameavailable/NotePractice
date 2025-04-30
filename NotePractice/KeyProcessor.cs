@@ -86,7 +86,10 @@ namespace NotePractice
             Debug.Print(isCtrlDown.ToString());
             if (noteIndex >= 0)
             {
-                return new Note((NoteLetter)noteIndex, mf.WritingOctave, isShiftDown, isCtrlDown, mf.WritingDuration);
+                Accidental accidental = Accidental.None;
+                if (isShiftDown) accidental = Accidental.Sharp;
+                if (isCtrlDown) accidental = Accidental.Flat;
+                return new Note((NoteLetter)noteIndex, mf.WritingOctave, accidental, mf.WritingDuration);
             }
             if (keyData == Keys.Space)
             {

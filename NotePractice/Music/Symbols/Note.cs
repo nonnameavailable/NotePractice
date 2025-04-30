@@ -13,28 +13,29 @@ namespace NotePractice.Music.Symbols
         public NoteLetter NoteLetter { get; set; }
         public int Octave { get; set; }
         private bool _sharp, _flat;
-        public bool Flat
-        {
-            get
-            {
-                return _flat;
-            }
-            set
-            {
-                if (NoteLetter != NoteLetter.C && NoteLetter != NoteLetter.F) _flat = value;
-            }
-        }
-        public bool Sharp
-        {
-            get
-            {
-                return _sharp;
-            }
-            set
-            {
-                if (NoteLetter != NoteLetter.E && NoteLetter != NoteLetter.B) _sharp = value;
-            }
-        }
+        //public bool Flat
+        //{
+        //    get
+        //    {
+        //        return _flat;
+        //    }
+        //    set
+        //    {
+        //        if (NoteLetter != NoteLetter.C && NoteLetter != NoteLetter.F) _flat = value;
+        //    }
+        //}
+        //public bool Sharp
+        //{
+        //    get
+        //    {
+        //        return _sharp;
+        //    }
+        //    set
+        //    {
+        //        if (NoteLetter != NoteLetter.E && NoteLetter != NoteLetter.B) _sharp = value;
+        //    }
+        //}
+        public Accidental Accidental { get; set; }
         public int NumVal { get => Octave * 7 + (int)NoteLetter; }
         public int Duration { get; set; }
         public int XPosShift { get; set; }
@@ -42,26 +43,27 @@ namespace NotePractice.Music.Symbols
         public bool DrawFlag { get; set; }
         public bool StemAlwaysRight { get; set; }
         public int StemLength { get; set; }
+        public bool IsSharp { get => Accidental == Accidental.Sharp; }
+        public bool IsFlat { get => Accidental == Accidental.Flat; }
 
         public SymbolType Type { get => SymbolType.Note; }
-        public Note(NoteLetter noteLetter, int octave, bool sharp = false, bool flat = false, int duration = 1)
+
+        public Note(NoteLetter noteLetter, int octave, Accidental accidental = Accidental.None, int duration = 1)
         {
             NoteLetter = noteLetter;
             Octave = octave;
-            Sharp = sharp;
-            Flat = flat;
             Duration = duration;
             DrawStem = true;
             DrawFlag = false;
             XPosShift = 0;
+            Accidental = accidental;
             StemLength = MusicDrawer.DefaultStemLength;
         }
-
         public override string ToString()
         {
             string sharpFlat = "";
-            if (Sharp) sharpFlat = "#";
-            if (Flat) sharpFlat = "b";
+            if (Accidental == Accidental.Sharp) sharpFlat = "#";
+            if(Accidental == Accidental.Flat) sharpFlat = "b";
             return Enum.GetName(typeof(NoteLetter), NoteLetter) + Octave.ToString() + sharpFlat;
         }
         public override bool Equals(object? obj)
@@ -69,15 +71,15 @@ namespace NotePractice.Music.Symbols
             if (obj == null || obj is not Note) return false;
             Note n = (Note)obj;
             bool letterCond = n.NoteLetter == NoteLetter;
-            if(n.Sharp && Flat)
+            if(n.IsSharp && IsFlat)
             {
                 letterCond = (NoteLetter)((int)n.NoteLetter + 1) == NoteLetter;
-            } else if(n.Flat && Sharp)
+            } else if(n.IsFlat && IsSharp)
             {
                 letterCond = (NoteLetter)((int)NoteLetter + 1) == n.NoteLetter;
             }
-            if ((n.Flat || n.Sharp) && !Flat && !Sharp) letterCond = false;
-            if ((Flat || Sharp) && !n.Flat && !n.Sharp) letterCond = false;
+            if ((n.IsFlat || n.IsSharp) && !IsFlat && !IsSharp) letterCond = false;
+            if ((IsFlat || IsSharp) && !n.IsFlat && !n.IsSharp) letterCond = false;
             return letterCond && n.Octave == Octave;
         }
         public int Distance(Note note)
@@ -186,14 +188,14 @@ namespace NotePractice.Music.Symbols
                     }
                 }
             }
-            // Draw Sharp and Flat signs
-            if (Sharp || Flat)
+            // Draw IsSharp and Flat signs
+            if (IsSharp || IsFlat)
             {
-                string sharpFlat = Sharp ? "#" : "b";
-                float fontSize = Sharp ? fnh * 1.3f : fnh;
+                string sharpFlat = IsSharp ? "#" : "b";
+                float fontSize = IsSharp ? fnh * 1.3f : fnh;
                 using Font f = new Font("Arial", fontSize, FontStyle.Bold);
                 Point pos;
-                if (Sharp)
+                if (IsSharp)
                 {
                     pos = new Point(notePosition.Xint - (int)(fnw * 1.4), notePosition.Yint - (int)(fnh * 0.95));
                 }
@@ -221,6 +223,10 @@ namespace NotePractice.Music.Symbols
             }
         }
 
+        string Symbol.StringForFileExport()
+        {
+            throw new NotImplementedException();
+        }
     }
 
     public enum NoteLetter
@@ -237,5 +243,12 @@ namespace NotePractice.Music.Symbols
     {
         Treble,
         Bass
+    }
+    public enum Accidental
+    {
+        None,
+        Sharp,
+        Flat,
+        Natural
     }
 }

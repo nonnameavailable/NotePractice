@@ -12,30 +12,19 @@ namespace NotePractice.Music.Symbols
     {
         public NoteLetter NoteLetter { get; set; }
         public int Octave { get; set; }
-        private bool _sharp, _flat;
-        //public bool Flat
-        //{
-        //    get
-        //    {
-        //        return _flat;
-        //    }
-        //    set
-        //    {
-        //        if (NoteLetter != NoteLetter.C && NoteLetter != NoteLetter.F) _flat = value;
-        //    }
-        //}
-        //public bool Sharp
-        //{
-        //    get
-        //    {
-        //        return _sharp;
-        //    }
-        //    set
-        //    {
-        //        if (NoteLetter != NoteLetter.E && NoteLetter != NoteLetter.B) _sharp = value;
-        //    }
-        //}
         public Accidental Accidental { get; set; }
+        private int _velocity;
+        public int Velocity
+        {
+            get
+            {
+                return _velocity;
+            }
+            set
+            {
+                _velocity = Math.Clamp(value, 0, 127);
+            }
+        }
         public int NumVal { get => Octave * 7 + (int)NoteLetter; }
         public int Duration { get; set; }
         public int XPosShift { get; set; }
@@ -58,6 +47,7 @@ namespace NotePractice.Music.Symbols
             XPosShift = 0;
             Accidental = accidental;
             StemLength = MusicDrawer.DefaultStemLength;
+            Velocity = 100;
         }
         public override string ToString()
         {

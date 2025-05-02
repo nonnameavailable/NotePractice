@@ -8,6 +8,7 @@ using System.Runtime.InteropServices;
 using System.Security.Policy;
 using System.Text;
 using System.Threading.Tasks;
+using NotePractice.MIDIHandling;
 using NotePractice.Music;
 using NotePractice.Music.Symbols;
 using NotePractice.Piano;
@@ -35,6 +36,8 @@ namespace NotePractice
         public int SelectedStaffIndex { get; set; }
         public Clef SelectedStaffClef { get; set; }
         private bool _showingWholeSong;
+        private MidiListener _midiListener;
+        private MidiSender _midiSender;
         public MainForm()
         {
             InitializeComponent();
@@ -73,8 +76,32 @@ namespace NotePractice
 
             SelectedStaffClef = Clef.Treble;
             SelectedStaffIndex = 0;
+
+            _midiListener = new MidiListener();
+            FindMidiDeviceForInput();
+        }
+        public void FindMidiDeviceForInput()
+        {
+            _midiListener.FindDevice();
+            _midiListener.NoteReceived += _midiListener_NoteReceived;
+            try
+            {
+                _midiListener.StartListening();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+        }
+        public void FindMidiDeviceForOutput()
+        {
+            _midiSender.FindDevice();
         }
 
+        private void _midiListener_NoteReceived(object? sender, NoteEventArgs e)
+        {
+            EvaluateNoteFromPiano(e.Note);
+        }
         private void _musicHolder_GrandStaffRemoved(object? sender, EventArgs e)
         {
             Song.RemoveGrandStaff();

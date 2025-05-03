@@ -67,7 +67,7 @@ namespace NotePractice
                         {
                             mf.Song.AddSymbol(s, mf.SelectedStaffIndex, mf.SelectedStaffClef);
                             //Debug.Print(mf.MidiSender.CallCount.ToString());
-                            if(s is Note note) mf.MidiSender.SendNoteToMidiAsync(note);
+                            if(s is Note note) mf.MidiSender.SendNotesToMidiAsync([note, note.ShiftedNote(2), note.ShiftedNote(4)]);
                         }
                     }
                     mf.UpdatePictureBoxAfterWrite();

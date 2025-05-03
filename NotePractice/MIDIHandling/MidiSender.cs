@@ -22,18 +22,23 @@ namespace NotePractice.MIDIHandling
         {
             DeviceName = string.Empty;
         }
-        private async Task SendNoteToMidi(Note note)
+        private async Task SendNotesToMidi(List<Note> notes)
         {
-            var midiNoteNumber = ConvertNoteToMidiNumber(note);
-            var noteOnEvent = new NoteOnEvent((SevenBitNumber)midiNoteNumber, (SevenBitNumber)note.Velocity); // 100 = velocity
-            //using var od = OutputDevice.GetByName(DeviceName);
-            //od.SendEvent(noteOnEvent);
-            _outputDevice.SendEvent(noteOnEvent);
+            foreach(Note note in notes)
+            {
+                var midiNoteNumber = ConvertNoteToMidiNumber(note);
+                var noteOnEvent = new NoteOnEvent((SevenBitNumber)midiNoteNumber, (SevenBitNumber)note.Velocity); // 100 = velocity
+                _outputDevice.SendEvent(noteOnEvent);
+            }
             await Task.Delay(1000);
+            foreach(Note note in notes)
+            {
+                var midiNoteNumber = ConvertNoteToMidiNumber(note);
+                _outputDevice.SendEvent(new NoteOffEvent((SevenBitNumber)midiNoteNumber, (SevenBitNumber)0));
+            }
             //od.SendEvent(new NoteOffEvent((SevenBitNumber)midiNoteNumber, (SevenBitNumber)0));
-            _outputDevice.SendEvent(new NoteOffEvent((SevenBitNumber)midiNoteNumber, (SevenBitNumber)0));
         }
-        public void SendNoteToMidiAsync(Note note)
+        public void SendNotesToMidiAsync(List<Note> notes)
         {
             if (DeviceName == "") return;
             if (_stopwatch.ElapsedMilliseconds < 100)
@@ -43,7 +48,7 @@ namespace NotePractice.MIDIHandling
             {
                 _stopwatch.Restart();
                 //_callCount++;
-                Task.Run(() => SendNoteToMidi(note));
+                Task.Run(() => SendNotesToMidi(notes));
             }
         }
 

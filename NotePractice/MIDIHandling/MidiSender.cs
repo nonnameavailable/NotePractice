@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -13,17 +14,37 @@ namespace NotePractice.MIDIHandling
     public class MidiSender
     {
         public string DeviceName { get; set; }
-        private OutputDevice? _outputDevice;
+        private OutputDevice _outputDevice;
+        private Stopwatch _stopwatch;
+        private int _callCount = 0;
+        public int CallCount { get => _callCount; }
         public MidiSender()
         {
             DeviceName = string.Empty;
         }
-        public void SendNoteToMidi(Note note)
+        private async Task SendNoteToMidi(Note note)
         {
-            if (_outputDevice == null) throw new Exception("No selected device!");
             var midiNoteNumber = ConvertNoteToMidiNumber(note);
             var noteOnEvent = new NoteOnEvent((SevenBitNumber)midiNoteNumber, (SevenBitNumber)note.Velocity); // 100 = velocity
+            //using var od = OutputDevice.GetByName(DeviceName);
+            //od.SendEvent(noteOnEvent);
             _outputDevice.SendEvent(noteOnEvent);
+            await Task.Delay(1000);
+            //od.SendEvent(new NoteOffEvent((SevenBitNumber)midiNoteNumber, (SevenBitNumber)0));
+            _outputDevice.SendEvent(new NoteOffEvent((SevenBitNumber)midiNoteNumber, (SevenBitNumber)0));
+        }
+        public void SendNoteToMidiAsync(Note note)
+        {
+            if (DeviceName == "") return;
+            if (_stopwatch.ElapsedMilliseconds < 100)
+            {
+                return;
+            } else
+            {
+                _stopwatch.Restart();
+                //_callCount++;
+                Task.Run(() => SendNoteToMidi(note));
+            }
         }
 
         private int ConvertNoteToMidiNumber(Note note)
@@ -50,11 +71,14 @@ namespace NotePractice.MIDIHandling
         public void FindDevice()
         {
             using DeviceSelectForm dsf =
-                new DeviceSelectForm(InputDevice.GetAll().Select(device => device.Name).ToList());
+                new DeviceSelectForm(InputDevice.GetAll().Select(device => device.Name).ToList(), "Select device for output.");
             if (dsf.ShowDialog() == DialogResult.OK)
             {
                 DeviceName = dsf.SelectedDeviceName;
-                _outputDevice = OutputDevice.GetByName(DeviceName);
+                _outputDevice?.Dispose();
+                _outputDevice = OutputDevice.GetByName(dsf.SelectedDeviceName);
+                _stopwatch = new Stopwatch();
+                _stopwatch.Start();
             }
         }
     }

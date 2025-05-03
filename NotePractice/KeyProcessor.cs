@@ -66,6 +66,8 @@ namespace NotePractice
                         if(s != null)
                         {
                             mf.Song.AddSymbol(s, mf.SelectedStaffIndex, mf.SelectedStaffClef);
+                            //Debug.Print(mf.MidiSender.CallCount.ToString());
+                            if(s is Note note) mf.MidiSender.SendNoteToMidiAsync(note);
                         }
                     }
                     mf.UpdatePictureBoxAfterWrite();
@@ -83,7 +85,6 @@ namespace NotePractice
             //int noteIndex = Array.IndexOf(noteKeys, keyData);
             bool isShiftDown = (keyData & Keys.Shift) == Keys.Shift;
             bool isCtrlDown = (keyData & Keys.Control) == Keys.Control;
-            Debug.Print(isCtrlDown.ToString());
             if (noteIndex >= 0)
             {
                 Accidental accidental = Accidental.None;
@@ -129,6 +130,7 @@ namespace NotePractice
             mf.Note = Noter.RandomNote(minOctave, maxOctave, mf.Cco.IncludeSharpFlat);
             mf.MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, [mf.Note]), false);
             mf.Cco.PreviousClef = nextClef;
+            //mf.MidiSender.SendNoteToMidiAsync(mf.Note);
         }
         private static void EvaluateIntervalFromKey(Keys keyData, MainForm mf)
         {

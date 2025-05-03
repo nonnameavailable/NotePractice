@@ -24,7 +24,7 @@ namespace NotePractice.MIDIHandling
         public void FindDevice()
         {
             using DeviceSelectForm dsf =
-                new DeviceSelectForm(InputDevice.GetAll().Select(device => device.Name).ToList());
+                new DeviceSelectForm(InputDevice.GetAll().Select(device => device.Name).ToList(), "Select device for input.");
             if (dsf.ShowDialog() == DialogResult.OK)
             {
                 DeviceName = dsf.SelectedDeviceName;

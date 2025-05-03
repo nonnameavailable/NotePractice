@@ -38,6 +38,7 @@ namespace NotePractice
         private bool _showingWholeSong;
         private MidiListener _midiListener;
         private MidiSender _midiSender;
+        public MidiSender MidiSender { get => _midiSender; }
         public MainForm()
         {
             InitializeComponent();
@@ -81,6 +82,7 @@ namespace NotePractice
             FindMidiDeviceForInput();
             _midiSender = new MidiSender();
             FindMidiDeviceForOutput();
+            //_midiSender.SendNoteToMidi(new Note(NoteLetter.C, 4));
         }
         public void FindMidiDeviceForInput()
         {
@@ -102,7 +104,15 @@ namespace NotePractice
 
         private void _midiListener_NoteReceived(object? sender, NoteEventArgs e)
         {
-            EvaluateNoteFromPiano(e.Note);
+            if (InvokeRequired)
+            {
+                Invoke(new Action(() => EvaluateNoteFromPiano(e.Note)));
+            }
+            else
+            {
+                EvaluateNoteFromPiano(e.Note);
+            }
+            //EvaluateNoteFromPiano(e.Note);
         }
         private void _musicHolder_GrandStaffRemoved(object? sender, EventArgs e)
         {

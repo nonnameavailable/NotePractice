@@ -13,11 +13,12 @@ namespace NotePractice.MIDIHandling
     public partial class DeviceSelectForm : Form
     {
         public string SelectedDeviceName { get; set; }
-        public DeviceSelectForm(List<string> deviceNames)
+        public DeviceSelectForm(List<string> deviceNames, string title = "Select device")
         {
             InitializeComponent();
             deviceNames.ForEach(deviceName => AddButton(deviceName));
             SelectedDeviceName = "";
+            Text = title;
         }
         private void AddButton(string text)
         {

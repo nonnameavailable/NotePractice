@@ -59,9 +59,7 @@ namespace NotePractice.Music
         }
         public void RemoveSymbol(int staffIndex, Clef clef)
         {
-            List<Symbol> listToRemoveFrom = clef == Clef.Treble ? GrandStaves[staffIndex].TrebleSymbols : GrandStaves[staffIndex].BassSymbols;
-            if (listToRemoveFrom.Count == 0) return;
-            listToRemoveFrom.RemoveAt(listToRemoveFrom.Count - 1);
+            GrandStaves[staffIndex].RemoveLastSymbol(clef);
         }
         public Bitmap GrandStaffBitmap(int staffIndex)
         {

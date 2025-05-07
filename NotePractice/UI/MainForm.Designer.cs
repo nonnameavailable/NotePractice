@@ -33,7 +33,6 @@ namespace NotePractice
             tableLayoutPanel1 = new TableLayoutPanel();
             mainPictureBox = new PictureBox();
             showPianoBTN = new Button();
-            practiceModeCBB = new ComboBox();
             panel1 = new Panel();
             modeGroupBox = new GroupBox();
             writingRB = new RadioButton();
@@ -41,11 +40,17 @@ namespace NotePractice
             modeControlPanel = new Panel();
             controlClefOctave = new ControlClefOctave();
             extraPanel = new Panel();
+            panel2 = new Panel();
+            label1 = new Label();
+            label2 = new Label();
+            inputMidiBTN = new Button();
+            outputMidiBTN = new Button();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)mainPictureBox).BeginInit();
             panel1.SuspendLayout();
             modeGroupBox.SuspendLayout();
             modeControlPanel.SuspendLayout();
+            panel2.SuspendLayout();
             SuspendLayout();
             // 
             // tableLayoutPanel1
@@ -56,16 +61,17 @@ namespace NotePractice
             tableLayoutPanel1.ColumnStyles.Add(new ColumnStyle(SizeType.Percent, 35F));
             tableLayoutPanel1.Controls.Add(mainPictureBox, 1, 1);
             tableLayoutPanel1.Controls.Add(showPianoBTN, 0, 0);
-            tableLayoutPanel1.Controls.Add(practiceModeCBB, 2, 0);
             tableLayoutPanel1.Controls.Add(panel1, 0, 1);
             tableLayoutPanel1.Controls.Add(modeControlPanel, 1, 0);
             tableLayoutPanel1.Controls.Add(extraPanel, 2, 1);
+            tableLayoutPanel1.Controls.Add(panel2, 2, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
             tableLayoutPanel1.Name = "tableLayoutPanel1";
             tableLayoutPanel1.RowCount = 2;
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 120F));
             tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Percent, 100F));
+            tableLayoutPanel1.RowStyles.Add(new RowStyle(SizeType.Absolute, 20F));
             tableLayoutPanel1.Size = new Size(669, 428);
             tableLayoutPanel1.TabIndex = 0;
             // 
@@ -88,16 +94,6 @@ namespace NotePractice
             showPianoBTN.TabIndex = 2;
             showPianoBTN.Text = "Show piano";
             showPianoBTN.UseVisualStyleBackColor = true;
-            // 
-            // practiceModeCBB
-            // 
-            practiceModeCBB.DropDownStyle = ComboBoxStyle.DropDownList;
-            practiceModeCBB.FormattingEnabled = true;
-            practiceModeCBB.Items.AddRange(new object[] { "Notes", "Intervals" });
-            practiceModeCBB.Location = new Point(472, 3);
-            practiceModeCBB.Name = "practiceModeCBB";
-            practiceModeCBB.Size = new Size(121, 23);
-            practiceModeCBB.TabIndex = 3;
             // 
             // panel1
             // 
@@ -170,6 +166,54 @@ namespace NotePractice
             extraPanel.Size = new Size(194, 302);
             extraPanel.TabIndex = 6;
             // 
+            // panel2
+            // 
+            panel2.Controls.Add(outputMidiBTN);
+            panel2.Controls.Add(inputMidiBTN);
+            panel2.Controls.Add(label2);
+            panel2.Controls.Add(label1);
+            panel2.Dock = DockStyle.Fill;
+            panel2.Location = new Point(472, 3);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(194, 114);
+            panel2.TabIndex = 7;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(15, 16);
+            label1.Name = "label1";
+            label1.Size = new Size(63, 15);
+            label1.TabIndex = 0;
+            label1.Text = "Input MIDI";
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new Point(112, 16);
+            label2.Name = "label2";
+            label2.Size = new Size(73, 15);
+            label2.TabIndex = 1;
+            label2.Text = "Output MIDI";
+            // 
+            // inputMidiBTN
+            // 
+            inputMidiBTN.Location = new Point(3, 36);
+            inputMidiBTN.Name = "inputMidiBTN";
+            inputMidiBTN.Size = new Size(88, 43);
+            inputMidiBTN.TabIndex = 2;
+            inputMidiBTN.Text = "None";
+            inputMidiBTN.UseVisualStyleBackColor = true;
+            // 
+            // outputMidiBTN
+            // 
+            outputMidiBTN.Location = new Point(103, 36);
+            outputMidiBTN.Name = "outputMidiBTN";
+            outputMidiBTN.Size = new Size(88, 43);
+            outputMidiBTN.TabIndex = 3;
+            outputMidiBTN.Text = "None";
+            outputMidiBTN.UseVisualStyleBackColor = true;
+            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -184,6 +228,8 @@ namespace NotePractice
             modeGroupBox.ResumeLayout(false);
             modeGroupBox.PerformLayout();
             modeControlPanel.ResumeLayout(false);
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
             ResumeLayout(false);
         }
 
@@ -194,12 +240,16 @@ namespace NotePractice
         private NumericUpDown numericUpDown2;
         private ControlClefOctave controlClefOctave;
         private Button showPianoBTN;
-        private ComboBox practiceModeCBB;
         private Panel panel1;
         private GroupBox modeGroupBox;
         private RadioButton writingRB;
         private RadioButton practiceRB;
         private Panel modeControlPanel;
         private Panel extraPanel;
+        private Panel panel2;
+        private Button outputMidiBTN;
+        private Button inputMidiBTN;
+        private Label label2;
+        private Label label1;
     }
 }

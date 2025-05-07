@@ -12,12 +12,15 @@ namespace NotePractice.Music
     {
         public List<Symbol> TrebleSymbols { get; set; }
         public List<Symbol> BassSymbols { get; set; }
+        private List<Note> _notesHereTreble, _notesHereBass;
         public GrandStaff()
         {
             TrebleSymbols = new List<Symbol>();
             BassSymbols = new List<Symbol>();
             TrebleSymbols.Add(new ClefSymbol(Clef.Treble));
             BassSymbols.Add(new ClefSymbol(Clef.Bass));
+            _notesHereBass = new();
+            _notesHereTreble = new();
         }
         public Bitmap Bitmap(bool drawCursor)
         {
@@ -33,11 +36,48 @@ namespace NotePractice.Music
         {
             if(clef == Clef.Treble)
             {
-                TrebleSymbols.Add(symbol);
+                if (symbol is Note note)
+                {
+                    if (ListContainsNote(note, _notesHereTreble)) return;
+                    _notesHereTreble.Add(note);
+                    TrebleSymbols.Add(symbol);
+                }
+                else
+                {
+                    _notesHereTreble.Clear();
+                    TrebleSymbols.Add(symbol);
+                }
             } else
             {
-                BassSymbols.Add(symbol);
+                if (symbol is Note note)
+                {
+                    if (ListContainsNote(note, _notesHereBass)) return;
+                    _notesHereBass.Add(note);
+                    BassSymbols.Add(symbol);
+                }
+                else
+                {
+                    _notesHereBass.Clear();
+                    BassSymbols.Add(symbol);
+                }
+
             }
+        }
+        public void RemoveLastSymbol(Clef clef)
+        {
+            List<Symbol> listToRemoveFrom = clef == Clef.Treble ? TrebleSymbols : BassSymbols;
+            if (listToRemoveFrom.Count == 0) return;
+            listToRemoveFrom.RemoveAt(listToRemoveFrom.Count - 1);
+            if(clef == Clef.Treble)_notesHereTreble.Clear();
+            if(clef == Clef.Bass)_notesHereTreble.Clear();
+        }
+        private bool ListContainsNote(Note note, List<Note> notes)
+        {
+            foreach(Note note2 in notes)
+            {
+                if (note2.Equals(note)) return true;
+            }
+            return false;
         }
     }
 }

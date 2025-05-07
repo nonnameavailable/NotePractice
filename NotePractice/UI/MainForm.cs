@@ -26,7 +26,7 @@ namespace NotePractice
         public ControlClefOctave Cco { get => controlClefOctave; }
         private PianoForm _pianoForm;
         public bool IsInPracticeMode { get => practiceRB.Checked; }
-        public string PracticeMode { get => practiceModeCBB.Text; }
+        public string PracticeMode { get => controlClefOctave.PracticeMode; }
         public PictureBox MainPictureBox { get => mainPictureBox; }
         private PictureBox _extraPictureBox;
         private MusicHolder _musicHolder;
@@ -39,6 +39,7 @@ namespace NotePractice
         private MidiListener _midiListener;
         private MidiSender _midiSender;
         public MidiSender MidiSender { get => _midiSender; }
+        private KeyProcessor _keyProcessor;
         public MainForm()
         {
             InitializeComponent();
@@ -50,7 +51,6 @@ namespace NotePractice
             ShowPianoBTN_Click(null, EventArgs.Empty);
             showPianoBTN.Click += ShowPianoBTN_Click;
             Notes = [new Note(NoteLetter.C, 4), new Note(NoteLetter.D, 4)];
-            practiceModeCBB.SelectedIndex = 0;
             WrittenSymbols = new();
             _showingWholeSong = false;
 
@@ -79,11 +79,39 @@ namespace NotePractice
             SelectedStaffIndex = 0;
 
             _midiListener = new MidiListener();
-            FindMidiDeviceForInput();
             _midiSender = new MidiSender();
-            FindMidiDeviceForOutput();
             //_midiSender.SendNoteToMidi(new Note(NoteLetter.C, 4));
+
+            _keyProcessor = new KeyProcessor();
+
+            inputMidiBTN.Click += InputMidiBTN_Click;
+            outputMidiBTN.Click += OutputMidiBTN_Click;
         }
+
+        private void OutputMidiBTN_Click(object? sender, EventArgs e)
+        {
+            FindMidiDeviceForOutput();
+            if(_midiListener.DeviceName != "")
+            {
+                outputMidiBTN.Text = _midiListener.DeviceName;
+            } else
+            {
+                outputMidiBTN.Text = "None";
+            }
+        }
+
+        private void InputMidiBTN_Click(object? sender, EventArgs e)
+        {
+            FindMidiDeviceForInput();
+            if(_midiSender.DeviceName != "")
+            {
+                inputMidiBTN.Text = _midiSender.DeviceName;
+            } else
+            {
+                inputMidiBTN.Text = "None";
+            }
+        }
+
         public void FindMidiDeviceForInput()
         {
             _midiListener.FindDevice();
@@ -172,11 +200,15 @@ namespace NotePractice
         {
             EvaluateNoteFromPiano(e.Note);
         }
-        protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        //protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
+        //{
+        //    Debug.Print("processing key");
+        //    return KeyProcessor.ProcessKey(msg, keyData, this);
+        //    //return base.ProcessCmdKey(ref msg, keyData);
+        //}
+        protected override bool ProcessKeyPreview(ref Message m)
         {
-            if (!mainPictureBox.Focused) return false;
-            return KeyProcessor.ProcessKey(msg, keyData, this);
-            //return base.ProcessCmdKey(ref msg, keyData);
+            return _keyProcessor.ProcessKey(m, (Keys)m.WParam, this);
         }
         private void EvaluateNoteFromPiano(Note note)
         {

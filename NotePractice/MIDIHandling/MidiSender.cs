@@ -17,28 +17,44 @@ namespace NotePractice.MIDIHandling
         private OutputDevice _outputDevice;
         private Stopwatch _stopwatch;
         private int _callCount = 0;
+        private List<int> _heldNotes;
         public int CallCount { get => _callCount; }
         public MidiSender()
         {
             DeviceName = string.Empty;
+            _heldNotes = new List<int>();
         }
-        private async Task SendNotesToMidi(List<Note> notes)
+        private async Task SendNotesToMidiON(List<Note> notes)
         {
             foreach(Note note in notes)
             {
                 var midiNoteNumber = ConvertNoteToMidiNumber(note);
+                if (_heldNotes.Contains(midiNoteNumber)) continue;
+                _heldNotes.Add(midiNoteNumber);
                 var noteOnEvent = new NoteOnEvent((SevenBitNumber)midiNoteNumber, (SevenBitNumber)note.Velocity); // 100 = velocity
                 _outputDevice.SendEvent(noteOnEvent);
             }
-            await Task.Delay(1000);
-            foreach(Note note in notes)
-            {
-                var midiNoteNumber = ConvertNoteToMidiNumber(note);
-                _outputDevice.SendEvent(new NoteOffEvent((SevenBitNumber)midiNoteNumber, (SevenBitNumber)0));
-            }
+            //await Task.Delay(1000);
+            //foreach (Note note in notes)
+            //{
+            //    var midiNoteNumber = ConvertNoteToMidiNumber(note);
+            //    _outputDevice.SendEvent(new NoteOffEvent((SevenBitNumber)midiNoteNumber, (SevenBitNumber)0));
+            //}
             //od.SendEvent(new NoteOffEvent((SevenBitNumber)midiNoteNumber, (SevenBitNumber)0));
         }
-        public void SendNotesToMidiAsync(List<Note> notes)
+        private async Task SendNotesToMidiOFF(List<Note> notes)
+        {
+            foreach (Note note in notes)
+            {
+                var midiNoteNumber = ConvertNoteToMidiNumber(note);
+                if(_heldNotes.Contains(midiNoteNumber))
+                {
+                    _heldNotes.Remove(midiNoteNumber);
+                    _outputDevice.SendEvent(new NoteOffEvent((SevenBitNumber)midiNoteNumber, (SevenBitNumber)0));
+                }
+            }
+        }
+        public void SendNotesToMidiAsyncON(List<Note> notes)
         {
             if (DeviceName == "") return;
             if (_stopwatch.ElapsedMilliseconds < 100)
@@ -48,8 +64,13 @@ namespace NotePractice.MIDIHandling
             {
                 _stopwatch.Restart();
                 //_callCount++;
-                Task.Run(() => SendNotesToMidi(notes));
+                Task.Run(() => SendNotesToMidiON(notes));
             }
+        }
+        public void SendNotesToMidiAsyncOFF(List<Note> notes)
+        {
+            if (DeviceName == "") return;
+            Task.Run(() => SendNotesToMidiOFF(notes));
         }
 
         private int ConvertNoteToMidiNumber(Note note)

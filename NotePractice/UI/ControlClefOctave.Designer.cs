@@ -43,6 +43,7 @@
             label6 = new Label();
             durationNUD = new NumericUpDown();
             label7 = new Label();
+            practiceModeCBB = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)bassMaxNUD).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bassMinNUD).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trebleMaxNUD).BeginInit();
@@ -54,7 +55,7 @@
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(201, 27);
+            label5.Location = new Point(201, 13);
             label5.Name = "label5";
             label5.Size = new Size(28, 15);
             label5.TabIndex = 21;
@@ -65,7 +66,7 @@
             clefCBB.DropDownStyle = ComboBoxStyle.DropDownList;
             clefCBB.FormattingEnabled = true;
             clefCBB.Items.AddRange(new object[] { "Treble", "Bass", "Both" });
-            clefCBB.Location = new Point(241, 23);
+            clefCBB.Location = new Point(241, 9);
             clefCBB.Name = "clefCBB";
             clefCBB.Size = new Size(89, 23);
             clefCBB.TabIndex = 20;
@@ -146,7 +147,7 @@
             // includeSharpFlatCB
             // 
             includeSharpFlatCB.AutoSize = true;
-            includeSharpFlatCB.Location = new Point(212, 50);
+            includeSharpFlatCB.Location = new Point(212, 36);
             includeSharpFlatCB.Margin = new Padding(3, 2, 3, 2);
             includeSharpFlatCB.Name = "includeSharpFlatCB";
             includeSharpFlatCB.Size = new Size(82, 19);
@@ -191,10 +192,21 @@
             label7.TabIndex = 27;
             label7.Text = "Duration";
             // 
+            // practiceModeCBB
+            // 
+            practiceModeCBB.DropDownStyle = ComboBoxStyle.DropDownList;
+            practiceModeCBB.FormattingEnabled = true;
+            practiceModeCBB.Items.AddRange(new object[] { "Notes", "Intervals" });
+            practiceModeCBB.Location = new Point(201, 56);
+            practiceModeCBB.Name = "practiceModeCBB";
+            practiceModeCBB.Size = new Size(121, 23);
+            practiceModeCBB.TabIndex = 28;
+            // 
             // ControlClefOctave
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(practiceModeCBB);
             Controls.Add(label7);
             Controls.Add(durationNUD);
             Controls.Add(writingOctaveNUD);
@@ -239,5 +251,6 @@
         private Label label6;
         private NumericUpDown durationNUD;
         private Label label7;
+        private ComboBox practiceModeCBB;
     }
 }

@@ -20,6 +20,7 @@ namespace NotePractice
         public bool IncludeSharpFlat { get => includeSharpFlatCB.Checked; }
         public int WritingOctave { get => (int)(writingOctaveNUD.Value); set => writingOctaveNUD.Value = Math.Clamp(value, 0, 8); }
         public int WritingDuration { get => (int)durationNUD.Value; set => durationNUD.Value = Math.Clamp(value, 1, 64); }
+        public string PracticeMode { get => practiceModeCBB.Text; }
         public Clef NextClef
         {
             get
@@ -54,6 +55,8 @@ namespace NotePractice
             trebleMaxNUD.ValueChanged += TrebleMaxNUD_ValueChanged;
             bassMinNUD.ValueChanged += BassMinNUD_ValueChanged;
             bassMaxNUD.ValueChanged += BassMaxNUD_ValueChanged;
+            
+            practiceModeCBB.SelectedIndex = 0;
         }
 
         private void BassMaxNUD_ValueChanged(object? sender, EventArgs e)

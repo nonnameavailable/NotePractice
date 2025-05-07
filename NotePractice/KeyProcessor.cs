@@ -11,31 +11,33 @@ namespace NotePractice
 {
     public class KeyProcessor
     {
-        public static bool ProcessKey(Message msg, Keys keyData, MainForm mf)
+        private bool _isShiftDown, _isCtrlDown;
+        private HashSet<Keys> _heldKeys;
+        public KeyProcessor()
         {
+            _isShiftDown = false;
+            _isCtrlDown = false;
+            _heldKeys = new();
+        }
+        public bool ProcessKey(Message msg, Keys keyData, MainForm mf)
+        {
+            mf.MainPictureBox.Focus();
             const int WM_KEYDOWN = 0x100;
             const int WM_KEYUP = 0x101;
+            Symbol? s = WrittenSymbol(keyData, mf);
+            Debug.Print(keyData.ToString());
             //Keys keyData = (Keys)m.WParam.ToInt32();
             if (msg.Msg == WM_KEYDOWN)
             {
-                if (keyData == Keys.Oemplus || keyData == Keys.Right)
+                if (_heldKeys.Contains(keyData)) return false;
+                _heldKeys.Add(keyData);
+                if (keyData == Keys.ShiftKey)
                 {
-                    mf.WritingDuration *= 2;
+                    _isShiftDown = true;
                     return true;
-                }
-                else if (keyData == Keys.OemMinus || keyData == Keys.Left)
+                } else if (keyData == Keys.ControlKey)
                 {
-                    mf.WritingDuration /= 2;
-                    return true;
-                }
-                else if (keyData == Keys.Oemcomma || keyData == Keys.Down)
-                {
-                    mf.WritingOctave--;
-                    return true;
-                }
-                else if (keyData == Keys.OemPeriod || keyData == Keys.Up)
-                {
-                    mf.WritingOctave++;
+                    _isCtrlDown = true;
                     return true;
                 }
                 if (mf.IsInPracticeMode)
@@ -61,37 +63,77 @@ namespace NotePractice
                     }
                     else
                     {
-                        Symbol s = WrittenSymbol(keyData, mf);
                         //if (s != null) mf.WrittenSymbols.Add(s);
-                        if(s != null)
+                        if (s != null)
                         {
                             mf.Song.AddSymbol(s, mf.SelectedStaffIndex, mf.SelectedStaffClef);
                             //Debug.Print(mf.MidiSender.CallCount.ToString());
-                            if(s is Note note) mf.MidiSender.SendNotesToMidiAsync([note, note.ShiftedNote(2), note.ShiftedNote(4)]);
+                            if (s is Note note) mf.MidiSender.SendNotesToMidiAsyncON([note]);
                         }
                     }
                     mf.UpdatePictureBoxAfterWrite();
                     //mf.MainPictureBox.Image = MusicDrawer.MusicBitmap(mf.WrittenSymbols);
                     return true;
                 }
+            } else if (msg.Msg == WM_KEYUP)
+            {
+                _heldKeys.Remove(keyData);
+                if (keyData == Keys.ShiftKey)
+                {
+                    _isShiftDown = false;
+                    return true;
+                }
+                else if (keyData == Keys.ControlKey)
+                {
+                    _isCtrlDown = false;
+                    return true;
+                }
+                else if (keyData == Keys.Oemplus || keyData == Keys.Right)
+                {
+                    mf.WritingDuration *= 2;
+                    return true;
+                }
+                else if (keyData == Keys.OemMinus || keyData == Keys.Left)
+                {
+                    mf.WritingDuration /= 2;
+                    return true;
+                }
+                else if (keyData == Keys.Oemcomma || keyData == Keys.Down)
+                {
+                    mf.WritingOctave--;
+                    return true;
+                }
+                else if (keyData == Keys.OemPeriod || keyData == Keys.Up)
+                {
+                    mf.WritingOctave++;
+                    return true;
+                }
+                if (s is Note note) mf.MidiSender.SendNotesToMidiAsyncOFF([note]);
+                return true;
             }
             return false;
         }
-        private static Symbol WrittenSymbol(Keys keyData, MainForm mf)
+        private Note? NoteFromKey(Keys keyData, MainForm mf)
         {
             Keys[] noteKeys = { Keys.C, Keys.D, Keys.E, Keys.F, Keys.G, Keys.A, Keys.B };
             Keys actualKey = keyData & Keys.KeyCode;
             int noteIndex = Array.IndexOf(noteKeys, actualKey);
             //int noteIndex = Array.IndexOf(noteKeys, keyData);
-            bool isShiftDown = (keyData & Keys.Shift) == Keys.Shift;
-            bool isCtrlDown = (keyData & Keys.Control) == Keys.Control;
+            //bool isShiftDown = (keyData & Keys.Shift) == Keys.Shift;
+            //bool isCtrlDown = (keyData & Keys.Control) == Keys.Control;
             if (noteIndex >= 0)
             {
                 Accidental accidental = Accidental.None;
-                if (isShiftDown) accidental = Accidental.Sharp;
-                if (isCtrlDown) accidental = Accidental.Flat;
+                if (_heldKeys.Contains(Keys.ShiftKey)) accidental = Accidental.Sharp;
+                if (_heldKeys.Contains(Keys.ControlKey)) accidental = Accidental.Flat;
                 return new Note((NoteLetter)noteIndex, mf.WritingOctave, accidental, mf.WritingDuration);
             }
+            else return null;
+        }
+        private Symbol? WrittenSymbol(Keys keyData, MainForm mf)
+        {
+            Note note = NoteFromKey(keyData, mf);
+            if (note != null) return note;
             if (keyData == Keys.Space)
             {
                 return new Shift();
@@ -106,7 +148,7 @@ namespace NotePractice
             }
             else if ((keyData & Keys.L) == Keys.L)
             {
-                if (isShiftDown)
+                if (_isShiftDown)
                 {
                     return new ClefSymbol(Clef.Bass);
                 }

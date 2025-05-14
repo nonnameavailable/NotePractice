@@ -85,7 +85,9 @@ namespace NotePractice.Music
                     note.DrawFlag = false;
                     note.DrawStem = true;
                     note.XPosShift = 0;
-                    note.StemAlwaysRight = false;
+                    //note.StemAlwaysRight = false;
+                    note.StemDirection = Direction.Up;
+                    note.StemSide = Direction.Right;
                     note.StemLength = (int)(LineSpacing * 3.5);
                     chord.Add(note);
                 }
@@ -104,14 +106,16 @@ namespace NotePractice.Music
             int prevDist = 0;
             int shiftCounter = 0;
             int xShiftValue = (int)(Unit * 1.3);
-            bool stemIsRight = !firstNote.StemShouldBeLeft(clef);
+            Direction stemDirection = firstNote.GetStemDirection(clef);
             for (int i = 0; i < notes.Count; i++)
             {
                 Note note = notes[i];
                 bool isFirstNote = i == 0;
                 bool isLastNote = i == notes.Count - 1;
                 bool isOnlyNote = notes.Count == 1;
-                note.StemAlwaysRight = stemIsRight;
+                bool stemIsRight = stemDirection == Direction.Up;
+                note.StemDirection = stemDirection;
+                note.StemSide = stemDirection == Direction.Down ? Direction.Left : Direction.Right;
                 if (isOnlyNote)
                 {
                     note.DrawFlag = true;
@@ -139,7 +143,7 @@ namespace NotePractice.Music
                         }
                         if(stemIsRight)firstInSequence.StemLength += LineSpacing / 2;
                         shiftCounter++;
-                        note.XPosShift = xShiftValue * ((shiftCounter) % 2);
+                        note.XPosShift = xShiftValue * (shiftCounter % 2);
                         if (!stemIsRight)
                         {
                             note.XPosShift *= -1;
@@ -153,7 +157,7 @@ namespace NotePractice.Music
                 }
                 if (isLastNote)
                 {
-                    if(firstNote.StemShouldBeLeft(clef))
+                    if(firstNote.GetStemDirection(clef) == Direction.Down)
                     {
                         firstNote.DrawFlag = true;
                     } else
@@ -185,6 +189,13 @@ namespace NotePractice.Music
                 if(symbol is Note note && prevSymbol is Shift)
                 {
                     beatCount += 1d / note.Duration;
+                    if (beatCount > 0.25)
+                    {
+                        beatCount = 1d / note.Duration;
+                        barStartIndex = i;
+                        barStartXPos = xPos;
+                        continue;
+                    }
                 } else if (symbol is Rest rest && prevSymbol is Shift)
                 {
                     beatCount += 1d / rest.Duration;
@@ -194,25 +205,31 @@ namespace NotePractice.Music
                 {
                     barStartIndex = i;
                     barStartXPos = xPos;
-                    continue;
                 }
                 if (isBarEnd)
                 {
                     beatCount = 0;
                     if (barStartIndex == -1) continue;
-                    OVector barStart = ((Note)symbols[barStartIndex]).StemEnd(barStartXPos, clef);
-                    OVector barEnd = ((Note)symbol).StemEnd(xPos, clef);
-                    if (barStartIndex >= 0 && !barStart.Equals(barEnd))
-                    {
-                        g.DrawLine(BarPen, barStart.ToPoint(), barEnd.ToPoint());
-                    } else continue;
+                    Note firstNote = (Note)symbols[barStartIndex];
                     for (int j = barStartIndex; j <= i; j++)
                     {
                         if (symbols[j] is Note notee)
                         {
                             notee.DrawFlag = false;
+                            if (j > barStartIndex)
+                            {
+                                notee.StemSide = firstNote.StemSide;
+                                notee.StemDirection = firstNote.StemDirection;
+                            }
                         }
                     }
+                    OVector barStart = ((Note)symbols[barStartIndex]).StemEnd(barStartXPos, clef);
+                    OVector barEnd = ((Note)symbol).StemEnd(xPos, clef);
+                    Debug.Print(firstNote.StemDirection.ToString() + " x " + ((Note)symbol).StemDirection.ToString());
+                    if (!barStart.Equals(barEnd))
+                    {
+                        g.DrawLine(BarPen, barStart.ToPoint(), barEnd.ToPoint());
+                    };
                 }
             }
         }

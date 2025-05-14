@@ -12,7 +12,7 @@ namespace NotePractice.Music
     {
         private int XPosShift { get => _note.XPosShift; }
         private int Duration { get => _note.Duration; }
-        private bool StemAlwaysRight { get => _note.StemAlwaysRight; }
+        //private bool StemAlwaysRight { get => _note.StemAlwaysRight; }
         private bool DrawStem { get => _note.DrawStem; }
         private int StemLength { get => _note.StemLength; }
         private bool DrawFlag { get => _note.DrawFlag; }
@@ -20,11 +20,15 @@ namespace NotePractice.Music
         private bool IsFlat { get => _note.IsFlat; }
         private NoteLetter NoteLetter { get => _note.NoteLetter; }
         private int Octave { get =>  _note.Octave; }
+        public Direction StemSide { get; set; }
+        public Direction StemDirection { get; set; }
 
         private Note _note;
         public NoteDrawer(Note note)
         {
             _note = note;
+            StemSide = Direction.Right;
+            StemDirection = Direction.Up;
         }
         public void DrawNote(Graphics g, int xPos, Clef clef)
         {
@@ -66,7 +70,8 @@ namespace NotePractice.Music
                     int flagWidth = (int)(MusicDrawer.LineSpacing * 0.8);
                     int flagHeight = (int)(MusicDrawer.DefaultStemLength * 0.6);
                     int stemXPos = stemStart.Xint;
-                    bool stemDown = StemShouldBeLeft(clef);
+                    //Direction stemDirection = GetStemDirection(clef);
+                    Direction stemDirection = StemDirection;
                     for (int i = 0; i < flagCount; i++)
                     {
                         int iShift = (int)(i * MusicDrawer.DefaultStemLength * 0.15);
@@ -74,7 +79,14 @@ namespace NotePractice.Music
                         int y1 = yPos - StemLength + iShift;
                         int x2 = stemXPos + flagWidth;
                         int y2 = yPos - StemLength + flagHeight + iShift;
-                        if (stemDown && !StemAlwaysRight)
+                        //if (stemDirection == Direction.Down && !StemAlwaysRight)
+                        //{
+                        //    x1 = (int)(stemXPos - MusicDrawer.Unit * 0.06);
+                        //    y1 = yPos + StemLength - iShift;
+                        //    x2 = stemXPos - flagWidth;
+                        //    y2 = yPos + StemLength - flagHeight - iShift;
+                        //}
+                        if (stemDirection == Direction.Down)
                         {
                             x1 = (int)(stemXPos - MusicDrawer.Unit * 0.06);
                             y1 = yPos + StemLength - iShift;
@@ -127,8 +139,12 @@ namespace NotePractice.Music
         private int StemXPos(int xPos, Clef clef)
         {
             int stemXPos = (int)(xPos + MusicDrawer.SmallNoteWidth / 2 * 1.2 - MusicDrawer.LinePen.Width * 0.5);
-            bool stemDown = StemShouldBeLeft(clef);
-            if (stemDown && !StemAlwaysRight)
+            Direction stemDirection = GetStemDirection(clef);
+            //if (stemDirection == Direction.Down && !StemAlwaysRight)
+            //{
+            //    stemXPos = (int)(xPos - MusicDrawer.SmallNoteWidth / 2 * 1.13 + MusicDrawer.LinePen.Width * 0.5);
+            //}
+            if (_note.StemDirection == Direction.Down)
             {
                 stemXPos = (int)(xPos - MusicDrawer.SmallNoteWidth / 2 * 1.13 + MusicDrawer.LinePen.Width * 0.5);
             }
@@ -142,9 +158,13 @@ namespace NotePractice.Music
         public OVector StemEnd(int xPos, Clef clef)
         {
             int stemXPos = StemXPos(xPos, clef);
-            bool stemDown = StemShouldBeLeft(clef);
+            //Direction stemDirection = GetStemDirection(clef);
             int yPos = YPos(clef);
-            if (stemDown && !StemAlwaysRight)
+            //if (stemDirection == Direction.Down && !StemAlwaysRight)
+            //{
+            //    return new OVector(stemXPos, yPos + StemLength);
+            //}
+            if (_note.StemDirection == Direction.Down)
             {
                 return new OVector(stemXPos, yPos + StemLength);
             }
@@ -153,9 +173,9 @@ namespace NotePractice.Music
                 return new OVector(stemXPos, yPos - StemLength);
             }
         }
-        public bool StemShouldBeLeft(Clef clef)
+        public Direction GetStemDirection(Clef clef)
         {
-            return YPos(clef) <= MusicDrawer.TopLinePosition + MusicDrawer.LineSpacing * 2;
+            return YPos(clef) <= MusicDrawer.TopLinePosition + MusicDrawer.LineSpacing * 2 ? Direction.Down : Direction.Up;
         }
         private int YPos(Clef clef)
         {

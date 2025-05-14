@@ -30,12 +30,12 @@ namespace NotePractice.Music.Symbols
         public int XPosShift { get; set; }
         public bool DrawStem { get; set; }
         public bool DrawFlag { get; set; }
-        public bool StemAlwaysRight { get; set; }
-        public Direction StemSide { get; set; }
-        public Direction StemDirection { get; set; }
+        //public bool StemAlwaysRight { get; set; }
         public int StemLength { get; set; }
         public bool IsSharp { get => Accidental == Accidental.Sharp; }
         public bool IsFlat { get => Accidental == Accidental.Flat; }
+        public Direction StemSide { get => _noteDrawer.StemSide; set => _noteDrawer.StemSide = value; }
+        public Direction StemDirection { get => _noteDrawer.StemDirection; set => _noteDrawer.StemDirection = value; }
         public SymbolType Type { get => SymbolType.Note; }
         private NoteDrawer _noteDrawer;
 
@@ -79,9 +79,9 @@ namespace NotePractice.Music.Symbols
         {
             return Math.Abs(note.NumVal - NumVal) + 1;
         }
-        public bool StemShouldBeLeft(Clef clef)
+        public Direction GetStemDirection(Clef clef)
         {
-            return _noteDrawer.StemShouldBeLeft(clef);
+            return _noteDrawer.GetStemDirection(clef);
         }
         public Note ShiftedNote(int shiftValue)
         {

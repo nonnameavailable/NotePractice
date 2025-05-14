@@ -24,6 +24,7 @@ namespace NotePractice.Music
         public const int DefaultStemLength = (int)(LineSpacing * 3.5);
         public static Pen LinePen = new Pen(Brushes.Black, Unit * 0.1f);
         public static Pen NotePen = new Pen(Brushes.Black, Unit * 0.2f);
+        public static Pen BarPen = new Pen(Brushes.Black, Unit * 0.5f);
 
         public static int FullNoteHeight = (int)(LineSpacing * 0.9);
         public static int FullNoteWidth = (int)(FullNoteHeight * 1.7);
@@ -43,7 +44,8 @@ namespace NotePractice.Music
             if(symbols.Count == 0) return result;
             using Graphics g = Graphics.FromImage(result);
             g.Clear(Color.White);
-            for(int i = 0; i < 5; i++)
+            DrawBeams(symbols, g);
+            for (int i = 0; i < 5; i++)
             {
                 g.DrawLine(LinePen, new Point(0, Unit * (i + 4)), new Point(width, Unit * (i + 4)));
             }
@@ -74,7 +76,7 @@ namespace NotePractice.Music
         {
             if (symbols.Count == 0) return;
             Clef clef = symbols[0] is ClefSymbol ? ((ClefSymbol)symbols[0]).ClefType : Clef.Treble;
-            List<Note> notes = new List<Note>();
+            List<Note> chord = new List<Note>();
             for (int i = 0; i < symbols.Count; i++)
             {
                 Symbol s = symbols[i];
@@ -85,16 +87,16 @@ namespace NotePractice.Music
                     note.XPosShift = 0;
                     note.StemAlwaysRight = false;
                     note.StemLength = (int)(LineSpacing * 3.5);
-                    notes.Add(note);
+                    chord.Add(note);
                 }
-                if((s is not Note && notes.Count > 0) || (i == symbols.Count - 1 && notes.Count > 0))
+                if((s is not Note && chord.Count > 0) || (i == symbols.Count - 1 && chord.Count > 0))
                 {
-                    AdjustNoteList(notes, clef);
-                    notes.Clear();
+                    AdjustFLagsAndStemsOfChord(chord, clef);
+                    chord.Clear();
                 }
             }
         }
-        public static void AdjustNoteList(List<Note> notes, Clef clef)
+        private static void AdjustFLagsAndStemsOfChord(List<Note> notes, Clef clef)
         {
             notes = notes.OrderBy(note => note.Octave).ThenBy(note => (int)note.NoteLetter).ToList();
             Note firstNote = notes[0];
@@ -158,6 +160,58 @@ namespace NotePractice.Music
                     {
                         note.DrawFlag = true;
                         firstNote.DrawFlag = false;
+                    }
+                }
+            }
+        }
+        private static void DrawBeams(List<Symbol> symbols, Graphics g)
+        {
+            if(symbols.Count < 2) return;
+            double beatCount = 0;
+            int xPos = XSymbolShift;
+            Clef clef = symbols[0] is ClefSymbol cleff ? cleff.ClefType : Clef.Treble;
+            int barStartIndex = -1;
+            int barStartXPos = 0;
+            for(int i = 1; i < symbols.Count; i++)
+            {
+                Symbol symbol = symbols[i];
+                Symbol prevSymbol = symbols[i - 1];
+                bool isBarStart = beatCount == 0 && symbol is Note;
+                if (symbol is Shift shift)
+                {
+                    xPos += XSymbolShift;
+                    continue;
+                }
+                if(symbol is Note note && prevSymbol is Shift)
+                {
+                    beatCount += 1d / note.Duration;
+                } else if (symbol is Rest rest && prevSymbol is Shift)
+                {
+                    beatCount += 1d / rest.Duration;
+                }
+                bool isBarEnd = beatCount == 0.25 && symbol is Note;
+                if (isBarStart)
+                {
+                    barStartIndex = i;
+                    barStartXPos = xPos;
+                    continue;
+                }
+                if (isBarEnd)
+                {
+                    beatCount = 0;
+                    if (barStartIndex == -1) continue;
+                    OVector barStart = ((Note)symbols[barStartIndex]).StemEnd(barStartXPos, clef);
+                    OVector barEnd = ((Note)symbol).StemEnd(xPos, clef);
+                    if (barStartIndex >= 0 && !barStart.Equals(barEnd))
+                    {
+                        g.DrawLine(BarPen, barStart.ToPoint(), barEnd.ToPoint());
+                    } else continue;
+                    for (int j = barStartIndex; j <= i; j++)
+                    {
+                        if (symbols[j] is Note notee)
+                        {
+                            notee.DrawFlag = false;
+                        }
                     }
                 }
             }

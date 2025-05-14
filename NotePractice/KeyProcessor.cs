@@ -25,7 +25,6 @@ namespace NotePractice
             const int WM_KEYDOWN = 0x100;
             const int WM_KEYUP = 0x101;
             Symbol? s = WrittenSymbol(keyData, mf);
-            Debug.Print(keyData.ToString());
             //Keys keyData = (Keys)m.WParam.ToInt32();
             if (msg.Msg == WM_KEYDOWN)
             {

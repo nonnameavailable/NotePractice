@@ -97,7 +97,7 @@ namespace NotePractice.Music
                         OVector v2 = new OVector(x2, y2);
                         //using GraphicsPath flagPath = MyGraphics.ArcPath(v1, v2, MusicDrawer.DefaultStemLength, 20);
                         using GraphicsPath flagPath = MyGraphics.FlagPath(v1, v2);
-                        MyGraphics.DrawPathInterpolatedWidths(g, flagPath, MusicDrawer.Unit * 0.2f, MusicDrawer.Unit * 0.02f);
+                        MyGraphics.DrawPathInterpolatedWidths(g, flagPath, MusicDrawer.Unit * 0.2f, MusicDrawer.Unit * 0.06f);
 
                     }
                 }

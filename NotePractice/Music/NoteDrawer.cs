@@ -177,7 +177,7 @@ namespace NotePractice.Music
         {
             return YPos(clef) <= MusicDrawer.TopLinePosition + MusicDrawer.LineSpacing * 2 ? Direction.Down : Direction.Up;
         }
-        private int YPos(Clef clef)
+        public int YPos(Clef clef)
         {
             int noteInt = (int)NoteLetter;
             int yPos = (int)(MusicDrawer.LineSpacing * 4 + MusicDrawer.LineSpacing * 5 - noteInt * MusicDrawer.NoteShift + 28 * MusicDrawer.NoteShift - Octave * 7 * MusicDrawer.NoteShift);

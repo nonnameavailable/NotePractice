@@ -165,6 +165,10 @@ namespace NotePractice.Music
                         note.DrawFlag = true;
                         firstNote.DrawFlag = false;
                     }
+                    if(stemDirection == Direction.Up)
+                    {
+                        firstNote.StemLength += firstNote.YPos(clef) - note.YPos(clef);
+                    }
                 }
             }
         }
@@ -181,8 +185,8 @@ namespace NotePractice.Music
             {
                 Symbol symbol = symbols[i];
                 Symbol prevSymbol = symbols[i - 1];
-                bool isBarStart = beatCount == 0 && symbol is Note;
-                if (isBarStart)
+                bool isBeamStart = beatCount == 0 && symbol is Note;
+                if (isBeamStart)
                 {
                     beamNotes.Add((Note)symbol);
                     beamStartIndex = i;
@@ -212,8 +216,8 @@ namespace NotePractice.Music
                 {
                     beatCount += 1d / rest.Duration;
                 }
-                bool isBarEnd = beatCount == 0.25 && symbol is Note;
-                if (isBarEnd)
+                bool isBeamEnd = beatCount == 0.25 && symbol is Note;
+                if (isBeamEnd)
                 {
                     beatCount = 0;
                     if (beamStartIndex == -1)

@@ -109,6 +109,7 @@ namespace NotePractice.Music.Symbols
             throw new NotImplementedException();
         }
         public OVector StemEnd(int xPos, Clef clef) => _noteDrawer.StemEnd(xPos, clef);
+        public int YPos(Clef clef) => _noteDrawer.YPos(clef);
     }
 
     public enum NoteLetter

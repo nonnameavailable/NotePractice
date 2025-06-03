@@ -55,10 +55,10 @@ namespace NotePractice
         {
             notes = notes.OrderBy(n => n.NumVal).ToList();
             List<Symbol> symbols = [new ClefSymbol(clef), new Shift(), new Shift()];
-            symbols.Concat(notes);
-            Bitmap result = MusicDrawer.MusicBitmap(notes.Cast<Symbol>().ToList(), false);
+            symbols = symbols.Concat(notes).ToList();
+            Bitmap result = MusicDrawer.MusicBitmap(symbols, false);
             using Graphics g = Graphics.FromImage(result);
-            using Font font = ScaledLetterFont(80); 
+            using Font font = ScaledLetterFont(60); 
             Keys[] numkeys = [Keys.NumPad2, Keys.NumPad3, Keys.NumPad4, Keys.NumPad5, Keys.NumPad6, Keys.NumPad7, Keys.NumPad8];
             int pressedNo = Array.IndexOf(numkeys, inputKey) + 2;
             int distance = notes[0].Distance(notes[1]);
@@ -69,7 +69,7 @@ namespace NotePractice
             else
             {
                 g.DrawString(pressedNo.ToString(), font, Brushes.Red, 20, 0);
-                g.DrawString(distance.ToString() + $"({notes[0].ToString()} - {notes[1].ToString()})", font, Brushes.Green, 20, 120);
+                g.DrawString(distance.ToString() + $"({notes[0].ToString()} - {notes[1].ToString()})", font, Brushes.Green, 20, 80);
             }
             return result;
         }

@@ -186,6 +186,7 @@ namespace NotePractice
             mf.MainPictureBox.Image?.Dispose();
             mf.MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, [mf.Note, mf.Note.ShiftedNote(shift)]), false);
             mf.Cco.PreviousClef = nextClef;
+            mf.Notes = [mf.Note, mf.Note.ShiftedNote(shift)];
         }
     }
 }

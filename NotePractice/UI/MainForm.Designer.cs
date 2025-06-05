@@ -37,19 +37,17 @@ namespace NotePractice
             modeGroupBox = new GroupBox();
             writingRB = new RadioButton();
             practiceRB = new RadioButton();
-            modeControlPanel = new Panel();
-            controlClefOctave = new ControlClefOctave();
-            extraPanel = new Panel();
+            topPanel = new Panel();
+            rightPanel = new Panel();
             panel2 = new Panel();
-            label1 = new Label();
-            label2 = new Label();
-            inputMidiBTN = new Button();
             outputMidiBTN = new Button();
+            inputMidiBTN = new Button();
+            label2 = new Label();
+            label1 = new Label();
             tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)mainPictureBox).BeginInit();
             panel1.SuspendLayout();
             modeGroupBox.SuspendLayout();
-            modeControlPanel.SuspendLayout();
             panel2.SuspendLayout();
             SuspendLayout();
             // 
@@ -62,8 +60,8 @@ namespace NotePractice
             tableLayoutPanel1.Controls.Add(mainPictureBox, 1, 1);
             tableLayoutPanel1.Controls.Add(showPianoBTN, 0, 0);
             tableLayoutPanel1.Controls.Add(panel1, 0, 1);
-            tableLayoutPanel1.Controls.Add(modeControlPanel, 1, 0);
-            tableLayoutPanel1.Controls.Add(extraPanel, 2, 1);
+            tableLayoutPanel1.Controls.Add(topPanel, 1, 0);
+            tableLayoutPanel1.Controls.Add(rightPanel, 2, 1);
             tableLayoutPanel1.Controls.Add(panel2, 2, 0);
             tableLayoutPanel1.Dock = DockStyle.Fill;
             tableLayoutPanel1.Location = new Point(0, 0);
@@ -138,33 +136,21 @@ namespace NotePractice
             practiceRB.Text = "Practice";
             practiceRB.UseVisualStyleBackColor = true;
             // 
-            // modeControlPanel
+            // topPanel
             // 
-            modeControlPanel.Controls.Add(controlClefOctave);
-            modeControlPanel.Dock = DockStyle.Fill;
-            modeControlPanel.Location = new Point(103, 3);
-            modeControlPanel.Name = "modeControlPanel";
-            modeControlPanel.Size = new Size(363, 114);
-            modeControlPanel.TabIndex = 5;
+            topPanel.Dock = DockStyle.Fill;
+            topPanel.Location = new Point(103, 3);
+            topPanel.Name = "topPanel";
+            topPanel.Size = new Size(363, 114);
+            topPanel.TabIndex = 5;
             // 
-            // controlClefOctave
+            // rightPanel
             // 
-            controlClefOctave.Dock = DockStyle.Fill;
-            controlClefOctave.Location = new Point(0, 0);
-            controlClefOctave.Name = "controlClefOctave";
-            controlClefOctave.PreviousClef = Clef.Treble;
-            controlClefOctave.Size = new Size(363, 114);
-            controlClefOctave.TabIndex = 0;
-            controlClefOctave.WritingDuration = 1;
-            controlClefOctave.WritingOctave = 4;
-            // 
-            // extraPanel
-            // 
-            extraPanel.Dock = DockStyle.Fill;
-            extraPanel.Location = new Point(472, 123);
-            extraPanel.Name = "extraPanel";
-            extraPanel.Size = new Size(194, 302);
-            extraPanel.TabIndex = 6;
+            rightPanel.Dock = DockStyle.Fill;
+            rightPanel.Location = new Point(472, 123);
+            rightPanel.Name = "rightPanel";
+            rightPanel.Size = new Size(194, 302);
+            rightPanel.TabIndex = 6;
             // 
             // panel2
             // 
@@ -178,23 +164,14 @@ namespace NotePractice
             panel2.Size = new Size(194, 114);
             panel2.TabIndex = 7;
             // 
-            // label1
+            // outputMidiBTN
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(15, 16);
-            label1.Name = "label1";
-            label1.Size = new Size(63, 15);
-            label1.TabIndex = 0;
-            label1.Text = "Input MIDI";
-            // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Location = new Point(112, 16);
-            label2.Name = "label2";
-            label2.Size = new Size(73, 15);
-            label2.TabIndex = 1;
-            label2.Text = "Output MIDI";
+            outputMidiBTN.Location = new Point(103, 36);
+            outputMidiBTN.Name = "outputMidiBTN";
+            outputMidiBTN.Size = new Size(88, 43);
+            outputMidiBTN.TabIndex = 3;
+            outputMidiBTN.Text = "None";
+            outputMidiBTN.UseVisualStyleBackColor = true;
             // 
             // inputMidiBTN
             // 
@@ -205,14 +182,23 @@ namespace NotePractice
             inputMidiBTN.Text = "None";
             inputMidiBTN.UseVisualStyleBackColor = true;
             // 
-            // outputMidiBTN
+            // label2
             // 
-            outputMidiBTN.Location = new Point(103, 36);
-            outputMidiBTN.Name = "outputMidiBTN";
-            outputMidiBTN.Size = new Size(88, 43);
-            outputMidiBTN.TabIndex = 3;
-            outputMidiBTN.Text = "None";
-            outputMidiBTN.UseVisualStyleBackColor = true;
+            label2.AutoSize = true;
+            label2.Location = new Point(112, 16);
+            label2.Name = "label2";
+            label2.Size = new Size(73, 15);
+            label2.TabIndex = 1;
+            label2.Text = "Output MIDI";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(15, 16);
+            label1.Name = "label1";
+            label1.Size = new Size(63, 15);
+            label1.TabIndex = 0;
+            label1.Text = "Input MIDI";
             // 
             // MainForm
             // 
@@ -227,7 +213,6 @@ namespace NotePractice
             panel1.ResumeLayout(false);
             modeGroupBox.ResumeLayout(false);
             modeGroupBox.PerformLayout();
-            modeControlPanel.ResumeLayout(false);
             panel2.ResumeLayout(false);
             panel2.PerformLayout();
             ResumeLayout(false);
@@ -238,14 +223,13 @@ namespace NotePractice
         private TableLayoutPanel tableLayoutPanel1;
         private PictureBox mainPictureBox;
         private NumericUpDown numericUpDown2;
-        private ControlClefOctave controlClefOctave;
         private Button showPianoBTN;
         private Panel panel1;
         private GroupBox modeGroupBox;
         private RadioButton writingRB;
         private RadioButton practiceRB;
-        private Panel modeControlPanel;
-        private Panel extraPanel;
+        private Panel topPanel;
+        private Panel rightPanel;
         private Panel panel2;
         private Button outputMidiBTN;
         private Button inputMidiBTN;

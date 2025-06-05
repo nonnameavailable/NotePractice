@@ -21,12 +21,15 @@ namespace NotePractice
         public Note Note { get; set; }
         public List<Note> Notes { get; set; }
         public List<Symbol> WrittenSymbols { get; set; }
-        public int WritingOctave { get => controlClefOctave.WritingOctave; set => controlClefOctave.WritingOctave = value; }
-        public int WritingDuration { get => controlClefOctave.WritingDuration; set => controlClefOctave.WritingDuration = value; }
-        public ControlClefOctave Cco { get => controlClefOctave; }
+        public int WritingOctave { get => TCW.WritingOctave; set => TCW.WritingOctave = value; }
+        public int WritingDuration { get => TCW.WritingDuration; set => TCW.WritingDuration = value; }
+        private TopControlPractice _tcp;
+        public TopControlPractice TCP { get => _tcp; }
+        private TopControlWriting _tcw;
+        public TopControlWriting TCW { get => _tcw; }
         private PianoForm _pianoForm;
         public bool IsInPracticeMode { get => practiceRB.Checked; }
-        public string PracticeMode { get => controlClefOctave.PracticeMode; }
+        public string PracticeMode { get => TCP.PracticeMode; }
         public PictureBox MainPictureBox { get => mainPictureBox; }
         private PictureBox _extraPictureBox;
         private MusicHolder _musicHolder;
@@ -63,7 +66,7 @@ namespace NotePractice
 
             practiceRB.Click += PracticeRB_Click;
             writingRB.Click += WritingRB_Click;
-            extraPanel.Controls.Add(_extraPictureBox);
+            rightPanel.Controls.Add(_extraPictureBox);
 
             _song = new Song();
             _song.AddGrandStaff();
@@ -86,6 +89,10 @@ namespace NotePractice
 
             inputMidiBTN.Click += InputMidiBTN_Click;
             outputMidiBTN.Click += OutputMidiBTN_Click;
+
+            _tcp = new TopControlPractice();
+            topPanel.Controls.Add(_tcp);
+            _tcw = new TopControlWriting();
         }
 
         private void OutputMidiBTN_Click(object? sender, EventArgs e)
@@ -176,14 +183,18 @@ namespace NotePractice
 
         private void WritingRB_Click(object? sender, EventArgs e)
         {
-            extraPanel.Controls.Clear();
-            extraPanel.Controls.Add(_musicHolder);
+            rightPanel.Controls.Clear();
+            rightPanel.Controls.Add(_musicHolder);
+            topPanel.Controls.Clear();
+            topPanel.Controls.Add(TCW);
         }
 
         private void PracticeRB_Click(object? sender, EventArgs e)
         {
-            extraPanel.Controls.Clear();
-            extraPanel.Controls.Add(_extraPictureBox);
+            rightPanel.Controls.Clear();
+            rightPanel.Controls.Add(_extraPictureBox);
+            topPanel.Controls.Clear();
+            topPanel.Controls.Add(TCP);
         }
 
         private void ShowPianoBTN_Click(object? sender, EventArgs e)
@@ -212,17 +223,17 @@ namespace NotePractice
         }
         private void EvaluateNoteFromPiano(Note note)
         {
-            Clef nextClef = Cco.NextClef;
+            Clef nextClef = TCP.NextClef;
 
-            int minOctave = nextClef == Clef.Treble ? Cco.TrebleMin : Cco.BassMin;
-            int maxOctave = nextClef == Clef.Treble ? Cco.TrebleMax : Cco.BassMax;
+            int minOctave = nextClef == Clef.Treble ? TCP.TrebleMin : TCP.BassMin;
+            int maxOctave = nextClef == Clef.Treble ? TCP.TrebleMax : TCP.BassMax;
 
             ExtraPictureBox.Image?.Dispose();
-            ExtraPictureBox.Image = Noter.NoteImageWithLetter(Note, Cco.PreviousClef, note);
+            ExtraPictureBox.Image = Noter.NoteImageWithLetter(Note, TCP.PreviousClef, note);
             MainPictureBox.Image?.Dispose();
-            Note = Noter.RandomNote(minOctave, maxOctave, Cco.IncludeSharpFlat);
+            Note = Noter.RandomNote(minOctave, maxOctave, TCP.IncludeSharpFlat);
             MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, [Note]), false);
-            Cco.PreviousClef = nextClef;
+            TCP.PreviousClef = nextClef;
         }
         public void SetNewMainBitmap(Bitmap bitmap)
         {

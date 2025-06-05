@@ -1,6 +1,6 @@
 ﻿namespace NotePractice
 {
-    partial class ControlClefOctave
+    partial class TopControlPractice
     {
         /// <summary> 
         /// Required designer variable.
@@ -39,17 +39,11 @@
             label2 = new Label();
             label1 = new Label();
             includeSharpFlatCB = new CheckBox();
-            writingOctaveNUD = new NumericUpDown();
-            label6 = new Label();
-            durationNUD = new NumericUpDown();
-            label7 = new Label();
             practiceModeCBB = new ComboBox();
             ((System.ComponentModel.ISupportInitialize)bassMaxNUD).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bassMinNUD).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trebleMaxNUD).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trebleMinNUD).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)writingOctaveNUD).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)durationNUD).BeginInit();
             SuspendLayout();
             // 
             // label5
@@ -155,43 +149,6 @@
             includeSharpFlatCB.Text = "include #b";
             includeSharpFlatCB.UseVisualStyleBackColor = true;
             // 
-            // writingOctaveNUD
-            // 
-            writingOctaveNUD.Location = new Point(95, 89);
-            writingOctaveNUD.Maximum = new decimal(new int[] { 8, 0, 0, 0 });
-            writingOctaveNUD.Name = "writingOctaveNUD";
-            writingOctaveNUD.Size = new Size(36, 23);
-            writingOctaveNUD.TabIndex = 25;
-            writingOctaveNUD.Value = new decimal(new int[] { 4, 0, 0, 0 });
-            // 
-            // label6
-            // 
-            label6.AutoSize = true;
-            label6.Location = new Point(8, 91);
-            label6.Name = "label6";
-            label6.Size = new Size(84, 15);
-            label6.TabIndex = 24;
-            label6.Text = "Writing octave";
-            // 
-            // durationNUD
-            // 
-            durationNUD.Location = new Point(196, 89);
-            durationNUD.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
-            durationNUD.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
-            durationNUD.Name = "durationNUD";
-            durationNUD.Size = new Size(36, 23);
-            durationNUD.TabIndex = 26;
-            durationNUD.Value = new decimal(new int[] { 1, 0, 0, 0 });
-            // 
-            // label7
-            // 
-            label7.AutoSize = true;
-            label7.Location = new Point(137, 91);
-            label7.Name = "label7";
-            label7.Size = new Size(53, 15);
-            label7.TabIndex = 27;
-            label7.Text = "Duration";
-            // 
             // practiceModeCBB
             // 
             practiceModeCBB.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -202,15 +159,11 @@
             practiceModeCBB.Size = new Size(121, 23);
             practiceModeCBB.TabIndex = 28;
             // 
-            // ControlClefOctave
+            // TopControlPractice
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             Controls.Add(practiceModeCBB);
-            Controls.Add(label7);
-            Controls.Add(durationNUD);
-            Controls.Add(writingOctaveNUD);
-            Controls.Add(label6);
             Controls.Add(includeSharpFlatCB);
             Controls.Add(label5);
             Controls.Add(clefCBB);
@@ -222,14 +175,12 @@
             Controls.Add(trebleMinNUD);
             Controls.Add(label2);
             Controls.Add(label1);
-            Name = "ControlClefOctave";
-            Size = new Size(351, 117);
+            Name = "TopControlPractice";
+            Size = new Size(351, 89);
             ((System.ComponentModel.ISupportInitialize)bassMaxNUD).EndInit();
             ((System.ComponentModel.ISupportInitialize)bassMinNUD).EndInit();
             ((System.ComponentModel.ISupportInitialize)trebleMaxNUD).EndInit();
             ((System.ComponentModel.ISupportInitialize)trebleMinNUD).EndInit();
-            ((System.ComponentModel.ISupportInitialize)writingOctaveNUD).EndInit();
-            ((System.ComponentModel.ISupportInitialize)durationNUD).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -247,10 +198,6 @@
         private Label label2;
         private Label label1;
         private CheckBox includeSharpFlatCB;
-        private NumericUpDown writingOctaveNUD;
-        private Label label6;
-        private NumericUpDown durationNUD;
-        private Label label7;
         private ComboBox practiceModeCBB;
     }
 }

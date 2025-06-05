@@ -160,32 +160,32 @@ namespace NotePractice
         }
         private static void EvaluateNoteFromKey(Keys keyData, MainForm mf)
         {
-            Clef nextClef = mf.Cco.NextClef;
+            Clef nextClef = mf.TCP.NextClef;
 
-            int minOctave = nextClef == Clef.Treble ? mf.Cco.TrebleMin : mf.Cco.BassMin;
-            int maxOctave = nextClef == Clef.Treble ? mf.Cco.TrebleMax : mf.Cco.BassMax;
+            int minOctave = nextClef == Clef.Treble ? mf.TCP.TrebleMin : mf.TCP.BassMin;
+            int maxOctave = nextClef == Clef.Treble ? mf.TCP.TrebleMax : mf.TCP.BassMax;
 
             mf.ExtraPictureBox.Image?.Dispose();
-            mf.ExtraPictureBox.Image = Noter.NoteImageWithLetter(mf.Note, mf.Cco.PreviousClef, keyData);
+            mf.ExtraPictureBox.Image = Noter.NoteImageWithLetter(mf.Note, mf.TCP.PreviousClef, keyData);
             mf.MainPictureBox.Image?.Dispose();
-            mf.Note = Noter.RandomNote(minOctave, maxOctave, mf.Cco.IncludeSharpFlat);
+            mf.Note = Noter.RandomNote(minOctave, maxOctave, mf.TCP.IncludeSharpFlat);
             mf.MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, [mf.Note]), false);
-            mf.Cco.PreviousClef = nextClef;
+            mf.TCP.PreviousClef = nextClef;
             //mf.MidiSender.SendNoteToMidiAsync(mf.Note);
         }
         private static void EvaluateIntervalFromKey(Keys keyData, MainForm mf)
         {
-            Clef nextClef = mf.Cco.NextClef;
+            Clef nextClef = mf.TCP.NextClef;
             mf.ExtraPictureBox.Image?.Dispose();
-            mf.ExtraPictureBox.Image = Noter.IntervalImageWithNumber(mf.Notes, mf.Cco.PreviousClef, keyData);
+            mf.ExtraPictureBox.Image = Noter.IntervalImageWithNumber(mf.Notes, mf.TCP.PreviousClef, keyData);
             mf.MainPictureBox.Image?.Dispose();
-            int minOctave = nextClef == Clef.Treble ? mf.Cco.TrebleMin : mf.Cco.BassMin;
-            int maxOctave = nextClef == Clef.Treble ? mf.Cco.TrebleMax : mf.Cco.BassMax;
+            int minOctave = nextClef == Clef.Treble ? mf.TCP.TrebleMin : mf.TCP.BassMin;
+            int maxOctave = nextClef == Clef.Treble ? mf.TCP.TrebleMax : mf.TCP.BassMax;
             mf.Note = Noter.RandomNote(minOctave, maxOctave, false);
             int shift = new Random().Next(-7, 8);
             mf.MainPictureBox.Image?.Dispose();
             mf.MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, [mf.Note, mf.Note.ShiftedNote(shift)]), false);
-            mf.Cco.PreviousClef = nextClef;
+            mf.TCP.PreviousClef = nextClef;
             mf.Notes = [mf.Note, mf.Note.ShiftedNote(shift)];
         }
     }

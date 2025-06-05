@@ -11,15 +11,13 @@ using System.Windows.Forms;
 
 namespace NotePractice
 {
-    public partial class ControlClefOctave : UserControl
+    public partial class TopControlPractice : UserControl
     {
         public int TrebleMin { get => (int)trebleMinNUD.Value; }
         public int TrebleMax { get => (int)trebleMaxNUD.Value; }
         public int BassMin { get => (int)bassMinNUD.Value; }
         public int BassMax { get => (int)bassMaxNUD.Value; }
         public bool IncludeSharpFlat { get => includeSharpFlatCB.Checked; }
-        public int WritingOctave { get => (int)(writingOctaveNUD.Value); set => writingOctaveNUD.Value = Math.Clamp(value, 0, 8); }
-        public int WritingDuration { get => (int)durationNUD.Value; set => durationNUD.Value = Math.Clamp(value, 1, 64); }
         public string PracticeMode { get => practiceModeCBB.Text; }
         public Clef NextClef
         {
@@ -45,7 +43,7 @@ namespace NotePractice
             }
         }
         public Clef PreviousClef { get; set; }
-        public ControlClefOctave()
+        public TopControlPractice()
         {
             InitializeComponent();
             clefCBB.SelectedIndex = 0;

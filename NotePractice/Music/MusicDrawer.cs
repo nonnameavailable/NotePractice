@@ -55,10 +55,10 @@ namespace NotePractice.Music
             {
                 clef = cs.ClefType;
             }
-            for(int i = 0; i < symbols.Count; i++)
+            for (int i = 0; i < symbols.Count; i++)
             {
                 Symbol s = symbols[i];
-                s.Draw(g, xPos, clef);
+                if (s is not Shift || (s is Shift & drawCursor)) s.Draw(g, xPos, clef);
                 if (s is Shift)
                 {
                     xPos += XSymbolShift;

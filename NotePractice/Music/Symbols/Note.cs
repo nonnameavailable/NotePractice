@@ -59,21 +59,19 @@ namespace NotePractice.Music.Symbols
             if (Accidental == Accidental.Flat) sharpFlat = "b";
             return Enum.GetName(typeof(NoteLetter), NoteLetter) + Octave.ToString() + sharpFlat;
         }
+        public int ToMidiNumber()
+        {
+            int[] letterMap = [0, 2, 4, 5, 7, 9, 11];
+            int accidentalAdjustment = 0;
+            if (Accidental == Accidental.Sharp) accidentalAdjustment = 1;
+            if (Accidental == Accidental.Flat) accidentalAdjustment = -1;
+            return (Octave + 1) * 12 + letterMap[(int)NoteLetter] + accidentalAdjustment;
+        }
         public override bool Equals(object? obj)
         {
             if (obj == null || obj is not Note) return false;
             Note n = (Note)obj;
-            bool letterCond = n.NoteLetter == NoteLetter;
-            if (n.IsSharp && IsFlat)
-            {
-                letterCond = (NoteLetter)((int)n.NoteLetter + 1) == NoteLetter;
-            } else if (n.IsFlat && IsSharp)
-            {
-                letterCond = (NoteLetter)((int)NoteLetter + 1) == n.NoteLetter;
-            }
-            if ((n.IsFlat || n.IsSharp) && !IsFlat && !IsSharp) letterCond = false;
-            if ((IsFlat || IsSharp) && !n.IsFlat && !n.IsSharp) letterCond = false;
-            return letterCond && n.Octave == Octave;
+            return ToMidiNumber() == n.ToMidiNumber();
         }
         public int Distance(Note note)
         {

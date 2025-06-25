@@ -28,7 +28,7 @@ namespace NotePractice.MIDIHandling
         {
             foreach(Note note in notes)
             {
-                var midiNoteNumber = ConvertNoteToMidiNumber(note);
+                var midiNoteNumber = note.ToMidiNumber();
                 if (_heldNotes.Contains(midiNoteNumber)) continue;
                 _heldNotes.Add(midiNoteNumber);
                 var noteOnEvent = new NoteOnEvent((SevenBitNumber)midiNoteNumber, (SevenBitNumber)note.Velocity); // 100 = velocity
@@ -46,7 +46,7 @@ namespace NotePractice.MIDIHandling
         {
             foreach (Note note in notes)
             {
-                var midiNoteNumber = ConvertNoteToMidiNumber(note);
+                var midiNoteNumber = note.ToMidiNumber();
                 if(_heldNotes.Contains(midiNoteNumber))
                 {
                     _heldNotes.Remove(midiNoteNumber);
@@ -73,27 +73,6 @@ namespace NotePractice.MIDIHandling
             Task.Run(() => SendNotesToMidiOFF(notes));
         }
 
-        private int ConvertNoteToMidiNumber(Note note)
-        {
-            int baseNoteNumber;
-            switch (note.NoteLetter)
-            {
-                case NoteLetter.C: baseNoteNumber = 0; break;
-                case NoteLetter.D: baseNoteNumber = 2; break;
-                case NoteLetter.E: baseNoteNumber = 4; break;
-                case NoteLetter.F: baseNoteNumber = 5; break;
-                case NoteLetter.G: baseNoteNumber = 7; break;
-                case NoteLetter.A: baseNoteNumber = 9; break;
-                case NoteLetter.B: baseNoteNumber = 11; break;
-                default: throw new Exception("Invalid note letter.");
-            }
-
-            // Adjust for accidental
-            if (note.Accidental == Accidental.Sharp) baseNoteNumber += 1;
-            else if (note.Accidental == Accidental.Flat) baseNoteNumber -= 1;
-
-            return (note.Octave + 1) * 12 + baseNoteNumber;
-        }
         public void FindDevice()
         {
             using DeviceSelectForm dsf =

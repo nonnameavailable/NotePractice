@@ -43,6 +43,9 @@ namespace NotePractice
         private MidiSender _midiSender;
         public MidiSender MidiSender { get => _midiSender; }
         private KeyProcessor _keyProcessor;
+
+        public int PracticeIntervalDistance { get => TCP.IntervalDistance; }
+        public int PracticeNoteLength { get => TCP.PracticeNotesLength; }
         public MainForm()
         {
             InitializeComponent();
@@ -93,6 +96,7 @@ namespace NotePractice
             _tcp = new TopControlPractice();
             topPanel.Controls.Add(_tcp);
             _tcw = new TopControlWriting();
+            TCP.NUDValueCHanged += (sender, args) => mainPictureBox.Focus();
         }
 
         private void OutputMidiBTN_Click(object? sender, EventArgs e)
@@ -231,7 +235,7 @@ namespace NotePractice
             ExtraPictureBox.Image?.Dispose();
             ExtraPictureBox.Image = Noter.NoteImageWithLetter(Note, TCP.PreviousClef, note);
             MainPictureBox.Image?.Dispose();
-            Note = Noter.RandomNote(minOctave, maxOctave, TCP.IncludeSharpFlat);
+            Note = Noter.RandomNote(minOctave, maxOctave, TCP.IncludeSharpFlat, PracticeNoteLength);
             MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, [Note]), false);
             TCP.PreviousClef = nextClef;
         }

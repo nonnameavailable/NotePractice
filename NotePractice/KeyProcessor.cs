@@ -168,7 +168,7 @@ namespace NotePractice
             mf.ExtraPictureBox.Image?.Dispose();
             mf.ExtraPictureBox.Image = Noter.NoteImageWithLetter(mf.Note, mf.TCP.PreviousClef, keyData);
             mf.MainPictureBox.Image?.Dispose();
-            mf.Note = Noter.RandomNote(minOctave, maxOctave, mf.TCP.IncludeSharpFlat);
+            mf.Note = Noter.RandomNote(minOctave, maxOctave, mf.TCP.IncludeSharpFlat, mf.PracticeNoteLength);
             mf.MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, [mf.Note]), false);
             mf.TCP.PreviousClef = nextClef;
             //mf.MidiSender.SendNoteToMidiAsync(mf.Note);
@@ -177,15 +177,28 @@ namespace NotePractice
         {
             Clef nextClef = mf.TCP.NextClef;
             mf.ExtraPictureBox.Image?.Dispose();
-            mf.ExtraPictureBox.Image = Noter.IntervalImageWithNumber(mf.Notes, mf.TCP.PreviousClef, keyData);
+            mf.ExtraPictureBox.Image = Noter.IntervalImageWithNumber(mf.Notes, mf.TCP.PreviousClef, keyData, mf.PracticeIntervalDistance);
             mf.MainPictureBox.Image?.Dispose();
             int minOctave = nextClef == Clef.Treble ? mf.TCP.TrebleMin : mf.TCP.BassMin;
             int maxOctave = nextClef == Clef.Treble ? mf.TCP.TrebleMax : mf.TCP.BassMax;
-            mf.Note = Noter.RandomNote(minOctave, maxOctave, false);
+            mf.Note = Noter.RandomNote(minOctave, maxOctave, false, mf.PracticeNoteLength);
             int shift = new Random().Next(-7, 8);
             mf.MainPictureBox.Image?.Dispose();
-            mf.MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, [mf.Note, mf.Note.ShiftedNote(shift)]), false);
+
+            List<Symbol> shiftedNotes = new List<Symbol>();
+            shiftedNotes.Add(mf.Note);
+            for(int i = 0; i < mf.PracticeIntervalDistance; i++)
+            {
+                shiftedNotes.Add(new Shift());
+            }
+            shiftedNotes.Add(mf.Note.ShiftedNote(shift));
+            mf.MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, shiftedNotes), false);
             mf.TCP.PreviousClef = nextClef;
+            List<Symbol> shifts = new List<Symbol>();
+            for(int i = 0; i < mf.PracticeIntervalDistance; i++)
+            {
+                shifts.Add(new Shift());
+            }
             mf.Notes = [mf.Note, mf.Note.ShiftedNote(shift)];
         }
     }

@@ -225,7 +225,7 @@ namespace NotePractice.Music
                         beamNotes.Clear();
                         continue;
                     }
-                    beamNotes.Add((Note)symbol);
+                    //beamNotes.Add((Note)symbol);
                     Note firstNote = (Note)symbols[beamStartIndex];
                     for (int j = beamStartIndex; j <= i; j++)
                     {
@@ -248,8 +248,8 @@ namespace NotePractice.Music
                     OVector beamSection = beamDirection.Copy().Divide(beamShiftSpan);
                     for(int j = 0; j < beamShiftSpan; j++)
                     {
-                        int beamCount = (int)Math.Log2(beamNotes[j+1].Duration) - 2;
-                        int beamCount2 = (int)Math.Log2(beamNotes[j].Duration) - 2;
+                        int beamCount = (int)Math.Log2(beamNotes[Math.Min(j+1, beamNotes.Count - 1)].Duration) - 2;
+                        int beamCount2 = (int)Math.Log2(beamNotes[Math.Min(j, beamNotes.Count - 1)].Duration) - 2;
                         if (j == 0)
                         {
                             beamCount = beamCount2;
@@ -272,9 +272,13 @@ namespace NotePractice.Music
                 }
             }
         }
-        public static List<Symbol> StartSymbols(Clef clef, List<Note> notes)
+        //public static List<Symbol> StartSymbols(Clef clef, List<Note> notes)
+        //{
+        //    return new List<Symbol>() { new ClefSymbol(clef), new Shift(), new Shift() }.Concat(notes).ToList();
+        //}
+        public static List<Symbol> StartSymbols(Clef clef, List<Symbol> symbols)
         {
-            return new List<Symbol>() { new ClefSymbol(clef), new Shift(), new Shift() }.Concat(notes).ToList();
+            return new List<Symbol>() { new ClefSymbol(clef), new Shift(), new Shift() }.Concat(symbols).ToList();
         }
     }
 }

@@ -51,16 +51,24 @@ namespace NotePractice
             }
             return result;
         }
-        public static Bitmap IntervalImageWithNumber(List<Note> notes, Clef clef, Keys inputKey)
+        public static Bitmap IntervalImageWithNumber(List<Note> notes, Clef clef, Keys inputKey, int hDistance)
         {
             notes = notes.OrderBy(n => n.NumVal).ToList();
             List<Symbol> symbols = [new ClefSymbol(clef), new Shift(), new Shift()];
-            symbols = symbols.Concat(notes).ToList();
+            symbols.Add(notes[0]);
+            for(int i = 0; i < hDistance; i++)
+            {
+                symbols.Add(new Shift());
+            }
+            symbols.Add(notes[1]);
+            //symbols = symbols.Concat(notes).ToList();
             Bitmap result = MusicDrawer.MusicBitmap(symbols, false);
             using Graphics g = Graphics.FromImage(result);
             using Font font = ScaledLetterFont(60); 
-            Keys[] numkeys = [Keys.NumPad2, Keys.NumPad3, Keys.NumPad4, Keys.NumPad5, Keys.NumPad6, Keys.NumPad7, Keys.NumPad8];
-            int pressedNo = Array.IndexOf(numkeys, inputKey) + 2;
+            Keys[] numPadKeys = [Keys.NumPad2, Keys.NumPad3, Keys.NumPad4, Keys.NumPad5, Keys.NumPad6, Keys.NumPad7, Keys.NumPad8];
+            Keys[] numRowKeys = [Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7, Keys.D8];
+            int pressedNo = Array.IndexOf(numPadKeys, inputKey) + 2;
+            if (pressedNo == 1) pressedNo = Array.IndexOf(numRowKeys, inputKey) + 2;
             int distance = notes[0].Distance(notes[1]);
             if(pressedNo == distance)
             {
@@ -94,7 +102,7 @@ namespace NotePractice
             }
             return path;
         }
-        public static Note RandomNote(int minOctave, int maxOctave, bool includeSharpFlat)
+        public static Note RandomNote(int minOctave, int maxOctave, bool includeSharpFlat, int duration)
         {
             Random r = new Random();            
             int octave = r.Next(minOctave, maxOctave + 1);
@@ -125,6 +133,7 @@ namespace NotePractice
                     }
                 }
             }
+            result.Duration = duration;
             return result;
         }
         private static float DpiMult()

@@ -95,7 +95,7 @@ namespace NotePractice.Music.Symbols
                 newNlVal += 7;
                 newOctave--;
             }
-            return new Note((NoteLetter)newNlVal, newOctave);
+            return new Note((NoteLetter)newNlVal, newOctave, duration: Duration);
         }
         public void Draw(Graphics g, int xPos, Clef clef)
         {

@@ -40,10 +40,16 @@
             label1 = new Label();
             includeSharpFlatCB = new CheckBox();
             practiceModeCBB = new ComboBox();
+            lengthNUD = new NumericUpDown();
+            label6 = new Label();
+            intervalDistanceNUD = new NumericUpDown();
+            label7 = new Label();
             ((System.ComponentModel.ISupportInitialize)bassMaxNUD).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bassMinNUD).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trebleMaxNUD).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trebleMinNUD).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)lengthNUD).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)intervalDistanceNUD).BeginInit();
             SuspendLayout();
             // 
             // label5
@@ -159,10 +165,50 @@
             practiceModeCBB.Size = new Size(121, 23);
             practiceModeCBB.TabIndex = 28;
             // 
+            // lengthNUD
+            // 
+            lengthNUD.Location = new Point(95, 88);
+            lengthNUD.Maximum = new decimal(new int[] { 64, 0, 0, 0 });
+            lengthNUD.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            lengthNUD.Name = "lengthNUD";
+            lengthNUD.Size = new Size(36, 23);
+            lengthNUD.TabIndex = 30;
+            lengthNUD.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
+            // label6
+            // 
+            label6.AutoSize = true;
+            label6.Location = new Point(8, 90);
+            label6.Name = "label6";
+            label6.Size = new Size(70, 15);
+            label6.TabIndex = 29;
+            label6.Text = "Note length";
+            // 
+            // intervalDistanceNUD
+            // 
+            intervalDistanceNUD.Location = new Point(288, 88);
+            intervalDistanceNUD.Maximum = new decimal(new int[] { 4, 0, 0, 0 });
+            intervalDistanceNUD.Name = "intervalDistanceNUD";
+            intervalDistanceNUD.Size = new Size(36, 23);
+            intervalDistanceNUD.TabIndex = 32;
+            // 
+            // label7
+            // 
+            label7.AutoSize = true;
+            label7.Location = new Point(189, 90);
+            label7.Name = "label7";
+            label7.Size = new Size(93, 15);
+            label7.TabIndex = 31;
+            label7.Text = "Interval distance";
+            // 
             // TopControlPractice
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            Controls.Add(intervalDistanceNUD);
+            Controls.Add(label7);
+            Controls.Add(lengthNUD);
+            Controls.Add(label6);
             Controls.Add(practiceModeCBB);
             Controls.Add(includeSharpFlatCB);
             Controls.Add(label5);
@@ -176,11 +222,13 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Name = "TopControlPractice";
-            Size = new Size(351, 89);
+            Size = new Size(351, 118);
             ((System.ComponentModel.ISupportInitialize)bassMaxNUD).EndInit();
             ((System.ComponentModel.ISupportInitialize)bassMinNUD).EndInit();
             ((System.ComponentModel.ISupportInitialize)trebleMaxNUD).EndInit();
             ((System.ComponentModel.ISupportInitialize)trebleMinNUD).EndInit();
+            ((System.ComponentModel.ISupportInitialize)lengthNUD).EndInit();
+            ((System.ComponentModel.ISupportInitialize)intervalDistanceNUD).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
@@ -199,5 +247,9 @@
         private Label label1;
         private CheckBox includeSharpFlatCB;
         private ComboBox practiceModeCBB;
+        private NumericUpDown lengthNUD;
+        private Label label6;
+        private NumericUpDown intervalDistanceNUD;
+        private Label label7;
     }
 }

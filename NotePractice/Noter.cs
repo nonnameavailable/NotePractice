@@ -53,7 +53,7 @@ namespace NotePractice
         }
         public static Bitmap IntervalImageWithNumber(List<Note> notes, Clef clef, Keys inputKey, int hDistance)
         {
-            notes = notes.OrderBy(n => n.NumVal).ToList();
+            notes = notes.OrderBy(n => n.ToMidiNumber()).ToList();
             List<Symbol> symbols = [new ClefSymbol(clef), new Shift(), new Shift()];
             symbols.Add(notes[0]);
             for(int i = 0; i < hDistance; i++)
@@ -69,7 +69,7 @@ namespace NotePractice
             Keys[] numRowKeys = [Keys.D2, Keys.D3, Keys.D4, Keys.D5, Keys.D6, Keys.D7, Keys.D8];
             int pressedNo = Array.IndexOf(numPadKeys, inputKey) + 2;
             if (pressedNo == 1) pressedNo = Array.IndexOf(numRowKeys, inputKey) + 2;
-            int distance = notes[0].Distance(notes[1]);
+            int distance = notes[0].WhiteKeyDistance(notes[1]);
             if(pressedNo == distance)
             {
                 g.DrawString(distance.ToString() + $"({notes[0].ToString()} - {notes[1].ToString()})", font, Brushes.Green, 20, 0);

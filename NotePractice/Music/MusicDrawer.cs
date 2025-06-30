@@ -124,7 +124,7 @@ namespace NotePractice.Music
                 if (!isFirstNote)
                 {
                     Note prevNote = notes[i - 1];
-                    int dist = note.Distance(prevNote);
+                    int dist = note.WhiteKeyDistance(prevNote);
                     if(dist == 2)
                     {
                         if (prevDist != 2)

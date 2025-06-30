@@ -177,7 +177,7 @@ namespace NotePractice
         {
             Clef nextClef = mf.TCP.NextClef;
             mf.ExtraPictureBox.Image?.Dispose();
-            mf.ExtraPictureBox.Image = Noter.IntervalImageWithNumber(mf.Notes, mf.TCP.PreviousClef, keyData, mf.PracticeIntervalDistance);
+            mf.ExtraPictureBox.Image = Noter.IntervalImageWithNumber(mf.Notes, mf.TCP.PreviousClef, keyData, mf.NoteSpacing);
             mf.MainPictureBox.Image?.Dispose();
             int minOctave = nextClef == Clef.Treble ? mf.TCP.TrebleMin : mf.TCP.BassMin;
             int maxOctave = nextClef == Clef.Treble ? mf.TCP.TrebleMax : mf.TCP.BassMax;
@@ -187,7 +187,7 @@ namespace NotePractice
 
             List<Symbol> shiftedNotes = new List<Symbol>();
             shiftedNotes.Add(mf.Note);
-            for(int i = 0; i < mf.PracticeIntervalDistance; i++)
+            for(int i = 0; i < mf.NoteSpacing; i++)
             {
                 shiftedNotes.Add(new Shift());
             }
@@ -195,7 +195,7 @@ namespace NotePractice
             mf.MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, shiftedNotes), false);
             mf.TCP.PreviousClef = nextClef;
             List<Symbol> shifts = new List<Symbol>();
-            for(int i = 0; i < mf.PracticeIntervalDistance; i++)
+            for(int i = 0; i < mf.NoteSpacing; i++)
             {
                 shifts.Add(new Shift());
             }

@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            label5 = new Label();
             clefCBB = new ComboBox();
             label4 = new Label();
             label3 = new Label();
@@ -42,33 +41,27 @@
             practiceModeCBB = new ComboBox();
             lengthNUD = new NumericUpDown();
             label6 = new Label();
-            intervalDistanceNUD = new NumericUpDown();
+            noteSpacingNUD = new NumericUpDown();
             label7 = new Label();
+            noteCountNUD = new NumericUpDown();
+            label5 = new Label();
             ((System.ComponentModel.ISupportInitialize)bassMaxNUD).BeginInit();
             ((System.ComponentModel.ISupportInitialize)bassMinNUD).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trebleMaxNUD).BeginInit();
             ((System.ComponentModel.ISupportInitialize)trebleMinNUD).BeginInit();
             ((System.ComponentModel.ISupportInitialize)lengthNUD).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)intervalDistanceNUD).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)noteSpacingNUD).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)noteCountNUD).BeginInit();
             SuspendLayout();
-            // 
-            // label5
-            // 
-            label5.AutoSize = true;
-            label5.Location = new Point(201, 13);
-            label5.Name = "label5";
-            label5.Size = new Size(28, 15);
-            label5.TabIndex = 21;
-            label5.Text = "Clef";
             // 
             // clefCBB
             // 
             clefCBB.DropDownStyle = ComboBoxStyle.DropDownList;
             clefCBB.FormattingEnabled = true;
             clefCBB.Items.AddRange(new object[] { "Treble", "Bass", "Both" });
-            clefCBB.Location = new Point(241, 9);
+            clefCBB.Location = new Point(197, 6);
             clefCBB.Name = "clefCBB";
-            clefCBB.Size = new Size(89, 23);
+            clefCBB.Size = new Size(73, 23);
             clefCBB.TabIndex = 20;
             clefCBB.SelectedIndexChanged += clefCBB_SelectedIndexChanged;
             // 
@@ -147,7 +140,7 @@
             // includeSharpFlatCB
             // 
             includeSharpFlatCB.AutoSize = true;
-            includeSharpFlatCB.Location = new Point(212, 36);
+            includeSharpFlatCB.Location = new Point(197, 34);
             includeSharpFlatCB.Margin = new Padding(3, 2, 3, 2);
             includeSharpFlatCB.Name = "includeSharpFlatCB";
             includeSharpFlatCB.Size = new Size(82, 19);
@@ -160,9 +153,9 @@
             practiceModeCBB.DropDownStyle = ComboBoxStyle.DropDownList;
             practiceModeCBB.FormattingEnabled = true;
             practiceModeCBB.Items.AddRange(new object[] { "Notes", "Intervals" });
-            practiceModeCBB.Location = new Point(201, 56);
+            practiceModeCBB.Location = new Point(276, 6);
             practiceModeCBB.Name = "practiceModeCBB";
-            practiceModeCBB.Size = new Size(121, 23);
+            practiceModeCBB.Size = new Size(71, 23);
             practiceModeCBB.TabIndex = 28;
             // 
             // lengthNUD
@@ -184,34 +177,54 @@
             label6.TabIndex = 29;
             label6.Text = "Note length";
             // 
-            // intervalDistanceNUD
+            // noteSpacingNUD
             // 
-            intervalDistanceNUD.Location = new Point(288, 88);
-            intervalDistanceNUD.Maximum = new decimal(new int[] { 4, 0, 0, 0 });
-            intervalDistanceNUD.Name = "intervalDistanceNUD";
-            intervalDistanceNUD.Size = new Size(36, 23);
-            intervalDistanceNUD.TabIndex = 32;
+            noteSpacingNUD.Location = new Point(276, 56);
+            noteSpacingNUD.Maximum = new decimal(new int[] { 4, 0, 0, 0 });
+            noteSpacingNUD.Name = "noteSpacingNUD";
+            noteSpacingNUD.Size = new Size(36, 23);
+            noteSpacingNUD.TabIndex = 32;
             // 
             // label7
             // 
             label7.AutoSize = true;
-            label7.Location = new Point(189, 90);
+            label7.Location = new Point(193, 58);
             label7.Name = "label7";
-            label7.Size = new Size(93, 15);
+            label7.Size = new Size(77, 15);
             label7.TabIndex = 31;
-            label7.Text = "Interval distance";
+            label7.Text = "Note spacing";
+            // 
+            // noteCountNUD
+            // 
+            noteCountNUD.Location = new Point(276, 88);
+            noteCountNUD.Maximum = new decimal(new int[] { 50, 0, 0, 0 });
+            noteCountNUD.Minimum = new decimal(new int[] { 1, 0, 0, 0 });
+            noteCountNUD.Name = "noteCountNUD";
+            noteCountNUD.Size = new Size(36, 23);
+            noteCountNUD.TabIndex = 34;
+            noteCountNUD.Value = new decimal(new int[] { 1, 0, 0, 0 });
+            // 
+            // label5
+            // 
+            label5.AutoSize = true;
+            label5.Location = new Point(193, 90);
+            label5.Name = "label5";
+            label5.Size = new Size(67, 15);
+            label5.TabIndex = 33;
+            label5.Text = "Note count";
             // 
             // TopControlPractice
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            Controls.Add(intervalDistanceNUD);
+            Controls.Add(noteCountNUD);
+            Controls.Add(label5);
+            Controls.Add(noteSpacingNUD);
             Controls.Add(label7);
             Controls.Add(lengthNUD);
             Controls.Add(label6);
             Controls.Add(practiceModeCBB);
             Controls.Add(includeSharpFlatCB);
-            Controls.Add(label5);
             Controls.Add(clefCBB);
             Controls.Add(label4);
             Controls.Add(label3);
@@ -228,14 +241,13 @@
             ((System.ComponentModel.ISupportInitialize)trebleMaxNUD).EndInit();
             ((System.ComponentModel.ISupportInitialize)trebleMinNUD).EndInit();
             ((System.ComponentModel.ISupportInitialize)lengthNUD).EndInit();
-            ((System.ComponentModel.ISupportInitialize)intervalDistanceNUD).EndInit();
+            ((System.ComponentModel.ISupportInitialize)noteSpacingNUD).EndInit();
+            ((System.ComponentModel.ISupportInitialize)noteCountNUD).EndInit();
             ResumeLayout(false);
             PerformLayout();
         }
 
         #endregion
-
-        private Label label5;
         private ComboBox clefCBB;
         private Label label4;
         private Label label3;
@@ -249,7 +261,9 @@
         private ComboBox practiceModeCBB;
         private NumericUpDown lengthNUD;
         private Label label6;
-        private NumericUpDown intervalDistanceNUD;
+        private NumericUpDown noteSpacingNUD;
         private Label label7;
+        private NumericUpDown noteCountNUD;
+        private Label label5;
     }
 }

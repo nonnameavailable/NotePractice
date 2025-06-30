@@ -12,6 +12,7 @@ using NotePractice.MIDIHandling;
 using NotePractice.Music;
 using NotePractice.Music.Symbols;
 using NotePractice.Piano;
+using NotePractice.Practice;
 using NotePractice.UI;
 
 namespace NotePractice
@@ -43,9 +44,12 @@ namespace NotePractice
         private MidiSender _midiSender;
         public MidiSender MidiSender { get => _midiSender; }
         private KeyProcessor _keyProcessor;
+        public int NoteCount { get => TCP.NoteCount; }
+        public bool IncludeSharpFlat { get => TCP.IncludeSharpFlat; }
 
-        public int PracticeIntervalDistance { get => TCP.IntervalDistance; }
+        public int NoteSpacing { get => TCP.NoteSpacing; }
         public int PracticeNoteLength { get => TCP.PracticeNotesLength; }
+        public PracticeManager PM { get; }
         public MainForm()
         {
             InitializeComponent();
@@ -97,6 +101,24 @@ namespace NotePractice
             topPanel.Controls.Add(_tcp);
             _tcw = new TopControlWriting();
             TCP.NUDValueCHanged += (sender, args) => mainPictureBox.Focus();
+
+            PM = new PracticeManager();
+            PM.NoteCountReached += PM_NoteCountReached;
+        }
+
+        private void PM_NoteCountReached(object? sender, EventArgs e)
+        {
+            Clef nextClef = TCP.NextClef;
+
+            int minOctave = nextClef == Clef.Treble ? TCP.TrebleMin : TCP.BassMin;
+            int maxOctave = nextClef == Clef.Treble ? TCP.TrebleMax : TCP.BassMax;
+
+            ExtraPictureBox.Image?.Dispose();
+            ExtraPictureBox.Image = PracticeDrawer.EvaluatedNotePractice(PM, TCP.PreviousClef, NoteSpacing);
+            MainPictureBox.Image?.Dispose();
+            PM.GenerateNotePractice(NoteCount, minOctave, maxOctave, IncludeSharpFlat);
+            MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, PracticeManager.SpacedSymbolList(PM.PracticeNotes.Cast<Symbol>().ToList(), NoteSpacing)), false);
+            TCP.PreviousClef = nextClef;
         }
 
         private void OutputMidiBTN_Click(object? sender, EventArgs e)
@@ -213,7 +235,8 @@ namespace NotePractice
 
         private void _pianoForm_NotePlayed(object? sender, NoteEventArgs e)
         {
-            EvaluateNoteFromPiano(e.Note);
+            //EvaluateNoteFromPiano(e.Note);
+            PM.AddInputNote(e.Note);
         }
         //protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
         //{

@@ -20,7 +20,8 @@ namespace NotePractice
         public bool IncludeSharpFlat { get => includeSharpFlatCB.Checked; }
         public string PracticeMode { get => practiceModeCBB.Text; }
         public int PracticeNotesLength { get => (int)lengthNUD.Value; }
-        public int IntervalDistance { get => (int)intervalDistanceNUD.Value; }
+        public int NoteSpacing { get => (int)noteSpacingNUD.Value; }
+        public int NoteCount { get => (int)noteCountNUD.Value; }
         public event EventHandler NUDValueCHanged;
         private int _previousLength;
         public Clef NextClef
@@ -61,7 +62,7 @@ namespace NotePractice
             practiceModeCBB.SelectedIndex = 0;
             _previousLength = 1;
             lengthNUD.ValueChanged += LengthNUD_ValueChanged;
-            intervalDistanceNUD.ValueChanged += (sender, args) => NUDValueCHanged?.Invoke(sender, args);
+            noteSpacingNUD.ValueChanged += (sender, args) => NUDValueCHanged?.Invoke(sender, args);
 
         }
 

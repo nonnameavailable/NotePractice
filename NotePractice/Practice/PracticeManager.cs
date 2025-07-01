@@ -44,7 +44,7 @@ namespace NotePractice.Practice
             if (PracticeNotes.Count != 2) return false;
             return inputNo == PracticeNotes[0].WhiteKeyDistance(PracticeNotes[1]);
         }
-        public void GenerateNotePractice(int noteCount, int minOctave, int maxOctave, bool includeSharpFlat)
+        public void GenerateNotePractice(int noteCount, int minOctave, int maxOctave, bool includeSharpFlat, int noteLength)
         {
             PracticeNotes.Clear();
             InputNotes.Clear();
@@ -54,12 +54,12 @@ namespace NotePractice.Practice
 
             var rnd = new Random();
             int firstMidiValue = rnd.Next(minMidiValue, maxMidiValue);
-            Note note = new Note(firstMidiValue);
+            Note note = new Note(firstMidiValue, noteLength);
             if (!includeSharpFlat) note.Accidental = Accidental.None;
             AddPracticeNote(note);
             for (int i = 1; i < noteCount; i++)
             {
-                note = new Note(rnd.Next(minMidiValue, maxMidiValue));
+                note = new Note(rnd.Next(minMidiValue, maxMidiValue), noteLength);
                 if (!includeSharpFlat) note.Accidental = Accidental.None;
                 AddPracticeNote(note);
             }

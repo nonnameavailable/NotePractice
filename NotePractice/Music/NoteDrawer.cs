@@ -180,10 +180,10 @@ namespace NotePractice.Music
         public int YPos(Clef clef)
         {
             int noteInt = (int)NoteLetter;
-            int yPos = (int)(MusicDrawer.LineSpacing * 4 + MusicDrawer.LineSpacing * 5 - noteInt * MusicDrawer.NoteShift + 28 * MusicDrawer.NoteShift - Octave * 7 * MusicDrawer.NoteShift);
+            int yPos = (int)(MusicDrawer.TopLinePosition + MusicDrawer.LineSpacing * 5 - noteInt * MusicDrawer.NoteShift + 28 * MusicDrawer.NoteShift - Octave * 7 * MusicDrawer.NoteShift);
             if (clef == Clef.Bass)
             {
-                yPos = (int)(MusicDrawer.LineSpacing * 3 - noteInt * MusicDrawer.NoteShift + 28 * MusicDrawer.NoteShift - Octave * 7 * MusicDrawer.NoteShift);
+                yPos = (int)(MusicDrawer.TopLinePosition - MusicDrawer.LineSpacing - noteInt * MusicDrawer.NoteShift + 28 * MusicDrawer.NoteShift - Octave * 7 * MusicDrawer.NoteShift);
             }
             return yPos;
         }

@@ -116,7 +116,7 @@ namespace NotePractice
             ExtraPictureBox.Image?.Dispose();
             ExtraPictureBox.Image = PracticeDrawer.EvaluatedNotePractice(PM, TCP.PreviousClef, NoteSpacing);
             MainPictureBox.Image?.Dispose();
-            PM.GenerateNotePractice(NoteCount, minOctave, maxOctave, IncludeSharpFlat);
+            PM.GenerateNotePractice(NoteCount, minOctave, maxOctave, IncludeSharpFlat, PracticeNoteLength);
             MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, PracticeManager.SpacedSymbolList(PM.PracticeNotes.Cast<Symbol>().ToList(), NoteSpacing)), false);
             TCP.PreviousClef = nextClef;
         }

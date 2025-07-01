@@ -17,10 +17,12 @@ namespace NotePractice.Music
     {
         public const int Unit = 60;
         public const int LineSpacing = Unit;
+        public const int TopEmptySpace = LineSpacing * 6;
+        public const int BottomEmptySpace = LineSpacing * 6;
         public const int XSymbolShift = Unit * 3;
         public const int NoteShift = LineSpacing / 2;
-        public const int TopLinePosition = LineSpacing * 4;
-        public const int BottomLinePosition = LineSpacing * 8;
+        public const int TopLinePosition = TopEmptySpace;
+        public const int BottomLinePosition = TopEmptySpace + LineSpacing * 4;
         public const int DefaultStemLength = (int)(LineSpacing * 3.5);
         public static Pen LinePen = new Pen(Brushes.Black, Unit * 0.1f);
         public static Pen NotePen = new Pen(Brushes.Black, Unit * 0.2f);
@@ -34,7 +36,7 @@ namespace NotePractice.Music
         {
             AdjustNotes(symbols);
             int width = XSymbolShift;
-            int height = LineSpacing * 12;
+            int height = TopEmptySpace + LineSpacing * 4 + BottomEmptySpace;
             foreach (Symbol symbol in symbols)
             {
                 if (symbol is Shift) width += XSymbolShift; 
@@ -47,7 +49,8 @@ namespace NotePractice.Music
             DrawBeams(symbols, g);
             for (int i = 0; i < 5; i++)
             {
-                g.DrawLine(LinePen, new Point(0, Unit * (i + 4)), new Point(width, Unit * (i + 4)));
+                int yLinePosition = TopLinePosition + LineSpacing * i;
+                g.DrawLine(LinePen, new Point(0, yLinePosition), new Point(width, yLinePosition));
             }
             int xPos = XSymbolShift;
             Clef clef = Clef.Treble;
@@ -71,6 +74,19 @@ namespace NotePractice.Music
                 g.DrawLine(p, xPos, TopLinePosition, xPos, BottomLinePosition);
             }
             return result;
+        }
+        public static void DrawSymbols(List<Symbol> symbols, Graphics g, int xPos, Clef clef, bool drawCursor)
+        {
+            for (int i = 0; i < symbols.Count; i++)
+            {
+                Symbol s = symbols[i];
+                if (s is not Shift || (s is Shift & drawCursor)) s.Draw(g, xPos, clef);
+                if (s is Shift)
+                {
+                    xPos += XSymbolShift;
+                }
+            }
+
         }
         private static void AdjustNotes(List<Symbol> symbols)
         {

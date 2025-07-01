@@ -31,7 +31,6 @@ namespace NotePractice.Music.Symbols
         public int XPosShift { get; set; }
         public bool DrawStem { get; set; }
         public bool DrawFlag { get; set; }
-        //public bool StemAlwaysRight { get; set; }
         public int StemLength { get; set; }
         public bool IsSharp { get => Accidental == Accidental.Sharp; }
         public bool IsFlat { get => Accidental == Accidental.Flat; }
@@ -85,7 +84,7 @@ namespace NotePractice.Music.Symbols
         {
             string sharpFlat = "";
             if (Accidental == Accidental.Sharp) sharpFlat = "#";
-            if (Accidental == Accidental.Flat) sharpFlat = "b";
+            if (Accidental == Accidental.Flat) sharpFlat = "♭";
             return Enum.GetName(typeof(NoteLetter), NoteLetter) + Octave.ToString() + sharpFlat;
         }
         public int ToMidiNumber()

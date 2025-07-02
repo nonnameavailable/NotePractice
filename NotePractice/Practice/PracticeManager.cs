@@ -2,6 +2,7 @@
 using NotePractice.Music.Symbols;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -11,7 +12,7 @@ namespace NotePractice.Practice
     public class PracticeManager
     {
         public event EventHandler NoteCountReached;
-        public List<Note> PracticeNotes { get; }
+        public List<Note> PracticeNotes { get; set; }
         public List<Note> InputNotes { get; }
 
         public PracticeManager()
@@ -44,6 +45,11 @@ namespace NotePractice.Practice
             if (PracticeNotes.Count != 2) return false;
             return inputNo == PracticeNotes[0].WhiteKeyDistance(PracticeNotes[1]);
         }
+        public int FirstIntervalDistance()
+        {
+            if (PracticeNotes.Count != 2) return -1;
+            return PracticeNotes[0].WhiteKeyDistance(PracticeNotes[1]);
+        }
         public void GenerateNotePractice(int noteCount, int minOctave, int maxOctave, bool includeSharpFlat, int noteLength)
         {
             PracticeNotes.Clear();
@@ -54,13 +60,27 @@ namespace NotePractice.Practice
 
             var rnd = new Random();
             int firstMidiValue = rnd.Next(minMidiValue, maxMidiValue);
-            Note note = new Note(firstMidiValue, noteLength);
-            if (!includeSharpFlat) note.Accidental = Accidental.None;
-            AddPracticeNote(note);
-            for (int i = 1; i < noteCount; i++)
+            for (int i = 0; i < noteCount; i++)
             {
-                note = new Note(rnd.Next(minMidiValue, maxMidiValue), noteLength);
-                if (!includeSharpFlat) note.Accidental = Accidental.None;
+                Note note = new Note(rnd.Next(minMidiValue, maxMidiValue), noteLength);
+                if (!includeSharpFlat)
+                {
+                    note.Accidental = Accidental.None;
+                } else
+                {
+                    int rand = rnd.Next(0, 100);
+                    if(rand < 33)
+                    {
+                        note.Accidental = Accidental.None;
+                    } else if(rand < 66 && note.NoteLetter != NoteLetter.E && note.NoteLetter != NoteLetter.B)
+                    {
+                        note.Accidental = Accidental.Sharp;
+                    }
+                    else if (note.NoteLetter != NoteLetter.F && note.NoteLetter != NoteLetter.C)
+                    {
+                        note.Accidental = Accidental.Flat;
+                    }
+                }
                 AddPracticeNote(note);
             }
         }
@@ -93,6 +113,40 @@ namespace NotePractice.Practice
             {
                 result = new(symbols);
             }
+            return result;
+        }
+        public static Note RandomNote(int minOctave, int maxOctave, bool includeSharpFlat, int duration)
+        {
+            Random r = new Random();
+            int octave = r.Next(minOctave, maxOctave + 1);
+
+            int minNl = 0;
+            int maxNl = 7;
+            if (octave == 0) minNl = 5;
+            if (octave == 8) maxNl = 1;
+            NoteLetter nl = (NoteLetter)r.Next(minNl, maxNl);
+            Note result = new Note(nl, octave);
+            if (includeSharpFlat)
+            {
+                int rnd = r.Next(0, 10);
+                if (rnd < 3)
+                {
+                    result.Accidental = Accidental.Sharp;
+                    if (nl == NoteLetter.E || nl == NoteLetter.B)
+                    {
+                        result.NoteLetter = (NoteLetter)((int)nl - 1);
+                    }
+                }
+                else if (rnd < 6)
+                {
+                    result.Accidental = Accidental.Flat;
+                    if (nl == NoteLetter.F || nl == NoteLetter.C)
+                    {
+                        result.NoteLetter = (NoteLetter)((int)nl + 1);
+                    }
+                }
+            }
+            result.Duration = duration;
             return result;
         }
     }

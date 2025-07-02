@@ -74,10 +74,4 @@ namespace NotePractice.Music
         Shift,
         Clef
     }
-    public interface Symbol
-    {
-        void Draw(Graphics g, int xPos, Clef clef = Clef.Treble);
-        string StringForFileExport();
-        public SymbolType Type { get; }
-    }
 }

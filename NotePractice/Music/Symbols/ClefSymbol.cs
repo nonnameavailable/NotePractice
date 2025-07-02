@@ -15,7 +15,7 @@ namespace NotePractice.Music.Symbols
         {
             ClefType = clef;
         }
-        public void Draw(Graphics g, int xPos, Clef clef)
+        public void Draw(Graphics g, int xPos, Clef clef, Color? color)
         {
             Bitmap treble = Resources.treble_clef_nolines;
             Bitmap bass = Resources.bass_clef_nolines;

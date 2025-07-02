@@ -42,14 +42,14 @@ namespace NotePractice
             path.AddPath(endArc, true);
             return path;
         }
-        public static void DrawPathInterpolatedWidths(Graphics g, GraphicsPath path, float startWidth, float endWidth)
+        public static void DrawPathInterpolatedWidths(Graphics g, GraphicsPath path, float startWidth, float endWidth, Color color)
         {
             PointF[] points = path.PathPoints;
             for(int i = 0; i < points.Length - 1; i++)
             {
                 double distance = i / (double)points.Length;
                 float width = Lerp(startWidth, endWidth, distance);
-                using Pen pen = new Pen(Color.Black, width);
+                using Pen pen = new Pen(color, width);
                 pen.StartCap = LineCap.Round;
                 pen.EndCap = LineCap.Round;
                 g.DrawLine(pen, points[i], points[i + 1]);

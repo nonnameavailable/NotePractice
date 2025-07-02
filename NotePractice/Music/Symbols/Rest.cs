@@ -15,7 +15,7 @@ namespace NotePractice.Music.Symbols
         {
             Duration = duration;
         }
-        public void Draw(Graphics g, int xPos, Clef clef)
+        public void Draw(Graphics g, int xPos, Clef clef, Color? color)
         {
             if (Duration == 1 || Duration == 2)
             {

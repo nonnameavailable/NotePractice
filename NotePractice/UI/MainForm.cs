@@ -19,8 +19,8 @@ namespace NotePractice
 {
     public partial class MainForm : Form
     {
-        public Note Note { get; set; }
-        public List<Note> Notes { get; set; }
+        //public Note Note { get; set; }
+        //public List<Note> Notes { get; set; }
         public List<Symbol> WrittenSymbols { get; set; }
         public int WritingOctave { get => TCW.WritingOctave; set => TCW.WritingOctave = value; }
         public int WritingDuration { get => TCW.WritingDuration; set => TCW.WritingDuration = value; }
@@ -54,13 +54,13 @@ namespace NotePractice
         {
             InitializeComponent();
             AutoScaleMode = AutoScaleMode.None;
-            Note = new Note(NoteLetter.C, 4, duration: 64);
+            //Note = new Note(NoteLetter.C, 4, duration: 64);
 
-            mainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(Clef.Treble, [Note]), false);
+            
             mainPictureBox.Click += (sender, args) => mainPictureBox.Focus();
             ShowPianoBTN_Click(null, EventArgs.Empty);
             showPianoBTN.Click += ShowPianoBTN_Click;
-            Notes = [new Note(NoteLetter.C, 4), new Note(NoteLetter.D, 4)];
+            //Notes = [new Note(NoteLetter.C, 4), new Note(NoteLetter.D, 4)];
             WrittenSymbols = new();
             _showingWholeSong = false;
 
@@ -104,23 +104,41 @@ namespace NotePractice
 
             PM = new PracticeManager();
             PM.NoteCountReached += PM_NoteCountReached;
+
+            GenerateNotePractice();
+            UpdateMainPictureBox();
+
+            TCP.PracticeModeChanged += TCP_PracticeModeChanged;
+        }
+        public void UpdateMainPictureBox()
+        {
+            MainPictureBox.Image?.Dispose();
+            MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(TCP.NextClef, PracticeManager.SpacedSymbolList(PM.PracticeNotes.Cast<Symbol>().ToList(), NoteSpacing)), false);
+        }
+        private void TCP_PracticeModeChanged(object? sender, EventArgs e)
+        {
+            if (TCP.PracticeMode == "Intervals") TCP.NoteCount = 2;
+            GenerateNotePractice();
+            UpdateMainPictureBox();
         }
 
         private void PM_NoteCountReached(object? sender, EventArgs e)
         {
             Clef nextClef = TCP.NextClef;
-
-            int minOctave = nextClef == Clef.Treble ? TCP.TrebleMin : TCP.BassMin;
-            int maxOctave = nextClef == Clef.Treble ? TCP.TrebleMax : TCP.BassMax;
-
             ExtraPictureBox.Image?.Dispose();
             ExtraPictureBox.Image = PracticeDrawer.EvaluatedNotePractice(PM, TCP.PreviousClef, NoteSpacing);
             MainPictureBox.Image?.Dispose();
-            PM.GenerateNotePractice(NoteCount, minOctave, maxOctave, IncludeSharpFlat, PracticeNoteLength);
-            MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, PracticeManager.SpacedSymbolList(PM.PracticeNotes.Cast<Symbol>().ToList(), NoteSpacing)), false);
+            GenerateNotePractice();
+            UpdateMainPictureBox();
             TCP.PreviousClef = nextClef;
         }
-
+        public void GenerateNotePractice()
+        {
+            Clef nextClef = TCP.NextClef;
+            int minOctave = nextClef == Clef.Treble ? TCP.TrebleMin : TCP.BassMin;
+            int maxOctave = nextClef == Clef.Treble ? TCP.TrebleMax : TCP.BassMax;
+            PM.GenerateNotePractice(NoteCount, minOctave, maxOctave, IncludeSharpFlat, PracticeNoteLength);
+        }
         private void OutputMidiBTN_Click(object? sender, EventArgs e)
         {
             FindMidiDeviceForOutput();
@@ -167,11 +185,11 @@ namespace NotePractice
         {
             if (InvokeRequired)
             {
-                Invoke(new Action(() => EvaluateNoteFromPiano(e.Note)));
+                Invoke(new Action(() => PM.AddPracticeNote(e.Note)));
             }
             else
             {
-                EvaluateNoteFromPiano(e.Note);
+                PM.AddPracticeNote(e.Note);
             }
             //EvaluateNoteFromPiano(e.Note);
         }
@@ -248,20 +266,20 @@ namespace NotePractice
         {
             return _keyProcessor.ProcessKey(m, (Keys)m.WParam, this);
         }
-        private void EvaluateNoteFromPiano(Note note)
-        {
-            Clef nextClef = TCP.NextClef;
+        //private void EvaluateNoteFromPiano(Note note)
+        //{
+        //    Clef nextClef = TCP.NextClef;
 
-            int minOctave = nextClef == Clef.Treble ? TCP.TrebleMin : TCP.BassMin;
-            int maxOctave = nextClef == Clef.Treble ? TCP.TrebleMax : TCP.BassMax;
+        //    int minOctave = nextClef == Clef.Treble ? TCP.TrebleMin : TCP.BassMin;
+        //    int maxOctave = nextClef == Clef.Treble ? TCP.TrebleMax : TCP.BassMax;
 
-            ExtraPictureBox.Image?.Dispose();
-            ExtraPictureBox.Image = Noter.NoteImageWithLetter(Note, TCP.PreviousClef, note);
-            MainPictureBox.Image?.Dispose();
-            Note = Noter.RandomNote(minOctave, maxOctave, TCP.IncludeSharpFlat, PracticeNoteLength);
-            MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, [Note]), false);
-            TCP.PreviousClef = nextClef;
-        }
+        //    ExtraPictureBox.Image?.Dispose();
+        //    ExtraPictureBox.Image = Noter.NoteImageWithLetter(Note, TCP.PreviousClef, note);
+        //    MainPictureBox.Image?.Dispose();
+        //    Note = Noter.RandomNote(minOctave, maxOctave, TCP.IncludeSharpFlat, PracticeNoteLength);
+        //    MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, [Note]), false);
+        //    TCP.PreviousClef = nextClef;
+        //}
         public void SetNewMainBitmap(Bitmap bitmap)
         {
             MainPictureBox.Image?.Dispose();

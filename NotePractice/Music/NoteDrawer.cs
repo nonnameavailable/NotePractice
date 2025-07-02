@@ -30,7 +30,7 @@ namespace NotePractice.Music
             StemSide = Direction.Right;
             StemDirection = Direction.Up;
         }
-        public void DrawNote(Graphics g, int xPos, Clef clef)
+        public void DrawNote(Graphics g, int xPos, Clef clef, Color color)
         {
             int yPos = YPos(clef);
             xPos += XPosShift;
@@ -42,9 +42,12 @@ namespace NotePractice.Music
             int snh = MusicDrawer.SmallNoteHeight;
             OVector stemStart = StemStart(xPos, clef);
             OVector stemEnd = StemEnd(xPos, clef);
+            using Brush noteBrush = new SolidBrush(color);
+            using Pen notePen = new Pen(noteBrush, MusicDrawer.Unit * 0.2f);
+            using Pen stemPen = new Pen(noteBrush, MusicDrawer.Unit * 0.1f);
             if (Duration == 1)
             {
-                g.DrawEllipse(MusicDrawer.NotePen, xPos - fnw / 2, yPos - fnh / 2, fnw, fnh);
+                g.DrawEllipse(notePen, xPos - fnw / 2, yPos - fnh / 2, fnw, fnh);
             }
             else
             {
@@ -52,16 +55,16 @@ namespace NotePractice.Music
                 g.TranslateTransform(xPos, yPos);
                 g.RotateTransform(-15);
                 Rectangle noteRectangle = new Rectangle(-snw / 2, -snh / 2, snw, snh);
-                g.DrawEllipse(MusicDrawer.NotePen, noteRectangle);
+                g.DrawEllipse(notePen, noteRectangle);
                 if (Duration > 2)
                 {
-                    g.FillEllipse(Brushes.Black, noteRectangle);
+                    g.FillEllipse(noteBrush, noteRectangle);
                 }
                 g.Restore(savedG);
                 // Draw stem
                 if (DrawStem)
                 {
-                    g.DrawLine(MusicDrawer.LinePen, stemStart.Xint, stemStart.Yint, stemEnd.Xint, stemEnd.Yint);
+                    g.DrawLine(stemPen, stemStart.Xint, stemStart.Yint, stemEnd.Xint, stemEnd.Yint);
                 }
                 // Draw flag
                 if (DrawFlag && Duration > 4)
@@ -97,7 +100,7 @@ namespace NotePractice.Music
                         OVector v2 = new OVector(x2, y2);
                         //using GraphicsPath flagPath = MyGraphics.ArcPath(v1, v2, MusicDrawer.DefaultStemLength, 20);
                         using GraphicsPath flagPath = MyGraphics.FlagPath(v1, v2);
-                        MyGraphics.DrawPathInterpolatedWidths(g, flagPath, MusicDrawer.Unit * 0.2f, MusicDrawer.Unit * 0.06f);
+                        MyGraphics.DrawPathInterpolatedWidths(g, flagPath, MusicDrawer.Unit * 0.2f, MusicDrawer.Unit * 0.06f, color);
 
                     }
                 }
@@ -105,7 +108,7 @@ namespace NotePractice.Music
             // Draw IsSharp and Flat signs
             if (IsSharp || IsFlat)
             {
-                string sharpFlat = IsSharp ? "#" : "b";
+                string sharpFlat = IsSharp ? "#" : "♭";
                 float fontSize = IsSharp ? fnh * 1.3f : fnh;
                 using Font f = new Font("Arial", fontSize, FontStyle.Bold);
                 Point pos;
@@ -117,7 +120,7 @@ namespace NotePractice.Music
                 {
                     pos = new Point(notePosition.Xint - (int)(fnw * 1.3), notePosition.Yint - (int)(fnh * 0.8));
                 }
-                g.DrawString(sharpFlat, f, Brushes.Black, pos);
+                g.DrawString(sharpFlat, f, noteBrush, pos);
             }
             // Draw helper lines when notes are above or below the staff
             int halfHelperLength = (int)(MusicDrawer.Unit * 1.5);

@@ -1,11 +1,13 @@
 ﻿using NotePractice.Music;
 using NotePractice.Music.Symbols;
+using NotePractice.Practice;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace NotePractice
 {
@@ -44,11 +46,16 @@ namespace NotePractice
                     //PRACTICE
                     if (mf.PracticeMode == "Notes")
                     {
-                        EvaluateNoteFromKey(keyData, mf);
+                        //EvaluateNoteFromKey(keyData, mf);
+                        AddNoteFromKey(keyData, mf);
                     }
                     else
                     {
-                        EvaluateIntervalFromKey(keyData, mf);
+                        if (mf.PM.PracticeNotes.Count == 2)
+                        {
+                            EvaluateIntervalFromKey(keyData, mf);
+                        }
+                        else return false;
                     }
                     return true;
                 }
@@ -112,6 +119,14 @@ namespace NotePractice
             }
             return false;
         }
+        private void AddNoteFromKey(Keys keyData, MainForm mf)
+        {
+            Keys[] noteKeys = { Keys.C, Keys.D, Keys.E, Keys.F, Keys.G, Keys.A, Keys.B };
+            if (Array.IndexOf(noteKeys, keyData) == -1) return;
+            NoteLetter pressedNL = (NoteLetter)Array.IndexOf(noteKeys, keyData);
+            Note templateNote = mf.PM.PracticeNotes[mf.PM.InputNotes.Count];
+            mf.PM.AddInputNote(new Note(pressedNL, templateNote.Octave, templateNote.Accidental, templateNote.Duration));
+        }
         private Note? NoteFromKey(Keys keyData, MainForm mf)
         {
             Keys[] noteKeys = { Keys.C, Keys.D, Keys.E, Keys.F, Keys.G, Keys.A, Keys.B };
@@ -158,48 +173,24 @@ namespace NotePractice
             }
             else return null;
         }
-        private static void EvaluateNoteFromKey(Keys keyData, MainForm mf)
-        {
-            Clef nextClef = mf.TCP.NextClef;
-
-            int minOctave = nextClef == Clef.Treble ? mf.TCP.TrebleMin : mf.TCP.BassMin;
-            int maxOctave = nextClef == Clef.Treble ? mf.TCP.TrebleMax : mf.TCP.BassMax;
-
-            mf.ExtraPictureBox.Image?.Dispose();
-            mf.ExtraPictureBox.Image = Noter.NoteImageWithLetter(mf.Note, mf.TCP.PreviousClef, keyData);
-            mf.MainPictureBox.Image?.Dispose();
-            mf.Note = Noter.RandomNote(minOctave, maxOctave, mf.TCP.IncludeSharpFlat, mf.PracticeNoteLength);
-            mf.MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, [mf.Note]), false);
-            mf.TCP.PreviousClef = nextClef;
-            //mf.MidiSender.SendNoteToMidiAsync(mf.Note);
-        }
         private static void EvaluateIntervalFromKey(Keys keyData, MainForm mf)
         {
             Clef nextClef = mf.TCP.NextClef;
             mf.ExtraPictureBox.Image?.Dispose();
-            mf.ExtraPictureBox.Image = Noter.IntervalImageWithNumber(mf.Notes, mf.TCP.PreviousClef, keyData, mf.NoteSpacing);
+            //mf.ExtraPictureBox.Image = Noter.IntervalImageWithNumber(mf.Notes, mf.TCP.PreviousClef, keyData, mf.NoteSpacing);
+            mf.ExtraPictureBox.Image = PracticeDrawer.EvaluatedIntervalPractice(mf.PM, mf.TCP.PreviousClef, mf.NoteSpacing, keyData);
             mf.MainPictureBox.Image?.Dispose();
             int minOctave = nextClef == Clef.Treble ? mf.TCP.TrebleMin : mf.TCP.BassMin;
             int maxOctave = nextClef == Clef.Treble ? mf.TCP.TrebleMax : mf.TCP.BassMax;
-            mf.Note = Noter.RandomNote(minOctave, maxOctave, false, mf.PracticeNoteLength);
+            Note firstNote = PracticeManager.RandomNote(minOctave, maxOctave, false, mf.PracticeNoteLength);
             int shift = new Random().Next(-7, 8);
             mf.MainPictureBox.Image?.Dispose();
 
-            List<Symbol> shiftedNotes = new List<Symbol>();
-            shiftedNotes.Add(mf.Note);
-            for(int i = 0; i < mf.NoteSpacing; i++)
-            {
-                shiftedNotes.Add(new Shift());
-            }
-            shiftedNotes.Add(mf.Note.ShiftedNote(shift));
-            mf.MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, shiftedNotes), false);
+            mf.PM.PracticeNotes.Clear();
+            mf.PM.AddPracticeNote(firstNote);
+            mf.PM.AddPracticeNote(firstNote.ShiftedNote(shift));
+            mf.MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, PracticeManager.SpacedSymbolList(mf.PM.PracticeNotes.Cast<Symbol>().ToList(), mf.NoteSpacing)), false);
             mf.TCP.PreviousClef = nextClef;
-            List<Symbol> shifts = new List<Symbol>();
-            for(int i = 0; i < mf.NoteSpacing; i++)
-            {
-                shifts.Add(new Shift());
-            }
-            mf.Notes = [mf.Note, mf.Note.ShiftedNote(shift)];
         }
     }
 }

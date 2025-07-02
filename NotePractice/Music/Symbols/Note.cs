@@ -125,9 +125,17 @@ namespace NotePractice.Music.Symbols
             }
             return new Note((NoteLetter)newNlVal, newOctave, duration: Duration);
         }
-        public void Draw(Graphics g, int xPos, Clef clef)
+        public void Draw(Graphics g, int xPos, Clef clef, Color? color = null)
         {
-            _noteDrawer.DrawNote(g, xPos, clef);
+            Color resultColor;
+            if (color == null)
+            {
+                resultColor = Color.Black;
+            } else
+            {
+                resultColor = (Color)color;
+            }
+                _noteDrawer.DrawNote(g, xPos, clef, resultColor);
         }
 
         string Symbol.StringForFileExport()

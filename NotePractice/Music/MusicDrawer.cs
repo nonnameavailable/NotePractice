@@ -25,13 +25,12 @@ namespace NotePractice.Music
         public const int BottomLinePosition = TopEmptySpace + LineSpacing * 4;
         public const int DefaultStemLength = (int)(LineSpacing * 3.5);
         public static Pen LinePen = new Pen(Brushes.Black, Unit * 0.1f);
-        public static Pen NotePen = new Pen(Brushes.Black, Unit * 0.2f);
         public static Pen BarPen = new Pen(Brushes.Black, Unit * 0.5f);
 
-        public static int FullNoteHeight = (int)(LineSpacing * 0.9);
-        public static int FullNoteWidth = (int)(FullNoteHeight * 1.7);
-        public static int SmallNoteHeight = (int)(LineSpacing* 0.8);
-        public static int SmallNoteWidth = (int)(SmallNoteHeight* 1.6);
+        public const int FullNoteHeight = (int)(LineSpacing * 0.9);
+        public const int FullNoteWidth = (int)(FullNoteHeight * 1.7);
+        public const int SmallNoteHeight = (int)(LineSpacing* 0.8);
+        public const int SmallNoteWidth = (int)(SmallNoteHeight* 1.6);
         public static Bitmap MusicBitmap(List<Symbol> symbols, bool drawCursor = true)
         {
             AdjustNotes(symbols);
@@ -58,15 +57,8 @@ namespace NotePractice.Music
             {
                 clef = cs.ClefType;
             }
-            for (int i = 0; i < symbols.Count; i++)
-            {
-                Symbol s = symbols[i];
-                if (s is not Shift || (s is Shift & drawCursor)) s.Draw(g, xPos, clef);
-                if (s is Shift)
-                {
-                    xPos += XSymbolShift;
-                }
-            }
+            Color color = Color.FromArgb(0, 0, 0);
+            DrawSymbols(symbols, g, xPos, clef, drawCursor, color);
             if (drawCursor)
             {
                 Color cursorColor = Color.FromArgb(120, 255, 0, 0);
@@ -75,12 +67,12 @@ namespace NotePractice.Music
             }
             return result;
         }
-        public static void DrawSymbols(List<Symbol> symbols, Graphics g, int xPos, Clef clef, bool drawCursor)
+        public static void DrawSymbols(List<Symbol> symbols, Graphics g, int xPos, Clef clef, bool drawCursor, Color color)
         {
             for (int i = 0; i < symbols.Count; i++)
             {
                 Symbol s = symbols[i];
-                if (s is not Shift || (s is Shift & drawCursor)) s.Draw(g, xPos, clef);
+                if (s is not Shift || (s is Shift & drawCursor)) s.Draw(g, xPos, clef, color);
                 if (s is Shift)
                 {
                     xPos += XSymbolShift;

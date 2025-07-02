@@ -21,8 +21,9 @@ namespace NotePractice
         public string PracticeMode { get => practiceModeCBB.Text; }
         public int PracticeNotesLength { get => (int)lengthNUD.Value; }
         public int NoteSpacing { get => (int)noteSpacingNUD.Value; }
-        public int NoteCount { get => (int)noteCountNUD.Value; }
+        public int NoteCount { get => (int)noteCountNUD.Value; set => noteCountNUD.Value = value; }
         public event EventHandler NUDValueCHanged;
+        public event EventHandler PracticeModeChanged;
         private int _previousLength;
         public Clef NextClef
         {
@@ -64,6 +65,7 @@ namespace NotePractice
             lengthNUD.ValueChanged += LengthNUD_ValueChanged;
             noteSpacingNUD.ValueChanged += (sender, args) => NUDValueCHanged?.Invoke(sender, args);
 
+            practiceModeCBB.SelectedValueChanged += (sender, args) => PracticeModeChanged?.Invoke(sender, args);
         }
 
         private void LengthNUD_ValueChanged(object? sender, EventArgs e)

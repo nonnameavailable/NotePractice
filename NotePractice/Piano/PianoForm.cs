@@ -1,5 +1,6 @@
 ﻿using NotePractice.Music;
 using NotePractice.Music.Symbols;
+using NotePractice.Practice;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -27,12 +28,10 @@ namespace NotePractice.Piano
             _noteUnderCursor = new Note(NoteLetter.C, 4);
             _piano = new Piano();
             mainPictureBox.Image = _piano.PianoBitmap(new Point(-1, -1), out Note playedNote);
-            helpPictureBox.Image = Noter.NoteImageWithLetter(_noteUnderCursor, _helpClef, _noteUnderCursor);
-            UpdateHelpPictureBox();
             mainPictureBox.MouseMove += MainPictureBox_MouseMove;
             mainPictureBox.Click += MainPictureBox_Click;
+            helpPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(_helpClef, [_noteUnderCursor]), false);
         }
-
         private void MainPictureBox_MouseMove(object? sender, MouseEventArgs e)
         {
             Note newNote = _piano.NoteUnderCursor(mainPictureBox.MousePositionOnImage);
@@ -47,7 +46,7 @@ namespace NotePractice.Piano
         }
         private void UpdateHelpPictureBox()
         {
-            Bitmap newHelpImage = Noter.NoteImageWithLetter(_noteUnderCursor, _helpClef, _noteUnderCursor);
+            Bitmap newHelpImage = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(_helpClef, [_noteUnderCursor]), false);
             using Graphics g = Graphics.FromImage(newHelpImage);
             HelpBitmapColorOverlay(g);
             helpPictureBox.Image?.Dispose();

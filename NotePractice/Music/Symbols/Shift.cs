@@ -10,7 +10,7 @@ namespace NotePractice.Music.Symbols
     {
         public SymbolType Type { get => SymbolType.Shift; }
 
-        public void Draw(Graphics g, int xPos, Clef clef = Clef.Treble)
+        public void Draw(Graphics g, int xPos, Clef clef, Color? color)
         {
             Color cursorColor = Color.FromArgb(120, 0, 255, 0);
             using Pen p = new Pen(cursorColor, MusicDrawer.Unit / 10);

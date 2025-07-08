@@ -15,11 +15,15 @@ namespace NotePractice
     {
         private bool _isShiftDown, _isCtrlDown;
         private HashSet<Keys> _heldKeys;
+        private List<DateTime> _keyDownTimes;
+        private List<DateTime> _keyUpTimes;
         public KeyProcessor()
         {
             _isShiftDown = false;
             _isCtrlDown = false;
             _heldKeys = new();
+            _keyDownTimes = new();
+            _keyUpTimes = new();
         }
         public bool ProcessKey(Message msg, Keys keyData, MainForm mf)
         {
@@ -32,6 +36,7 @@ namespace NotePractice
             {
                 if (_heldKeys.Contains(keyData)) return false;
                 _heldKeys.Add(keyData);
+                _keyDownTimes.Add(DateTime.Now);
                 if (keyData == Keys.ShiftKey)
                 {
                     _isShiftDown = true;
@@ -84,6 +89,7 @@ namespace NotePractice
             } else if (msg.Msg == WM_KEYUP)
             {
                 _heldKeys.Remove(keyData);
+                _keyUpTimes.Add(DateTime.Now);
                 if (keyData == Keys.ShiftKey)
                 {
                     _isShiftDown = false;
@@ -191,6 +197,13 @@ namespace NotePractice
             mf.PM.AddPracticeNote(firstNote.ShiftedNote(shift));
             mf.MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, PracticeManager.SpacedSymbolList(mf.PM.PracticeNotes.Cast<Symbol>().ToList(), mf.NoteSpacing)), false);
             mf.TCP.PreviousClef = nextClef;
+        }
+        public List<int> NoteLengthsFromKeyPresses()
+        {
+            List<int> result = new();
+            if (_keyDownTimes.Count != _keyUpTimes.Count || _keyDownTimes.Count == 0 || _keyUpTimes.Count == 0) return result;
+            DateTime firstPressTime = _keyDownTimes[0];
+            return result;
         }
     }
 }

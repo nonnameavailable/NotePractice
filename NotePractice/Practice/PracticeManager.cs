@@ -6,6 +6,9 @@ using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Threading;
+using System.Media;
+using NotePractice.Properties;
 
 namespace NotePractice.Practice
 {
@@ -14,11 +17,13 @@ namespace NotePractice.Practice
         public event EventHandler NoteCountReached;
         public List<Note> PracticeNotes { get; set; }
         public List<Note> InputNotes { get; }
-
+        private SoundPlayer _metronomeClicker;
+        System.Threading.Timer _metronomeTimer;
         public PracticeManager()
         {
             InputNotes = new();
             PracticeNotes = new();
+            _metronomeClicker = new SoundPlayer(Resources.metronome_click);
         }
 
         public void AddPracticeNote(Note note) => PracticeNotes.Add(note);
@@ -148,6 +153,14 @@ namespace NotePractice.Practice
             }
             result.Duration = duration;
             return result;
+        }
+        public void StartMetronome(int delay)
+        {
+            _metronomeTimer = new(_ => _metronomeClicker.Play(), null, 0, delay);
+        }
+        public void StopMetronome()
+        {
+            _metronomeTimer?.Dispose();
         }
     }
 }

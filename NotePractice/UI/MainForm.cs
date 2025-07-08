@@ -50,6 +50,7 @@ namespace NotePractice
         public int NoteSpacing { get => TCP.NoteSpacing; }
         public int PracticeNoteLength { get => TCP.PracticeNotesLength; }
         public PracticeManager PM { get; }
+
         public MainForm()
         {
             InitializeComponent();

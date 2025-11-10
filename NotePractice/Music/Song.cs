@@ -1,4 +1,5 @@
-﻿using NotePractice.Music.Symbols;
+﻿using NotePractice.Music.Drawing;
+using NotePractice.Music.Symbols;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -65,13 +66,5 @@ namespace NotePractice.Music
         {
             return GrandStaves[staffIndex].Bitmap(true);
         }
-    }
-    public enum SymbolType
-    {
-        Note,
-        Rest,
-        BarLine,
-        Shift,
-        Clef
     }
 }

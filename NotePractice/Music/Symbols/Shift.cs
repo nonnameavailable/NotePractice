@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NotePractice.Music.Drawing;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,8 +9,6 @@ namespace NotePractice.Music.Symbols
 {
     public class Shift : Symbol
     {
-        public SymbolType Type { get => SymbolType.Shift; }
-
         public void Draw(Graphics g, int xPos, Clef clef, Color? color)
         {
             Color cursorColor = Color.FromArgb(120, 0, 255, 0);

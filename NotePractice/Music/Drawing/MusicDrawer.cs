@@ -11,7 +11,7 @@ using NotePractice.Properties;
 using System.Drawing.Drawing2D;
 using System.Diagnostics;
 
-namespace NotePractice.Music
+namespace NotePractice.Music.Drawing
 {
     public class MusicDrawer
     {
@@ -72,7 +72,7 @@ namespace NotePractice.Music
             for (int i = 0; i < symbols.Count; i++)
             {
                 Symbol s = symbols[i];
-                if (s is not Shift || (s is Shift & drawCursor)) s.Draw(g, xPos, clef, color);
+                if (s is not Shift || s is Shift & drawCursor) s.Draw(g, xPos, clef, color);
                 if (s is Shift)
                 {
                     xPos += XSymbolShift;
@@ -99,7 +99,7 @@ namespace NotePractice.Music
                     note.StemLength = (int)(LineSpacing * 3.5);
                     chord.Add(note);
                 }
-                if((s is not Note && chord.Count > 0) || (i == symbols.Count - 1 && chord.Count > 0))
+                if(s is not Note && chord.Count > 0 || i == symbols.Count - 1 && chord.Count > 0)
                 {
                     AdjustFLagsAndStemsOfChord(chord, clef);
                     chord.Clear();
@@ -250,7 +250,7 @@ namespace NotePractice.Music
                     OVector beamStart = ((Note)symbols[beamStartIndex]).StemEnd(beamStartXPos, clef);
                     OVector beamEnd = ((Note)symbol).StemEnd(xPos, clef);
                     OVector beamDirection = beamEnd.Copy().Subtract(beamStart);
-                    int beamShiftValue = (int)(Unit);
+                    int beamShiftValue = Unit;
                     OVector beamShift = firstNote.StemDirection == Direction.Up ? new OVector(0, beamShiftValue) : new OVector(0, -beamShiftValue);
                     int beamShiftSpan = (xPos - beamStartXPos) / XSymbolShift;
                     OVector beamSection = beamDirection.Copy().Divide(beamShiftSpan);

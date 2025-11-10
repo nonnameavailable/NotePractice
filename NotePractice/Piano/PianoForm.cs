@@ -1,4 +1,4 @@
-﻿using NotePractice.Music;
+﻿using NotePractice.Music.Drawing;
 using NotePractice.Music.Symbols;
 using NotePractice.Practice;
 using System;

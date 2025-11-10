@@ -1,7 +1,8 @@
 ﻿using Melanchall.DryWetMidi.MusicTheory;
-using NotePractice.Music;
+using NotePractice.Music.Drawing;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
@@ -36,7 +37,6 @@ namespace NotePractice.Music.Symbols
         public bool IsFlat { get => Accidental == Accidental.Flat; }
         public Direction StemSide { get => _noteDrawer.StemSide; set => _noteDrawer.StemSide = value; }
         public Direction StemDirection { get => _noteDrawer.StemDirection; set => _noteDrawer.StemDirection = value; }
-        public SymbolType Type { get => SymbolType.Note; }
         private NoteDrawer _noteDrawer;
 
         public Note(NoteLetter noteLetter, int octave, Accidental accidental = Accidental.None, int duration = 1)
@@ -109,6 +109,11 @@ namespace NotePractice.Music.Symbols
         {
             return _noteDrawer.GetStemDirection(clef);
         }
+        /// <summary>
+        /// Returns a new note with the NoteLetter shifted by the shiftValue
+        /// </summary>
+        /// <param name="shiftValue"></param>
+        /// <returns></returns>
         public Note ShiftedNote(int shiftValue)
         {
             int newNlVal = (int)NoteLetter + shiftValue;
@@ -123,7 +128,7 @@ namespace NotePractice.Music.Symbols
                 newNlVal += 7;
                 newOctave--;
             }
-            return new Note((NoteLetter)newNlVal, newOctave, duration: Duration);
+            return new Note((NoteLetter)newNlVal, newOctave, duration: Duration, accidental: Accidental);
         }
         public void Draw(Graphics g, int xPos, Clef clef, Color? color = null)
         {
@@ -144,6 +149,51 @@ namespace NotePractice.Music.Symbols
         }
         public OVector StemEnd(int xPos, Clef clef) => _noteDrawer.StemEnd(xPos, clef);
         public int YPos(Clef clef) => _noteDrawer.YPos(clef);
+        public Note IntervalNote(IntervalType it)
+        {
+            int[] shiftMap = [0, 1, 1, 2, 2, 3, 4, 4, 5, 5, 6, 6, 7];
+            int resultMidiNumber = ToMidiNumber() + (int)it;
+            Note shiftedNote = ShiftedNote(shiftMap[(int)it]);
+            if(shiftedNote.ToMidiNumber() > resultMidiNumber)
+            {
+                if(shiftedNote.Accidental == Accidental.Sharp)
+                {
+                    shiftedNote.Accidental = Accidental.None;
+                }
+                else if(shiftedNote.Accidental == Accidental.None)
+                {
+                    shiftedNote.Accidental = Accidental.Flat;
+                }
+            }
+            else if(shiftedNote.ToMidiNumber() < resultMidiNumber)
+            {
+                if(shiftedNote.Accidental == Accidental.Flat)
+                {
+                    shiftedNote.Accidental = Accidental.None;
+                }
+                else if(shiftedNote.Accidental == Accidental.None)
+                {
+                    shiftedNote.Accidental = Accidental.Sharp;
+                }
+            }
+            Debug.Print(resultMidiNumber.ToString() + " x " + shiftedNote.ToMidiNumber().ToString());
+            return shiftedNote;
+        }
+        public Note ShiftedByOctave(int octaveShift)
+        {
+            return new Note(NoteLetter, Octave + octaveShift, Accidental, Duration);
+        }
+        //public Note IntervalNote(IntervalQuality intervalQuality, int intervalValue)
+        //{
+        //    Note result = ShiftedNote(intervalValue - 1);
+        //    int qualityShiftModifier = intervalQuality switch
+        //    {
+        //        IntervalQuality.Major => 1,
+        //        _ => 0
+        //    };
+        //    int semitoneShift = (intervalValue - 2)
+        //    int midiDif = result.ToMidiNumber() - this.ToMidiNumber();
+        //}
     }
 
     public enum NoteLetter
@@ -174,5 +224,29 @@ namespace NotePractice.Music.Symbols
         Down,
         Left,
         Right
+    }
+    public enum IntervalType
+    {
+        PerfectUnison,
+        MinorSecond,
+        MajorSecond,
+        MinorThird,
+        MajorThird,
+        PerfectFourth,
+        AugmentedFourthOrDiminishedFifth,
+        PerfectFifth,
+        MinorSixth,
+        MajorSixth,
+        MinorSeventh,
+        MajorSeventh,
+        PerfectOctave
+    }
+    public enum IntervalQuality
+    {
+        Perfect,
+        Minor,
+        Major,
+        Diminished,
+        Augmented
     }
 }

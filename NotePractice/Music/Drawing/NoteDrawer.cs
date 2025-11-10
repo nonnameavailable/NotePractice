@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace NotePractice.Music
+namespace NotePractice.Music.Drawing
 {
     public class NoteDrawer
     {
@@ -69,7 +69,7 @@ namespace NotePractice.Music
                 // Draw flag
                 if (DrawFlag && Duration > 4)
                 {
-                    int flagCount = (int)(Math.Log2(Duration)) - 2;
+                    int flagCount = (int)Math.Log2(Duration) - 2;
                     int flagWidth = (int)(MusicDrawer.LineSpacing * 0.8);
                     int flagHeight = (int)(MusicDrawer.DefaultStemLength * 0.6);
                     int stemXPos = stemStart.Xint;
@@ -183,10 +183,10 @@ namespace NotePractice.Music
         public int YPos(Clef clef)
         {
             int noteInt = (int)NoteLetter;
-            int yPos = (int)(MusicDrawer.TopLinePosition + MusicDrawer.LineSpacing * 5 - noteInt * MusicDrawer.NoteShift + 28 * MusicDrawer.NoteShift - Octave * 7 * MusicDrawer.NoteShift);
+            int yPos = MusicDrawer.TopLinePosition + MusicDrawer.LineSpacing * 5 - noteInt * MusicDrawer.NoteShift + 28 * MusicDrawer.NoteShift - Octave * 7 * MusicDrawer.NoteShift;
             if (clef == Clef.Bass)
             {
-                yPos = (int)(MusicDrawer.TopLinePosition - MusicDrawer.LineSpacing - noteInt * MusicDrawer.NoteShift + 28 * MusicDrawer.NoteShift - Octave * 7 * MusicDrawer.NoteShift);
+                yPos = MusicDrawer.TopLinePosition - MusicDrawer.LineSpacing - noteInt * MusicDrawer.NoteShift + 28 * MusicDrawer.NoteShift - Octave * 7 * MusicDrawer.NoteShift;
             }
             return yPos;
         }

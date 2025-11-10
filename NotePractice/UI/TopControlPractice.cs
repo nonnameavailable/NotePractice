@@ -52,7 +52,7 @@ namespace NotePractice
         public TopControlPractice()
         {
             InitializeComponent();
-            clefCBB.SelectedIndex = 0;
+            clefCBB.SelectedIndex = 1;
             PreviousClef = NextClef;
 
             trebleMinNUD.ValueChanged += TrebleMinNUD_ValueChanged;

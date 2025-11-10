@@ -10,6 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using NotePractice.MIDIHandling;
 using NotePractice.Music;
+using NotePractice.Music.Drawing;
 using NotePractice.Music.Symbols;
 using NotePractice.Piano;
 using NotePractice.Practice;
@@ -55,13 +56,11 @@ namespace NotePractice
         {
             InitializeComponent();
             AutoScaleMode = AutoScaleMode.None;
-            //Note = new Note(NoteLetter.C, 4, duration: 64);
 
-            
+
             mainPictureBox.Click += (sender, args) => mainPictureBox.Focus();
             ShowPianoBTN_Click(null, EventArgs.Empty);
             showPianoBTN.Click += ShowPianoBTN_Click;
-            //Notes = [new Note(NoteLetter.C, 4), new Note(NoteLetter.D, 4)];
             WrittenSymbols = new();
             _showingWholeSong = false;
 
@@ -110,6 +109,23 @@ namespace NotePractice
             UpdateMainPictureBox();
 
             TCP.PracticeModeChanged += TCP_PracticeModeChanged;
+
+            //Chord c1 = new(new Note(NoteLetter.F, 3, duration: 4), ChordQuality.Minor);
+            //Chord c2 = new(new Note(NoteLetter.B, 3, duration: 4, accidental: Accidental.Flat), ChordQuality.Major);
+            //Chord c3 = new(new Note(NoteLetter.E, 3, duration: 4), ChordQuality.Seventh);
+            //List<Symbol> symbols = c1.NotesS.Concat([new Shift()])
+            //    .Concat(c2.SecondInversionS).Concat([new Shift()])
+            //    .Concat(c1.NotesS.Concat([new Shift()]))
+            //    .Concat(c3.FirstInversionS).ToList();
+            //Bitmap chordsBitmap = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(Clef.Bass, symbols), false);
+            //mainPictureBox.Image = chordsBitmap;
+            mainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(Clef.Treble,
+                [new Note(NoteLetter.E, 4, duration: 4),
+                //new Note(NoteLetter.F, 4, duration: 4),
+                new Note(NoteLetter.G, 4, duration: 4),
+                new Note(NoteLetter.A, 4, duration: 4),
+                new Note(NoteLetter.B, 4, duration: 4)]));
+
         }
         public void UpdateMainPictureBox()
         {
@@ -139,6 +155,8 @@ namespace NotePractice
             int minOctave = nextClef == Clef.Treble ? TCP.TrebleMin : TCP.BassMin;
             int maxOctave = nextClef == Clef.Treble ? TCP.TrebleMax : TCP.BassMax;
             PM.GenerateNotePractice(NoteCount, minOctave, maxOctave, IncludeSharpFlat, PracticeNoteLength);
+            //Chord c = new Chord(new Note(NoteLetter.D, 3, duration: 4), ChordQuality.Minor);
+            //c.Notes.ForEach(note => PM.PracticeNotes.Add(note));
         }
         private void OutputMidiBTN_Click(object? sender, EventArgs e)
         {
@@ -257,30 +275,11 @@ namespace NotePractice
             //EvaluateNoteFromPiano(e.Note);
             PM.AddInputNote(e.Note);
         }
-        //protected override bool ProcessCmdKey(ref Message msg, Keys keyData)
-        //{
-        //    Debug.Print("processing key");
-        //    return KeyProcessor.ProcessKey(msg, keyData, this);
-        //    //return base.ProcessCmdKey(ref msg, keyData);
-        //}
         protected override bool ProcessKeyPreview(ref Message m)
         {
             return _keyProcessor.ProcessKey(m, (Keys)m.WParam, this);
         }
-        //private void EvaluateNoteFromPiano(Note note)
-        //{
-        //    Clef nextClef = TCP.NextClef;
 
-        //    int minOctave = nextClef == Clef.Treble ? TCP.TrebleMin : TCP.BassMin;
-        //    int maxOctave = nextClef == Clef.Treble ? TCP.TrebleMax : TCP.BassMax;
-
-        //    ExtraPictureBox.Image?.Dispose();
-        //    ExtraPictureBox.Image = Noter.NoteImageWithLetter(Note, TCP.PreviousClef, note);
-        //    MainPictureBox.Image?.Dispose();
-        //    Note = Noter.RandomNote(minOctave, maxOctave, TCP.IncludeSharpFlat, PracticeNoteLength);
-        //    MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, [Note]), false);
-        //    TCP.PreviousClef = nextClef;
-        //}
         public void SetNewMainBitmap(Bitmap bitmap)
         {
             MainPictureBox.Image?.Dispose();

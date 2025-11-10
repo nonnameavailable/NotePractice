@@ -11,6 +11,5 @@ namespace NotePractice.Music
     {
         void Draw(Graphics g, int xPos, Clef clef = Clef.Treble, Color? color = null);
         string StringForFileExport();
-        public SymbolType Type { get; }
     }
 }

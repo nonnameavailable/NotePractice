@@ -154,9 +154,13 @@ namespace NotePractice.Practice
             result.Duration = duration;
             return result;
         }
+        private void MetronomeTick()
+        {
+            _metronomeClicker.Play();
+        }
         public void StartMetronome(int delay)
         {
-            _metronomeTimer = new(_ => _metronomeClicker.Play(), null, 0, delay);
+            _metronomeTimer = new(_ => MetronomeTick(), null, 0, delay);
         }
         public void StopMetronome()
         {

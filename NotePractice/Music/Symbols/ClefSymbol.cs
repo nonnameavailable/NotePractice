@@ -1,4 +1,5 @@
-﻿using NotePractice.Properties;
+﻿using NotePractice.Music.Drawing;
+using NotePractice.Properties;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,6 @@ namespace NotePractice.Music.Symbols
 {
     public class ClefSymbol : Symbol
     {
-        public SymbolType Type => SymbolType.Clef;
         public Clef ClefType { get; set; }
         public ClefSymbol(Clef clef)
         {

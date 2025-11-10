@@ -1,4 +1,5 @@
 ﻿using NotePractice.Music;
+using NotePractice.Music.Drawing;
 using NotePractice.Music.Symbols;
 using NotePractice.Practice;
 using System;
@@ -198,12 +199,20 @@ namespace NotePractice
             mf.MainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(nextClef, PracticeManager.SpacedSymbolList(mf.PM.PracticeNotes.Cast<Symbol>().ToList(), mf.NoteSpacing)), false);
             mf.TCP.PreviousClef = nextClef;
         }
-        public List<int> NoteLengthsFromKeyPresses()
+        //public List<int> NoteLengthsFromKeyPresses()
+        //{
+        //    List<int> result = new();
+        //    if (_keyDownTimes.Count != _keyUpTimes.Count || _keyDownTimes.Count == 0 || _keyUpTimes.Count == 0) return result;
+        //    for(int i = 0; i < _keyDownTimes.Count; i++)
+        //    {
+        //        result.Add((int)(_keyUpTimes[i] - _keyDownTimes[i]).TotalMilliseconds);
+        //    }
+        //    return result;
+        //}
+        public void ResetKeyTimes()
         {
-            List<int> result = new();
-            if (_keyDownTimes.Count != _keyUpTimes.Count || _keyDownTimes.Count == 0 || _keyUpTimes.Count == 0) return result;
-            DateTime firstPressTime = _keyDownTimes[0];
-            return result;
+            _keyDownTimes.Clear();
+            _keyUpTimes.Clear();
         }
     }
 }

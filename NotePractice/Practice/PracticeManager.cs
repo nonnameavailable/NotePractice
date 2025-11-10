@@ -16,7 +16,7 @@ namespace NotePractice.Practice
     {
         public event EventHandler NoteCountReached;
         public List<Note> PracticeNotes { get; set; }
-        public List<Note> InputNotes { get; }
+        public List<Note> InputNotes { get; set; }
         private SoundPlayer _metronomeClicker;
         System.Threading.Timer _metronomeTimer;
         public PracticeManager()
@@ -32,6 +32,8 @@ namespace NotePractice.Practice
             InputNotes.Add(note);
             if(InputNotes.Count >= PracticeNotes.Count)
             {
+                InputNotes = InputNotes.OrderBy(note=>note.ToMidiNumber()).ToList();
+                PracticeNotes = PracticeNotes.OrderBy(note => note.ToMidiNumber()).ToList();
                 NoteCountReached?.Invoke(this, EventArgs.Empty);
             }
         }

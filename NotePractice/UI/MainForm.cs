@@ -161,9 +161,9 @@ namespace NotePractice
         private void OutputMidiBTN_Click(object? sender, EventArgs e)
         {
             FindMidiDeviceForOutput();
-            if(_midiListener.DeviceName != "")
+            if(_midiSender.DeviceName != "")
             {
-                outputMidiBTN.Text = _midiListener.DeviceName;
+                outputMidiBTN.Text = _midiSender.DeviceName;
             } else
             {
                 outputMidiBTN.Text = "None";
@@ -173,12 +173,12 @@ namespace NotePractice
         private void InputMidiBTN_Click(object? sender, EventArgs e)
         {
             FindMidiDeviceForInput();
-            if(_midiSender.DeviceName != "")
+            if(_midiListener.DeviceName != "")
             {
-                inputMidiBTN.Text = _midiSender.DeviceName;
+                inputMidiBTN.Text = _midiListener.DeviceName;
             } else
             {
-                inputMidiBTN.Text = "None";
+                inputMidiBTN.Text = "NoName";
             }
         }
 
@@ -198,17 +198,21 @@ namespace NotePractice
         public void FindMidiDeviceForOutput()
         {
             _midiSender.FindDevice();
+            
         }
 
         private void _midiListener_NoteReceived(object? sender, NoteEventArgs e)
         {
             if (InvokeRequired)
             {
-                Invoke(new Action(() => PM.AddPracticeNote(e.Note)));
+                Invoke(new Action(() => {
+                    PM.AddInputNote(e.Note);
+                    Debug.Print(e.Note.ToString());
+                }));
             }
             else
             {
-                PM.AddPracticeNote(e.Note);
+                PM.AddInputNote(e.Note);
             }
             //EvaluateNoteFromPiano(e.Note);
         }

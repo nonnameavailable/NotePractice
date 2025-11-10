@@ -15,8 +15,10 @@ namespace NotePractice.MIDIHandling
 {
     public class MidiListener
     {
+        private InputDevice ?_inputDevice;
+
         public event EventHandler<NoteEventArgs> NoteReceived;
-        public string DeviceName { get; set; }
+        public string DeviceName { get; set; } = string.Empty;
         public MidiListener()
         {
             DeviceName = string.Empty;
@@ -32,10 +34,12 @@ namespace NotePractice.MIDIHandling
         }
         public void StartListening()
         {
-            if (DeviceName == string.Empty) throw new Exception("No selected device!");
-            var inputDevice = InputDevice.GetByName(DeviceName);
-            inputDevice.EventReceived += OnEventReceived;
-            inputDevice.StartEventsListening();
+            if (string.IsNullOrEmpty(DeviceName))
+                throw new Exception("No selected device!");
+
+            _inputDevice = InputDevice.GetByName(DeviceName);
+            _inputDevice.EventReceived += OnEventReceived;
+            _inputDevice.StartEventsListening();
         }
 
         private void OnEventReceived(object sender, MidiEventReceivedEventArgs e)

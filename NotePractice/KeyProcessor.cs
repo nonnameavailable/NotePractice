@@ -54,6 +54,11 @@ namespace NotePractice
                     {
                         //EvaluateNoteFromKey(keyData, mf);
                         AddNoteFromKey(keyData, mf);
+                        if (s is Note note)
+                        {
+                            mf.MidiSender.SendNotesToMidiAsyncON([note]);
+                            Debug.Print("sending note");
+                        }
                     }
                     else
                     {

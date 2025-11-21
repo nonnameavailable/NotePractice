@@ -57,7 +57,6 @@ namespace NotePractice
                         if (s is Note note)
                         {
                             mf.MidiSender.SendNotesToMidiAsyncON([note]);
-                            Debug.Print("sending note");
                         }
                     }
                     else

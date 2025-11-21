@@ -79,17 +79,30 @@ namespace NotePractice.Practice
                     if(rand < 33)
                     {
                         note.Accidental = Accidental.None;
-                    } else if(rand < 66 && note.NoteLetter != NoteLetter.E && note.NoteLetter != NoteLetter.B)
+                    } else if(rand < 66 /*&& note.NoteLetter != NoteLetter.E && note.NoteLetter != NoteLetter.B*/)
                     {
                         note.Accidental = Accidental.Sharp;
                     }
-                    else if (note.NoteLetter != NoteLetter.F && note.NoteLetter != NoteLetter.C)
+                    else/* if (note.NoteLetter != NoteLetter.F && note.NoteLetter != NoteLetter.C)*/
                     {
                         note.Accidental = Accidental.Flat;
                     }
                 }
                 AddPracticeNote(note);
             }
+        }
+        public void GenerateChordPractice(Clef clef, int noteDuration)
+        {
+            PracticeNotes.Clear();
+            InputNotes.Clear();
+            Note root = clef switch
+            {
+                Clef.Bass => RandomNote(2, 2, false, noteDuration),
+                Clef.Treble => RandomNote(4, 4, false, noteDuration)
+            };
+            Chord chord = new Chord(root, ChordQuality.Major);
+            //Chord chord = new Chord(new Note(NoteLetter.C, 3), ChordQuality.Major);
+            PracticeNotes.AddRange(chord.Notes);
         }
         public string PracticeNotesString()
         {

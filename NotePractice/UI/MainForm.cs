@@ -119,12 +119,13 @@ namespace NotePractice
             //    .Concat(c3.FirstInversionS).ToList();
             //Bitmap chordsBitmap = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(Clef.Bass, symbols), false);
             //mainPictureBox.Image = chordsBitmap;
-            mainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(Clef.Treble,
-                [new Note(NoteLetter.E, 4, duration: 4),
-                //new Note(NoteLetter.F, 4, duration: 4),
-                new Note(NoteLetter.G, 4, duration: 4),
-                new Note(NoteLetter.A, 4, duration: 4),
-                new Note(NoteLetter.B, 4, duration: 4)]));
+            //mainPictureBox.Image = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(Clef.Treble,
+            //    [new Note(NoteLetter.E, 4, duration: 4),
+            //    //new Note(NoteLetter.F, 4, duration: 4),
+            //    new Note(NoteLetter.G, 4, duration: 4),
+            //    new Note(NoteLetter.A, 4, duration: 4),
+            //    new Note(NoteLetter.B, 4, duration: 4)]));
+            mainPictureBox.Image = MusicDrawer.MusicBitmap(Chord.Nskp(), false);
 
         }
         public void UpdateMainPictureBox()
@@ -145,7 +146,14 @@ namespace NotePractice
             ExtraPictureBox.Image?.Dispose();
             ExtraPictureBox.Image = PracticeDrawer.EvaluatedNotePractice(PM, TCP.PreviousClef, NoteSpacing);
             MainPictureBox.Image?.Dispose();
-            GenerateNotePractice();
+            if(TCP.PracticeMode == "Chords")
+            {
+                PM.GenerateChordPractice(nextClef, TCP.PracticeNotesLength);
+            }
+            else
+            {
+                GenerateNotePractice();
+            }
             UpdateMainPictureBox();
             TCP.PreviousClef = nextClef;
         }

@@ -152,7 +152,7 @@
             // 
             practiceModeCBB.DropDownStyle = ComboBoxStyle.DropDownList;
             practiceModeCBB.FormattingEnabled = true;
-            practiceModeCBB.Items.AddRange(new object[] { "Notes", "Intervals" });
+            practiceModeCBB.Items.AddRange(new object[] { "Notes", "Intervals", "Chords", "Scales" });
             practiceModeCBB.Location = new Point(276, 6);
             practiceModeCBB.Name = "practiceModeCBB";
             practiceModeCBB.Size = new Size(71, 23);
@@ -235,7 +235,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Name = "TopControlPractice";
-            Size = new Size(351, 118);
+            Size = new Size(702, 118);
             ((System.ComponentModel.ISupportInitialize)bassMaxNUD).EndInit();
             ((System.ComponentModel.ISupportInitialize)bassMinNUD).EndInit();
             ((System.ComponentModel.ISupportInitialize)trebleMaxNUD).EndInit();

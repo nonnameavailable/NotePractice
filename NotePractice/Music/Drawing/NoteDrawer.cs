@@ -33,6 +33,10 @@ namespace NotePractice.Music.Drawing
         public void DrawNote(Graphics g, int xPos, Clef clef, Color color)
         {
             int yPos = YPos(clef);
+
+            using Font topNotef = new Font("Arial", MusicDrawer.Unit);
+            g.DrawString(_note.TopNote, topNotef, Brushes.Black, xPos - MusicDrawer.FullNoteWidth / 2, yPos - MusicDrawer.DefaultStemLength);
+
             xPos += XPosShift;
             // Draw ellipse based on note duration
             OVector notePosition = new OVector(xPos, yPos);

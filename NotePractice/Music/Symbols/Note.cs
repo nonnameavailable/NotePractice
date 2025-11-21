@@ -38,7 +38,7 @@ namespace NotePractice.Music.Symbols
         public Direction StemSide { get => _noteDrawer.StemSide; set => _noteDrawer.StemSide = value; }
         public Direction StemDirection { get => _noteDrawer.StemDirection; set => _noteDrawer.StemDirection = value; }
         private NoteDrawer _noteDrawer;
-
+        public string TopNote { get; set; }
         public Note(NoteLetter noteLetter, int octave, Accidental accidental = Accidental.None, int duration = 1)
         {
             NoteLetter = noteLetter;

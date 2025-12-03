@@ -31,7 +31,7 @@ namespace NotePractice.Music.Drawing
         public const int FullNoteWidth = (int)(FullNoteHeight * 1.7);
         public const int SmallNoteHeight = (int)(LineSpacing* 0.8);
         public const int SmallNoteWidth = (int)(SmallNoteHeight* 1.6);
-        public static Bitmap MusicBitmap(List<Symbol> symbols, bool drawCursor = true)
+        public static Bitmap MusicBitmap(List<Symbol> symbols, bool drawCursor = true, bool clearTransparent = false, Color? color = null)
         {
             AdjustNotes(symbols);
             int width = XSymbolShift;
@@ -44,8 +44,21 @@ namespace NotePractice.Music.Drawing
             Bitmap result = new Bitmap(width, height);
             if(symbols.Count == 0) return result;
             using Graphics g = Graphics.FromImage(result);
-            g.Clear(Color.White);
-            DrawBeams(symbols, g);
+            if (clearTransparent)
+            {
+                g.Clear(Color.FromArgb(0, 0, 0, 0));
+            } else
+            {
+                g.Clear(Color.White);
+            }
+
+            Color symbolColor = Color.FromArgb(0, 0, 0);
+            if (color != null)
+            {
+                symbolColor = (Color)color;
+            }
+
+            DrawBeams(symbols, g, symbolColor);
             for (int i = 0; i < 5; i++)
             {
                 int yLinePosition = TopLinePosition + LineSpacing * i;
@@ -57,8 +70,8 @@ namespace NotePractice.Music.Drawing
             {
                 clef = cs.ClefType;
             }
-            Color color = Color.FromArgb(0, 0, 0);
-            DrawSymbols(symbols, g, xPos, clef, drawCursor, color);
+            
+            DrawSymbols(symbols, g, xPos, clef, drawCursor, symbolColor);
             if (drawCursor)
             {
                 Color cursorColor = Color.FromArgb(120, 255, 0, 0);
@@ -180,7 +193,7 @@ namespace NotePractice.Music.Drawing
                 }
             }
         }
-        private static void DrawBeams(List<Symbol> symbols, Graphics g)
+        private static void DrawBeams(List<Symbol> symbols, Graphics g, Color color)
         {
             if(symbols.Count < 2) return;
             double beatCount = 0;
@@ -189,6 +202,8 @@ namespace NotePractice.Music.Drawing
             int beamStartIndex = -1;
             int beamStartXPos = 0;
             List<Note> beamNotes = new();
+            using Brush b = new SolidBrush(color);
+            using Pen colorBarPen = new Pen(b, BarPen.Width);
             for (int i = 1; i < symbols.Count; i++)
             {
                 Symbol symbol = symbols[i];
@@ -270,7 +285,7 @@ namespace NotePractice.Music.Drawing
                         {
                             if (!beamStart.Equals(beamEnd))
                             {
-                                g.DrawLine(BarPen, bs.Copy().Add(beamSection.Copy().Multiply(j)).ToPoint(), bs.Copy().Add(beamSection.Copy().Multiply(j+1)).ToPoint());
+                                g.DrawLine(colorBarPen, bs.Copy().Add(beamSection.Copy().Multiply(j)).ToPoint(), bs.Copy().Add(beamSection.Copy().Multiply(j+1)).ToPoint());
                                 bs.Add(beamShift);
                                 //beamEnd.Add(beamShift);
                             }

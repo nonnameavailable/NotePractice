@@ -144,6 +144,7 @@ namespace NotePractice
         {
             Clef nextClef = TCP.NextClef;
             ExtraPictureBox.Image?.Dispose();
+            if (NoteSpacing == 0) PM.SortNotes();
             ExtraPictureBox.Image = PracticeDrawer.EvaluatedNotePractice(PM, TCP.PreviousClef, NoteSpacing);
             MainPictureBox.Image?.Dispose();
             if(TCP.PracticeMode == "Chords")

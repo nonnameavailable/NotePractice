@@ -140,7 +140,7 @@ namespace NotePractice.Music.Symbols
             {
                 resultColor = (Color)color;
             }
-                _noteDrawer.DrawNote(g, xPos, clef, resultColor);
+            _noteDrawer.DrawNote(g, xPos, clef, resultColor);
         }
 
         string Symbol.StringForFileExport()

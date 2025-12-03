@@ -15,8 +15,11 @@ namespace NotePractice.Practice
         public static Bitmap EvaluatedNotePractice(PracticeManager pm, Clef clef, int noteSpacing)
         {
             List<Symbol> practiceSymbolList = PracticeManager.SpacedSymbolList(pm.PracticeNotes.Cast<Symbol>().ToList(), noteSpacing);
-            Bitmap result = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(clef, practiceSymbolList), false);
+            List<Symbol> inputSymbolList = PracticeManager.SpacedSymbolList(pm.InputNotes.Cast<Symbol>().ToList(), noteSpacing);
+            Bitmap result = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(clef, inputSymbolList), false, false, Color.FromArgb(255, 0, 0));
+            Bitmap practiceBitmap = MusicDrawer.MusicBitmap(MusicDrawer.StartSymbols(clef, practiceSymbolList), false, true, Color.FromArgb(0, 200, 0));
             using Graphics g = Graphics.FromImage(result);
+            g.DrawImage(practiceBitmap, 0, 0);
             using Font font = ScaledLetterFont(100);
             if (pm.EvaluateNotes())
             {

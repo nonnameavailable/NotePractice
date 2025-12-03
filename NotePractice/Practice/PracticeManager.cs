@@ -32,10 +32,13 @@ namespace NotePractice.Practice
             InputNotes.Add(note);
             if(InputNotes.Count >= PracticeNotes.Count)
             {
-                InputNotes = InputNotes.OrderBy(note=>note.ToMidiNumber()).ToList();
-                PracticeNotes = PracticeNotes.OrderBy(note => note.ToMidiNumber()).ToList();
                 NoteCountReached?.Invoke(this, EventArgs.Empty);
             }
+        }
+        public void SortNotes()
+        {
+            InputNotes = InputNotes.OrderBy(note => note.ToMidiNumber()).ToList();
+            PracticeNotes = PracticeNotes.OrderBy(note => note.ToMidiNumber()).ToList();
         }
         public bool EvaluateNotes()
         {

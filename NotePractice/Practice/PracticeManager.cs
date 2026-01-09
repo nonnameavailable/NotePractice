@@ -29,6 +29,10 @@ namespace NotePractice.Practice
         public void AddPracticeNote(Note note) => PracticeNotes.Add(note);
         public void AddInputNote(Note note)
         {
+            if (PracticeNotes.Count > 0)
+            {
+                note.Duration = PracticeNotes[0].Duration;
+            }
             InputNotes.Add(note);
             if(InputNotes.Count >= PracticeNotes.Count)
             {

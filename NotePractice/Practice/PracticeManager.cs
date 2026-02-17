@@ -33,6 +33,13 @@ namespace NotePractice.Practice
             {
                 note.Duration = PracticeNotes[0].Duration;
             }
+            Note nextPracticeNote = PracticeNotes[InputNotes.Count];
+            if(note.ToMidiNumber() == nextPracticeNote.ToMidiNumber())
+            {
+                note.NoteLetter = nextPracticeNote.NoteLetter;
+                note.Accidental = nextPracticeNote.Accidental;
+                note.Octave = nextPracticeNote.Octave;
+            }
             InputNotes.Add(note);
             if(InputNotes.Count >= PracticeNotes.Count)
             {
